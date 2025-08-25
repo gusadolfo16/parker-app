@@ -1,20 +1,16 @@
 import Switcher from '@/components/switcher/Switcher';
 import SwitcherItem from '@/components/switcher/SwitcherItem';
-import IconFull from '@/components/icons/IconFull';
 import IconGrid from '@/components/icons/IconGrid';
 import {
-  PATH_FULL_INFERRED,
   PATH_GRID_INFERRED,
 } from '@/app/path';
 import IconSearch from '../components/icons/IconSearch';
 import { useAppState } from '@/app/AppState';
 import {
-  GRID_HOMEPAGE_ENABLED,
   SHOW_KEYBOARD_SHORTCUT_TOOLTIPS,
   NAV_SORT_CONTROL,
 } from './config';
 import AdminAppMenu from '@/admin/AdminAppMenu';
-import Spinner from '@/components/Spinner';
 import clsx from 'clsx/lite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useKeydownHandler from '@/utility/useKeydownHandler';
@@ -47,7 +43,6 @@ export default function AppViewSwitcher({
 
   const {
     isUserSignedIn,
-    isUserSignedInEager,
     isUserAdmin,
     setIsCommandKOpen,
     invalidateSwr,
@@ -64,7 +59,6 @@ export default function AppViewSwitcher({
     isSortedByDefault,
     isAscending,
     pathGrid,
-    pathFull,
     pathSortToggle,
   } = sortConfig;
 
@@ -81,7 +75,6 @@ export default function AppViewSwitcher({
     hasLoadedRef.current = true;
   }, [invalidateSwr, sortBy]);
 
-  const refHrefFull = useRef<HTMLAnchorElement>(null);
   const refHrefGrid = useRef<HTMLAnchorElement>(null);
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
