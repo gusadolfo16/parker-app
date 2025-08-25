@@ -9,6 +9,7 @@ import { SortProps } from '@/photo/sort';
 import { getSortOptionsFromParams } from '@/photo/sort/path';
 import { PhotoQueryOptions } from '@/photo/db';
 import { FEED_META_QUERY_OPTIONS, getFeedQueryOptions } from '@/feed';
+import { getAppText } from '@/i18n/state/server';
 
 export const maxDuration = 60;
 
@@ -29,6 +30,7 @@ export async function generateMetadata({
 
 export default async function FullPageSort({ params }: SortProps) {
   const sortOptions = await getSortOptionsFromParams(params);
+  const appText = await getAppText();
   const [
     photos,
     photosCount,
@@ -47,6 +49,6 @@ export default async function FullPageSort({ params }: SortProps) {
         photosCount,
         ...sortOptions,
       }} />
-      : <PhotosEmptyState />
+      : <PhotosEmptyState appText={appText} />
   );
 }
