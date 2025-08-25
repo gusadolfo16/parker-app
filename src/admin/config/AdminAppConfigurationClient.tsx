@@ -33,8 +33,6 @@ import {
 import ColorDot from '@/photo/color/ColorDot';
 import { Oklch } from '@/photo/color/client';
 
-import { testConnectionsAction } from '@/admin/actions';
-
 export default function AdminAppConfigurationClient({
   // Storage
   hasDatabase,
