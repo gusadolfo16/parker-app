@@ -11,7 +11,11 @@ export default async function SignInPage() {
   const session = await auth();
 
   if (session?.user) {
-    redirect(PATH_ADMIN);
+    if (session.user.email === process.env.ADMIN_EMAIL) {
+      redirect(PATH_ADMIN);
+    } else {
+      redirect(PATH_ROOT);
+    }
   }
 
   const appText = await getAppText();

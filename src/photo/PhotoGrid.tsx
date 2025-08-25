@@ -7,6 +7,7 @@ import { clsx } from 'clsx/lite';
 import AnimateItems from '@/components/AnimateItems';
 import { GRID_ASPECT_RATIO } from '@/app/config';
 import { useAppState } from '@/app/AppState';
+import { useSelection } from '@/selection/SelectionContext';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
 import { ReactNode } from 'react';
 import { GRID_GAP_CLASSNAME } from '@/components';
@@ -41,10 +42,14 @@ export default function PhotoGrid({
 } & PhotoSetCategory) {
   const {
     isUserSignedIn,
-    selectedPhotoIds,
-    setSelectedPhotoIds,
     isGridHighDensity,
   } = useAppState();
+
+  const {
+    selectionMode,
+    selectedPhotos,
+    togglePhotoSelection,
+  } = useSelection();
 
   return (
     <AnimateItems
@@ -67,12 +72,13 @@ export default function PhotoGrid({
       staggerOnFirstLoadOnly={staggerOnFirstLoadOnly}
       onAnimationComplete={onAnimationComplete}
       items={photos.map((photo, index) =>{
-        const isSelected = selectedPhotoIds?.includes(photo.id) ?? false;
+        const isSelected = selectedPhotos.some(p => p.id === photo.id);
         return <div
           key={photo.id}
           className={clsx(
             'flex relative overflow-hidden',
             'group',
+            isSelected && 'border-4 border-green-500', // Added green border
           )}
           style={{
             ...GRID_ASPECT_RATIO !== 0 && {
@@ -84,7 +90,7 @@ export default function PhotoGrid({
             className={clsx(
               'flex w-full h-full',
               // Prevent photo navigation when selecting
-              selectedPhotoIds?.length !== undefined && 'pointer-events-none',
+              selectionMode && 'pointer-events-none',
             )}
             {...{
               photo,
@@ -96,13 +102,10 @@ export default function PhotoGrid({
                 : undefined,
             }}
           />
-          {isUserSignedIn && canSelect && selectedPhotoIds !== undefined &&
+          {selectionMode &&
             <SelectTileOverlay
               isSelected={isSelected}
-              onSelectChange={() => setSelectedPhotoIds?.(isSelected
-                ? (selectedPhotoIds ?? []).filter(id => id !== photo.id)
-                : (selectedPhotoIds ?? []).concat(photo.id),
-              )}
+              onSelectChange={() => togglePhotoSelection(photo)}
             />}
         </div>;
       }).concat(additionalTile ? <>{additionalTile}</> : [])}

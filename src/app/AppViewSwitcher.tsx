@@ -48,6 +48,7 @@ export default function AppViewSwitcher({
   const {
     isUserSignedIn,
     isUserSignedInEager,
+    isUserAdmin,
     setIsCommandKOpen,
     invalidateSwr,
   } = useAppState();
@@ -86,9 +87,7 @@ export default function AppViewSwitcher({
   const onKeyDown = useCallback((e: KeyboardEvent) => {
     if (!e.metaKey) {
       switch (e.key.toLocaleUpperCase()) {
-        case KEY_COMMANDS.full:
-          if (pathname !== PATH_FULL_INFERRED) { refHrefFull.current?.click(); }
-          break;
+        
         case KEY_COMMANDS.grid:
           if (pathname !== PATH_GRID_INFERRED) { refHrefGrid.current?.click(); }
           break;
@@ -103,18 +102,7 @@ export default function AppViewSwitcher({
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
 
-  const renderItemFull =
-    <SwitcherItem
-      icon={<IconFull includeTitle={false} />}
-      href={pathFull}
-      hrefRef={refHrefFull}
-      active={currentSelection === 'full'}
-      tooltip={{...SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
-        content: appText.nav.full,
-        keyCommand: KEY_COMMANDS.full,
-      }}}
-      noPadding
-    />;
+  
 
   const renderItemGrid =
     <SwitcherItem
@@ -138,22 +126,10 @@ export default function AppViewSwitcher({
           'translate-x-[1px]',
         )}
       >
-        {GRID_HOMEPAGE_ENABLED ? renderItemGrid : renderItemFull}
-        {GRID_HOMEPAGE_ENABLED ? renderItemFull : renderItemGrid}
+        {renderItemGrid}
         {/* Show spinner if admin is suspected to be logged in */}
-        {(isUserSignedInEager && !isUserSignedIn) &&
-          <SwitcherItem
-            icon={<Spinner />}
-            isInteractive={false}
-            noPadding
-            tooltip={{
-              ...!isAdminMenuOpen && SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
-                content: appText.nav.admin,
-                keyCommand: KEY_COMMANDS.admin,
-              },
-            }}
-          />}
-        {isUserSignedIn &&
+        
+        {isUserAdmin &&
           <SwitcherItem
             icon={<AdminAppMenu
               isOpen={isAdminMenuOpen}

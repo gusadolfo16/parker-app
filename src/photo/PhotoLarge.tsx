@@ -51,6 +51,7 @@ import { lensFromPhoto } from '@/lens';
 import MaskedScroll from '@/components/MaskedScroll';
 import useCategoryCountsForPhoto from '@/category/useCategoryCountsForPhoto';
 import { useAppText } from '@/i18n/state/client';
+import { useSelection } from '@/selection/SelectionContext';
 
 export default function PhotoLarge({
   photo,
@@ -124,6 +125,12 @@ export default function PhotoLarge({
     shouldDebugRecipeOverlays,
     isUserSignedIn,
   } = useAppState();
+
+  const {
+    selectionMode,
+    selectedPhotos,
+    togglePhotoSelection,
+  } = useSelection();
 
   const appText = useAppText();
 
@@ -209,6 +216,8 @@ export default function PhotoLarge({
         ? 'w-[80%]'
         : undefined;
 
+  const isSelected = selectedPhotos.includes(photo);
+
   const renderLargePhoto =
     <div className={clsx(
       'relative',
@@ -216,11 +225,12 @@ export default function PhotoLarge({
       // Always specify height to ensure fallback doesn't collapse
       arePhotosMatted && 'h-[90%]',
       arePhotosMatted && matteContentWidthForAspectRatio,
+      isSelected && 'border-4 border-green-500',
     )}>
       <ZoomControls
         ref={refZoomControls}
         selectImageElement={selectZoomImageElement}
-        {...{ isEnabled: showZoomControls, shouldZoomOnFKeydown }}
+        {...{ isEnabled: false, shouldZoomOnFKeydown }}
       >
         <ImageLarge
           className={clsx(arePhotosMatted && 'h-full')}
@@ -284,17 +294,11 @@ export default function PhotoLarge({
     <AppGrid
       containerRef={ref}
       className={className}
-      contentMain={showZoomControls
-        ? <div className={largePhotoContainerClassName}>
+      contentMain={
+        <div className={largePhotoContainerClassName}>
           {renderLargePhoto}
         </div>
-        : <Link
-          href={pathForPhoto({ photo })}
-          className={largePhotoContainerClassName}
-          prefetch={prefetch}
-        >
-          {renderLargePhoto}
-        </Link>}
+      }
       classNameSide="relative"
       sideHiddenOnMobile={false}
       contentSide={
@@ -310,6 +314,11 @@ export default function PhotoLarge({
                 <div className="float-end hidden md:block">
                   {renderAdminMenu}
                 </div>
+                {selectionMode && (
+                  <button onClick={() => togglePhotoSelection(photo)}>
+                    {isSelected ? 'Deselect' : 'Select'}
+                  </button>
+                )}
                 {hasTitle && (showTitleAsH1
                   ? <h1>{renderPhotoLink}</h1>
                   : renderPhotoLink)}
@@ -443,45 +452,8 @@ export default function PhotoLarge({
                     'flex gap-1 translate-y-[0.5px]',
                     'translate-x-[-2.5px]',
                   )}>
-                    {showZoomControls &&
-                      <LoaderButton
-                        tooltip={appText.tooltip.zoom}
-                        icon={<LuExpand size={15} />}
-                        onClick={() => refZoomControls.current?.open()}
-                        styleAs="link"
-                        className="text-medium translate-y-[0.25px]"
-                        hideFocusOutline
-                      />}
-                    {shouldShare &&
-                      <ShareButton
-                        tooltip={appText.tooltip.sharePhoto}
-                        photo={photo}
-                        recent={shouldShareRecents
-                          ? recent
-                          : undefined}
-                        year={shouldShareYear
-                          ? year
-                          : undefined}
-                        tag={shouldShareTag
-                          ? primaryTag
-                          : undefined}
-                        camera={shouldShareCamera
-                          ? camera
-                          : undefined}
-                        lens={shouldShareLens
-                          ? lens
-                          : undefined}
-                        film={shouldShareFilm
-                          ? photo.film
-                          : undefined}
-                        recipe={shouldShareRecipe
-                          ? recipeTitle
-                          : undefined}
-                        focal={shouldShareFocalLength
-                          ? photo.focalLength
-                          : undefined}
-                        prefetch={prefetchRelatedLinks}
-                      />}
+                    
+                    
                     {ALLOW_PUBLIC_DOWNLOADS && 
                       <DownloadButton 
                         className="translate-y-[0.5px] md:translate-y-0"

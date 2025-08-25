@@ -21,6 +21,9 @@ import {
 import { useRef } from 'react';
 import useStickyNav from './useStickyNav';
 import { useAppState } from '@/app/AppState';
+import Switcher from '@/components/switcher/Switcher';
+import SwitcherItem from '@/components/switcher/SwitcherItem';
+import { useSelection } from '@/selection/SelectionContext';
 
 const NAV_HEIGHT_CLASS = NAV_CAPTION
   ? 'min-h-[4rem] sm:min-h-[5rem]'
@@ -42,7 +45,31 @@ export default function NavClient({
 
   const {
     hasLoadedWithAnimations,
+    isUserSignedIn,
+    isUserAdmin,
   } = useAppState();
+
+  const {
+    selectionMode,
+    toggleSelectionMode,
+    selectedPhotos,
+    confirmSelection,
+    clearSelection,
+  } = useSelection();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const {
     classNameStickyContainer,
@@ -86,8 +113,6 @@ export default function NavClient({
               className={clsx(
                 'w-full flex items-center bg-main',
                 NAV_HEIGHT_CLASS,
-                // Enlarge nav to ensure it fully masks underlying content
-                'md:w-[calc(100%+8px)] md:translate-x-[-4px] md:px-[4px]',
                 classNameStickyNav,
               )}>
               <AppViewSwitcher
@@ -95,9 +120,52 @@ export default function NavClient({
                 className="translate-x-[-1px]"
                 animate={hasLoadedWithAnimations && isNavVisible}
               />
+              {/* Selection Buttons */}
+              {selectionMode ? (
+                <Switcher type="borderless" className="mr-2">
+                  <SwitcherItem
+                    icon={<span>Confirm ({selectedPhotos.length})</span>}
+                    onClick={() => confirmSelection()}
+                    tooltip={{
+                      content: 'Confirm Selection',
+                    }}
+                    width="narrow"
+                  />
+                  <SwitcherItem
+                    icon={<span>View Selections</span>}
+                    href="/selected"
+                    tooltip={{
+                      content: 'View Selections',
+                    }}
+                    width="narrow"
+                  />
+                  <SwitcherItem
+                    icon={<span>Cancel</span>}
+                    onClick={() => clearSelection()}
+                    tooltip={{
+                      content: 'Cancel Selection',
+                    }}
+                    width="narrow"
+                  />
+                </Switcher>
+              ) : (
+                <div className="w-20">
+                  <Switcher type="borderless" className="mr-2">
+                    <SwitcherItem
+                      icon={<span>Select</span>}
+                      onClick={() => toggleSelectionMode()}
+                      tooltip={{
+                        content: 'Select Photos',
+                      }}
+                      width="narrow"
+                    />
+                  </Switcher>
+                </div>
+              )}
               <div className={clsx(
                 'grow text-right min-w-0',
                 'translate-y-[-1px]',
+                'mr-4', // Added margin-right
               )}>
                 <div className="truncate overflow-hidden select-none">
                   {renderLink(navTitle, PATH_ROOT)}
@@ -110,6 +178,22 @@ export default function NavClient({
                     {navCaption}
                   </div>}
               </div>
+              {/* Sign-in Button */}
+              {!isUserSignedIn && (
+                <div>
+                  <Link href="/sign-in" className="font-mono link h-4 active:text-medium disabled:bg-transparent! hover:text-dim inline-flex items-center gap-1.5 self-start whitespace-nowrap focus:outline-hidden text-medium">
+                    Sign In
+                  </Link>
+                </div>
+              )}
+              {/* Admin Button */}
+              {isUserAdmin && (
+                <div>
+                  <Link href="/admin/photos" className="font-mono link h-4 active:text-medium disabled:bg-transparent! hover:text-dim inline-flex items-center gap-1.5 self-start whitespace-nowrap focus:outline-hidden text-medium">
+                    Admin
+                  </Link>
+                </div>
+              )}
             </nav>]
             : []}
         />

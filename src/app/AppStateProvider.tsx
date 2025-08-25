@@ -10,7 +10,7 @@ import {
 import { AppStateContext } from '../app/AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
 import usePathnames from '@/utility/usePathnames';
-import { getAuthAction } from '@/auth/actions';
+import { getAuthSessionAction } from '@/auth/actions';
 import useSWR, { useSWRConfig } from 'swr';
 import {
   HIGH_DENSITY_GRID,
@@ -91,6 +91,8 @@ export default function AppStateProvider({
     useState<string>();
   const [userEmailEager, setUserEmailEager] =
     useState<string>();
+  const [isUserAdmin, setIsUserAdmin] =
+    useState(false);
   // ADMIN
   const [adminUpdateTimes, setAdminUpdateTimes] =
     useState<Date[]>([]);
@@ -148,14 +150,16 @@ export default function AppStateProvider({
     data: auth,
     error: authError,
     isLoading: isCheckingAuth,
-  } = useSWR(SWR_KEYS.GET_AUTH, getAuthAction);
+  } = useSWR(SWR_KEYS.GET_AUTH, getAuthSessionAction);
   useEffect(() => {
     if (auth === null || authError) {
       setUserEmail(undefined);
       setUserEmailEager(undefined);
       clearAuthEmailCookie();
+      setIsUserAdmin(false);
     } else {
-      setUserEmail(auth?.user?.email ?? undefined);
+      setUserEmail(auth?.session?.user?.email ?? undefined);
+      setIsUserAdmin(auth?.isAdmin ?? false);
     }
   }, [auth, authError]);
   const isUserSignedIn = Boolean(userEmail);
@@ -205,7 +209,7 @@ export default function AppStateProvider({
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
       uploadInputRef.current.click();
-      uploadInputRef.current.oninput = () => resolve(true);
+      uploadInputrrent.oninput = () => resolve(true);
       uploadInputRef.current.oncancel = () => resolve(false);
     } else {
       resolve(false);
@@ -248,6 +252,7 @@ export default function AppStateProvider({
         setUserEmail,
         isUserSignedIn,
         isUserSignedInEager,
+        isUserAdmin,
         clearAuthStateAndRedirectIfNecessary,
         // ADMIN
         adminUpdateTimes,

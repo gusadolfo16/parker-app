@@ -115,3 +115,8 @@ export const testConnectionsAction = async () =>
       aiError,
     };
   });
+
+export const revalidateAdminPathAction = async () => {
+  'use server';
+  revalidatePath('/admin', 'layout');
+};

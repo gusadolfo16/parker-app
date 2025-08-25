@@ -33,6 +33,8 @@ import {
 import ColorDot from '@/photo/color/ColorDot';
 import { Oklch } from '@/photo/color/client';
 
+import { testConnectionsAction } from '@/admin/actions';
+
 export default function AdminAppConfigurationClient({
   // Storage
   hasDatabase,
@@ -124,20 +126,14 @@ export default function AdminAppConfigurationClient({
   areAdminDebugToolsEnabled,
   isAdminDbOptimizeEnabled,
   isAdminSqlDebugEnabled,
-  // Connection status
-  databaseError,
-  storageError,
-  redisError,
-  aiError,
   // Component props
   simplifiedView,
-  isAnalyzingConfiguration,
-}: AppConfiguration &
-  Partial<Awaited<ReturnType<typeof testConnectionsAction>>> & {
+}: AppConfiguration & {
     simplifiedView?: boolean
-    isAnalyzingConfiguration?: boolean
   }) {
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [connectionErrors, setConnectionErrors] = useState<Partial<Awaited<ReturnType<typeof testConnectionsAction>>>>({});
+  const [isAnalyzingConfiguration, setIsAnalyzingConfiguration] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => { setHasScrolled(true); };
@@ -145,6 +141,13 @@ export default function AdminAppConfigurationClient({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
+  }, []);
+
+  useEffect(() => {
+    testConnectionsAction()
+      .then(setConnectionErrors)
+      .catch(() => setConnectionErrors({}))
+      .finally(() => setIsAnalyzingConfiguration(false));
   }, []);
 
   const renderContent = (content?: ReactNode) => content
@@ -225,8 +228,8 @@ export default function AdminAppConfigurationClient({
             status={hasDatabase}
             isPending={hasDatabase && isAnalyzingConfiguration}
           >
-            {databaseError && renderError({
-              connection: { provider: 'Database', error: databaseError},
+            {connectionErrors.databaseError && renderError({
+              connection: { provider: 'Database', error: connectionErrors.databaseError},
             })}
             {hasVercelPostgres
               ? renderSubStatus('checked', 'Vercel Postgres: connected')
@@ -263,8 +266,8 @@ export default function AdminAppConfigurationClient({
             status={hasStorageProvider}
             isPending={hasStorageProvider && isAnalyzingConfiguration}
           >
-            {storageError && renderError({
-              connection: { provider: 'Storage', error: storageError},
+            {connectionErrors.storageError && renderError({
+              connection: { provider: 'Storage', error: connectionErrors.storageError},
             })}
             <div>
               {hasVercelBlobStorage
@@ -430,8 +433,8 @@ export default function AdminAppConfigurationClient({
             isPending={isAiTextGenerationEnabled && isAnalyzingConfiguration}
             optional
           >
-            {aiError && renderError({
-              connection: { provider: 'OpenAI', error: aiError},
+            {connectionErrors.aiError && renderError({
+              connection: { provider: 'OpenAI', error: connectionErrors.aiError},
             })}
             Store your OpenAI secret key in order to enable AI-generated
             text descriptions and optionally leverage an invisible field
@@ -471,8 +474,8 @@ export default function AdminAppConfigurationClient({
             isPending={hasRedisStorage && isAnalyzingConfiguration}
             optional
           >
-            {redisError && renderError({
-              connection: { provider: 'Redis', error: redisError},
+            {connectionErrors.redisError && renderError({
+              connection: { provider: 'Redis', error: connectionErrors.redisError},
             })}
             Create Upstash Redis store from storage tab
             on Vercel dashboard and connect to this project

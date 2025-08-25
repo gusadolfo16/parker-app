@@ -1,6 +1,7 @@
 import { isPathProtected } from '@/app/path';
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 
 export const {
   handlers: { GET, POST },
@@ -22,6 +23,10 @@ export const {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
   callbacks: {
     authorized({ auth, request }) {
@@ -29,7 +34,9 @@ export const {
 
       const isUrlProtected = isPathProtected(pathname);
       const isUserLoggedIn = !!auth?.user;
-      const isRequestAuthorized = !isUrlProtected || isUserLoggedIn;
+      const isAdminUser = auth?.user?.email === process.env.ADMIN_EMAIL;
+
+      const isRequestAuthorized = !isUrlProtected || (isUserLoggedIn && isAdminUser);
 
       return isRequestAuthorized;
     },

@@ -26,6 +26,7 @@ import AdminUploadPanel from '@/admin/upload/AdminUploadPanel';
 import { revalidatePath } from 'next/cache';
 import RecipeModal from '@/recipe/RecipeModal';
 import ThemeColors from '@/app/ThemeColors';
+import { SelectionProvider } from '@/selection/SelectionContext';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 import SharedHoverProvider from '@/components/shared-hover/SharedHoverProvider';
 import { PATH_FEED_JSON, PATH_RSS_XML } from '@/app/path';
@@ -94,51 +95,53 @@ export default function RootLayout({
       )}>
         <AppStateProvider areAdminDebugToolsEnabled={ADMIN_DEBUG_TOOLS_ENABLED}>
           <AppTextProvider>
-            <ThemeColors />
-            <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
-              <SwrConfigClient>
-                <SharedHoverProvider>
-                  <div className={clsx(
-                    'mx-3 mb-3',
-                    'lg:mx-6 lg:mb-6',
-                  )}>
-                    <Nav />
-                    <main>
-                      <ShareModals />
-                      <RecipeModal />
-                      <div className={clsx(
-                        'min-h-[16rem] sm:min-h-[30rem]',
-                        'mb-12',
-                        'space-y-5',
-                      )}>
-                        <AdminUploadPanel
-                          shouldResize={!PRESERVE_ORIGINAL_UPLOADS}
-                          onLastUpload={async () => {
-                            'use server';
-                            // Update upload count in admin nav
-                            revalidatePath('/admin', 'layout');
-                          }}
-                        />
-                        <AdminBatchEditPanel
-                          onBatchActionComplete={async () => {
-                            'use server';
-                            // Update upload count in admin nav
-                            revalidatePath('/admin', 'layout');
-                          }}
-                        />
-                        {children}
-                      </div>
-                    </main>
-                    <Footer />
-                  </div>
-                  <CommandK />
-                </SharedHoverProvider>
-              </SwrConfigClient>
-              <Analytics debug={false} />
-              <SpeedInsights debug={false}  />
-              <PhotoEscapeHandler />
-              <ToasterWithThemes />
-            </ThemeProvider>
+            <SelectionProvider> {/* Added SelectionProvider */}
+              <ThemeColors />
+              <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
+                <SwrConfigClient>
+                  <SharedHoverProvider>
+                    <div className={clsx(
+                      'mx-3 mb-3',
+                      'lg:mx-6 lg:mb-6',
+                    )}>
+                      <Nav />
+                      <main>
+                        <ShareModals />
+                        <RecipeModal />
+                        <div className={clsx(
+                          'min-h-[16rem] sm:min-h-[30rem]',
+                          'mb-12',
+                          'space-y-5',
+                        )}>
+                          <AdminUploadPanel
+                            shouldResize={!PRESERVE_ORIGINAL_UPLOADS}
+                            onLastUpload={async () => {
+                              'use server';
+                              // Update upload count in admin nav
+                              revalidatePath('/admin', 'layout');
+                            }}
+                          />
+                          <AdminBatchEditPanel
+                            onBatchActionComplete={async () => {
+                              'use server';
+                              // Update upload count in admin nav
+                              revalidatePath('/admin', 'layout');
+                            }}
+                          />
+                          {children}
+                        </div>
+                      </main>
+                      <Footer />
+                    </div>
+                    <CommandK />
+                  </SharedHoverProvider>
+                </SwrConfigClient>
+                <Analytics debug={false} />
+                <SpeedInsights debug={false}  />
+                <PhotoEscapeHandler />
+                <ToasterWithThemes />
+              </ThemeProvider>
+            </SelectionProvider> {/* Closed SelectionProvider */}
           </AppTextProvider>
         </AppStateProvider>
       </body>

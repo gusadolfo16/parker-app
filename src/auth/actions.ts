@@ -51,6 +51,12 @@ export const signOutAction = async () =>
 
 export const getAuthAction = async () => auth();
 
+export const getAuthSessionAction = async () => {
+  const session = await auth();
+  const isAdmin = session?.user?.email === process.env.ADMIN_EMAIL;
+  return { session, isAdmin };
+};
+
 export const logClientAuthUpdate = async (data: Session | null | undefined) =>
   console.log('Client auth update', data);
 

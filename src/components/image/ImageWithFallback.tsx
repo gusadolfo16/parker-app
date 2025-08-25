@@ -62,6 +62,7 @@ export default function ImageWithFallback({
         className: classNameImage,
         onLoad,
         onError,
+        onContextMenu: (e) => e.preventDefault(),
       }} />
       <div
         className={clsx(
@@ -84,6 +85,7 @@ export default function ImageWithFallback({
               getBlurClass(),
               classNameImage,
             ),
+            onContextMenu: (e) => e.preventDefault(),
           }} />
           :  <div className={clsx(
             'w-full h-full',
