@@ -209,7 +209,7 @@ export default function AppStateProvider({
     if (uploadInputRef.current) {
       uploadInputRef.current.value = '';
       uploadInputRef.current.click();
-      uploadInputrrent.oninput = () => resolve(true);
+      uploadInputRef.current.oninput = () => resolve(true);
       uploadInputRef.current.oncancel = () => resolve(false);
     } else {
       resolve(false);
