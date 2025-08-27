@@ -10,6 +10,7 @@ import { SortProps } from '@/photo/sort';
 import { getSortOptionsFromParams } from '@/photo/sort/path';
 import { FEED_META_QUERY_OPTIONS, getFeedQueryOptions } from '@/feed';
 import { PhotoQueryOptions } from '@/photo/db';
+import { getAppText } from '@/i18n/state/server';
 
 export const maxDuration = 60;
 
@@ -35,6 +36,7 @@ export default async function GridPage({ params }: SortProps) {
     photosCount,
     photosCountWithExcludes,
     categories,
+    appText,
   ] = await Promise.all([
     getPhotosCached(sortOptions)
       .catch(() => []),
@@ -45,6 +47,7 @@ export default async function GridPage({ params }: SortProps) {
       .then(({ count }) => count)
       .catch(() => 0),
     getDataForCategoriesCached(),
+    getAppText(),
   ]);
 
   return (
@@ -58,6 +61,6 @@ export default async function GridPage({ params }: SortProps) {
           ...categories,
         }}
       />
-      : <PhotosEmptyState />
+      : <PhotosEmptyState appText={appText} />
   );
 }

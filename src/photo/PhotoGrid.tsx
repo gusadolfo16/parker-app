@@ -22,7 +22,6 @@ export default function PhotoGrid({
   staggerOnFirstLoadOnly = true,
   additionalTile,
   small,
-  canSelect,
   onLastPhotoVisible,
   onAnimationComplete,
   ...categories
@@ -36,12 +35,10 @@ export default function PhotoGrid({
   staggerOnFirstLoadOnly?: boolean
   additionalTile?: ReactNode
   small?: boolean
-  canSelect?: boolean
   onLastPhotoVisible?: () => void
   onAnimationComplete?: () => void
 } & PhotoSetCategory) {
   const {
-    isUserSignedIn,
     isGridHighDensity,
   } = useAppState();
 
@@ -113,4 +110,4 @@ export default function PhotoGrid({
         .concat(additionalTile ? ['more'] : [])}
     />
   );
-};
+}

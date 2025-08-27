@@ -15,9 +15,8 @@ import AppGrid from '@/components/AppGrid';
 import ImageLarge from '@/components/image/ImageLarge';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
-import { pathForFocalLength, pathForPhoto } from '@/app/path';
+import { pathForFocalLength } from '@/app/path';
 import PhotoTags from '@/tag/PhotoTags';
-import ShareButton from '@/share/ShareButton';
 import DownloadButton from '@/components/DownloadButton';
 import PhotoCamera from '../camera/PhotoCamera';
 import { cameraFromPhoto } from '@/camera';
@@ -38,8 +37,6 @@ import { useCallback, useMemo, useRef } from 'react';
 import useVisible from '@/utility/useVisible';
 import PhotoDate from './PhotoDate';
 import { useAppState } from '@/app/AppState';
-import { LuExpand } from 'react-icons/lu';
-import LoaderButton from '@/components/primitives/LoaderButton';
 import Tooltip from '@/components/Tooltip';
 import ZoomControls, { ZoomControlsRef } from '@/components/image/ZoomControls';
 import { AnimatePresence } from 'framer-motion';
@@ -60,8 +57,6 @@ export default function PhotoLarge({
   priority,
   prefetch = SHOULD_PREFETCH_ALL_LINKS,
   prefetchRelatedLinks = SHOULD_PREFETCH_ALL_LINKS,
-  recent,
-  year,
   revalidatePhoto,
   showTitle = true,
   showTitleAsH1,
@@ -69,17 +64,7 @@ export default function PhotoLarge({
   showLens = true,
   showFilm = true,
   showRecipe = true,
-  showZoomControls: _showZoomControls = true,
   shouldZoomOnFKeydown = true,
-  shouldShare = true,
-  shouldShareRecents,
-  shouldShareYear,
-  shouldShareCamera,
-  shouldShareLens,
-  shouldShareTag,
-  shouldShareFilm,
-  shouldShareRecipe,
-  shouldShareFocalLength,
   includeFavoriteInAdminMenu,
   onVisible,
   showAdminKeyCommands,
@@ -90,8 +75,6 @@ export default function PhotoLarge({
   priority?: boolean
   prefetch?: boolean
   prefetchRelatedLinks?: boolean
-  recent?: boolean
-  year?: string
   revalidatePhoto?: RevalidatePhoto
   showTitle?: boolean
   showTitleAsH1?: boolean
@@ -99,17 +82,7 @@ export default function PhotoLarge({
   showLens?: boolean
   showFilm?: boolean
   showRecipe?: boolean
-  showZoomControls?: boolean
   shouldZoomOnFKeydown?: boolean
-  shouldShare?: boolean
-  shouldShareRecents?: boolean
-  shouldShareYear?: boolean
-  shouldShareCamera?: boolean
-  shouldShareLens?: boolean
-  shouldShareTag?: boolean
-  shouldShareFilm?: boolean
-  shouldShareRecipe?: boolean
-  shouldShareFocalLength?: boolean
   includeFavoriteInAdminMenu?: boolean
   onVisible?: () => void
   showAdminKeyCommands?: boolean
@@ -120,7 +93,6 @@ export default function PhotoLarge({
   const refPhotoFilm = useRef<HTMLDivElement>(null);
 
   const {
-    areZoomControlsShown,
     arePhotosMatted,
     shouldDebugRecipeOverlays,
     isUserSignedIn,
@@ -142,7 +114,6 @@ export default function PhotoLarge({
     filmCount,
   } = useCategoryCountsForPhoto(photo);
 
-  const showZoomControls = _showZoomControls && areZoomControlsShown;
   const selectZoomImageElement = useCallback(
     (container: HTMLElement | null) => Array
       .from(container?.getElementsByTagName('img') ?? [])
@@ -392,7 +363,6 @@ export default function PhotoLarge({
                           </Link>}
                         {(
                           photo.focalLengthIn35MmFormatFormatted &&
-                          // eslint-disable-next-line max-len
                           photo.focalLengthIn35MmFormatFormatted !== photo.focalLengthFormatted
                         ) &&
                           <>
@@ -452,12 +422,10 @@ export default function PhotoLarge({
                     'flex gap-1 translate-y-[0.5px]',
                     'translate-x-[-2.5px]',
                   )}>
-                    
-                    
-                    {ALLOW_PUBLIC_DOWNLOADS && 
-                      <DownloadButton 
+                    {ALLOW_PUBLIC_DOWNLOADS &&
+                      <DownloadButton
                         className="translate-y-[0.5px] md:translate-y-0"
-                        photo={photo} 
+                        photo={photo}
                       />}
                   </div>
                 </div>
@@ -467,4 +435,4 @@ export default function PhotoLarge({
         </div>}
     />
   );
-};
+}

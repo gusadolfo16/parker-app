@@ -280,7 +280,7 @@ export default function AdminAppConfigurationClient({
                   >
                     create store
                   </AdminLink>
-                  {' '} 
+                  {' '}
                   and connect to project
                 </>,
                 )}
@@ -536,7 +536,7 @@ export default function AdminAppConfigurationClient({
             Set environment variable from {'"1-100"'}
             {' '}
             to control the quality of large photos
-            ({'"100"'} represents highest quality/largest size):
+            ({'`"100"`'} represents highest quality/largest size):
             {renderEnvVars(['NEXT_PUBLIC_IMAGE_QUALITY'])}
           </ChecklistRow>
           <ChecklistRow
@@ -646,7 +646,8 @@ export default function AdminAppConfigurationClient({
             optional
           >
             Set environment variable to {'"none"'}, {'"toggle"'} (default),
-            or {'"menu"'}, to control sort UI on grid/full homepages:
+            or {'"menu"'},
+            to control sort UI on grid/full homepages:
             {renderEnvVars(['NEXT_PUBLIC_NAV_SORT_CONTROL'])}
           </ChecklistRow>
           <ChecklistRow

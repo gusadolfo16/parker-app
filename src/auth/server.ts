@@ -36,7 +36,8 @@ export const {
       const isUserLoggedIn = !!auth?.user;
       const isAdminUser = auth?.user?.email === process.env.ADMIN_EMAIL;
 
-      const isRequestAuthorized = !isUrlProtected || (isUserLoggedIn && isAdminUser);
+      const isRequestAuthorized =
+        !isUrlProtected || (isUserLoggedIn && isAdminUser);
 
       return isRequestAuthorized;
     },

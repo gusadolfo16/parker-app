@@ -1,7 +1,13 @@
 'use client';
 
 import { Photo } from '@/photo';
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+} from 'react';
 
 interface SelectionContextType {
   selectionMode: boolean;
@@ -12,7 +18,9 @@ interface SelectionContextType {
   confirmSelection: () => void; // Placeholder for now
 }
 
-const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
+const SelectionContext = createContext<SelectionContextType | undefined>(
+  undefined,
+);
 
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
@@ -42,7 +50,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const confirmSelection = useCallback(() => {
-    // TODO: Implement actual confirmation logic (e.g., API call to lock photos)
+    // TODO: Implement actual confirmation logic
     console.log('Confirmed selection:', selectedPhotos);
     setSelectionMode(false);
     setSelectedPhotos([]);

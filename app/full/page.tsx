@@ -7,6 +7,7 @@ import PhotoFullPage from '@/photo/PhotoFullPage';
 import { getPhotosMetaCached } from '@/photo/cache';
 import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import { FEED_META_QUERY_OPTIONS, getFeedQueryOptions } from '@/feed';
+import { getAppText } from '@/i18n/state/server';
 
 export const dynamic = 'force-static';
 export const maxDuration = 60;
@@ -25,12 +26,14 @@ export default async function FullPage() {
   const [
     photos,
     photosCount,
+    appText,
   ] = await Promise.all([
     getPhotosCached()
       .catch(() => []),
     getPhotosMetaCached(FEED_META_QUERY_OPTIONS)
       .then(({ count }) => count)
       .catch(() => 0),
+    getAppText(),
   ]);
 
   return (
@@ -40,6 +43,8 @@ export default async function FullPage() {
         photosCount,
         ...USER_DEFAULT_SORT_OPTIONS,
       }} />
-      : <PhotosEmptyState />
+      : <PhotosEmptyState {...{
+        appText,
+      }} />
   );
 }

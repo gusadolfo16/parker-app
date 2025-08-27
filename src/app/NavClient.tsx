@@ -57,20 +57,6 @@ export default function NavClient({
     clearSelection,
   } = useSelection();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const {
     classNameStickyContainer,
     classNameStickyNav,
@@ -181,7 +167,15 @@ export default function NavClient({
               {/* Sign-in Button */}
               {!isUserSignedIn && (
                 <div>
-                  <Link href="/sign-in" className="font-mono link h-4 active:text-medium disabled:bg-transparent! hover:text-dim inline-flex items-center gap-1.5 self-start whitespace-nowrap focus:outline-hidden text-medium">
+                  <Link
+                    href="/sign-in"
+                    className={clsx(
+                      'font-mono link h-4 active:text-medium',
+                      'disabled:bg-transparent! hover:text-dim',
+                      'inline-flex items-center gap-1.5 self-start',
+                      'whitespace-nowrap focus:outline-hidden text-medium',
+                    )}
+                  >
                     Sign In
                   </Link>
                 </div>
@@ -189,7 +183,15 @@ export default function NavClient({
               {/* Admin Button */}
               {isUserAdmin && (
                 <div>
-                  <Link href="/admin/photos" className="font-mono link h-4 active:text-medium disabled:bg-transparent! hover:text-dim inline-flex items-center gap-1.5 self-start whitespace-nowrap focus:outline-hidden text-medium">
+                  <Link
+                    href="/admin/photos"
+                    className={clsx(
+                      'font-mono link h-4 active:text-medium',
+                      'disabled:bg-transparent! hover:text-dim',
+                      'inline-flex items-center gap-1.5 self-start',
+                      'whitespace-nowrap focus:outline-hidden text-medium',
+                    )}
+                  >
                     Admin
                   </Link>
                 </div>
@@ -200,4 +202,4 @@ export default function NavClient({
       }
     />
   );
-};
+}
