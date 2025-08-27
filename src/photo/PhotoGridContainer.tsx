@@ -19,7 +19,6 @@ export default function PhotoGridContainer({
   animateOnFirstLoadOnly,
   header,
   sidebar,
-  canSelect,
   ...categories
 }: {
   cacheKey: string
@@ -55,7 +54,6 @@ export default function PhotoGridContainer({
             ...categories,
             animateOnFirstLoadOnly,
             onAnimationComplete,
-            canSelect,
           }} />
           {count > photos.length &&
             <PhotoGridInfinite {...{
@@ -67,7 +65,6 @@ export default function PhotoGridContainer({
               ...categories,
               canStart: shouldAnimateDynamicItems,
               animateOnFirstLoadOnly,
-              canSelect,
             }} />}
         </div>
       </div>}
