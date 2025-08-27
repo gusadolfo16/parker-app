@@ -4,7 +4,7 @@ import { useSelection } from '@/selection/SelectionContext';
 import PhotoGrid from '@/photo/PhotoGrid';
 import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import AppGrid from '@/components/AppGrid';
-import { AppText } from '@/i18n/state/client';
+import { AppTextState as AppText } from '@/i18n/state';
 
 export default function SelectedPageClient({ appText }: { appText: AppText }) {
   const { selectedPhotos } = useSelection();
