@@ -6,7 +6,7 @@ import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import AppGrid from '@/components/AppGrid';
 import { AppTextState as AppText } from '@/i18n/state';
 
-export default function SelectedPageClient({ appText }: { appText: AppText }) {
+export default function SelectedPageClient({ appText }: { appText: AppText['onboarding'] }) {
   const { selectedPhotos } = useSelection();
 
   return (

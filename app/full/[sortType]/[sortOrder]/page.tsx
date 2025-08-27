@@ -49,6 +49,6 @@ export default async function FullPageSort({ params }: SortProps) {
         photosCount,
         ...sortOptions,
       }} />
-      : <PhotosEmptyState appText={appText} />
+      : <PhotosEmptyState appText={appText.onboarding} />
   );
 }

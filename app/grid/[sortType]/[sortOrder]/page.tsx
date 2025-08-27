@@ -61,6 +61,6 @@ export default async function GridPage({ params }: SortProps) {
           ...categories,
         }}
       />
-      : <PhotosEmptyState appText={appText} />
+      : <PhotosEmptyState appText={appText.onboarding} />
   );
 }

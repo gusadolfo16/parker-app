@@ -54,6 +54,6 @@ export default async function GridPage() {
           ...categories,
         }}
       />
-      : <PhotosEmptyState appText={appText} />
+      : <PhotosEmptyState appText={appText.onboarding} />
   );
 }

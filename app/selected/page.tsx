@@ -4,5 +4,5 @@ import SelectedPageClient from './SelectedPageClient';
 export default async function SelectedPage() {
   const appText = await getAppText();
 
-  return <SelectedPageClient appText={appText} />;
+  return <SelectedPageClient appText={appText.onboarding} />;
 }

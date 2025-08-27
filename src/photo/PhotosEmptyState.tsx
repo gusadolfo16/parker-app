@@ -11,12 +11,12 @@ import { revalidateAdminPathAction } from '@/admin/actions';
 import SignInOrUploadClient from '@/admin/SignInOrUploadClient';
 import Link from 'next/link';
 import { PATH_ADMIN_CONFIGURATION } from '@/app/path';
-import { AppText } from '@/i18n/type';
+import { AppTextState as AppText } from '@/i18n/state';
 
 export default function PhotosEmptyState({
   appText,
 }: {
-  appText: AppText
+  appText: AppText['onboarding']
 }) {
   return (
     <AppGrid
@@ -35,8 +35,8 @@ export default function PhotosEmptyState({
             'text-gray-700 dark:text-gray-200',
           )}>
             {!IS_SITE_READY
-              ? appText.onboarding.setupIncomplete
-              : appText.onboarding.setupComplete}
+              ? appText.setupIncomplete
+              : appText.setupComplete}
           </div>
           {!IS_SITE_READY
             ? <AdminAppConfiguration simplifiedView />
@@ -46,7 +46,7 @@ export default function PhotosEmptyState({
                 onLastUpload={revalidateAdminPathAction}
               />
               <div>
-                {appText.onboarding.setupConfig}
+                {appText.setupConfig}
                 {' '}
                 <Link
                   href={PATH_ADMIN_CONFIGURATION}

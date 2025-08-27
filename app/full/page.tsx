@@ -44,7 +44,7 @@ export default async function FullPage() {
         ...USER_DEFAULT_SORT_OPTIONS,
       }} />
       : <PhotosEmptyState {...{
-        appText,
+        appText: appText.onboarding,
       }} />
   );
 }

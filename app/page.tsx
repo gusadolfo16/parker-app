@@ -64,6 +64,6 @@ export default async function HomePage() {
           photosCount,
           ...USER_DEFAULT_SORT_OPTIONS,
         }} />
-      : <PhotosEmptyState appText={appText} />
+      : <PhotosEmptyState appText={appText.onboarding} />
   );
 }
