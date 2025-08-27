@@ -148,23 +148,12 @@ export default function PhotoDetailPage({
             primaryTag={tag}
             priority
             prefetchRelatedLinks
-            recent={recent}
-            year={year}
             showTitle={Boolean(customHeader)}
             showTitleAsH1
             showCamera={!camera}
             showLens={!lens}
             showFilm={!film}
             showRecipe={!recipe}
-            shouldShare={shouldShare}
-            shouldShareRecents={recent !== undefined}
-            shouldShareYear={year !== undefined}
-            shouldShareCamera={camera !== undefined}
-            shouldShareLens={lens !== undefined}
-            shouldShareTag={tag !== undefined}
-            shouldShareFilm={film !== undefined}
-            shouldShareRecipe={recipe !== undefined}
-            shouldShareFocalLength={focal !== undefined}
             includeFavoriteInAdminMenu={includeFavoriteInAdminMenu}
             showAdminKeyCommands
           />,
