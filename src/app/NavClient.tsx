@@ -110,7 +110,7 @@ export default function NavClient({
               {selectionMode ? (
                 <Switcher type="borderless" className="mr-2">
                   <SwitcherItem
-                    icon={<span>Confirm ({selectedPhotos.length})</span>}
+                    icon={<span>Confirm</span>}
                     onClick={() => confirmSelection()}
                     tooltip={{
                       content: 'Confirm Selection',
@@ -126,19 +126,9 @@ export default function NavClient({
                     width="narrow"
                   />
                 </Switcher>
+                <span className="text-dim ml-2">({selectedPhotos.length})</span>
               ) : (
-                <div className="w-20">
-                  <Switcher type="borderless" className="mr-2">
-                    <SwitcherItem
-                      icon={<span>Select</span>}
-                      onClick={() => toggleSelectionMode()}
-                      tooltip={{
-                        content: 'Select Photos',
-                      }}
-                      width="narrow"
-                    />
-                  </Switcher>
-                </div>
+                <div className="mr-2">
               )}
               {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
               {!selectionMode && selectedPhotos.length > 0 && (

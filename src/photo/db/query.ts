@@ -77,7 +77,9 @@ const createPhotosTable = () =>
       exclude_from_feeds BOOLEAN DEFAULT FALSE,
       hidden BOOLEAN DEFAULT FALSE,
       updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+      locked_by VARCHAR(255),
+      locked_at TIMESTAMP WITH TIME ZONE
     )
   `;
 
@@ -204,7 +206,9 @@ export const insertPhoto = (photo: PhotoDbInsert) =>
       exclude_from_feeds,
       hidden,
       taken_at,
-      taken_at_naive
+      taken_at_naive,
+      locked_by,
+      locked_at
     )
     VALUES (
       ${photo.id},
@@ -238,7 +242,9 @@ export const insertPhoto = (photo: PhotoDbInsert) =>
       ${photo.excludeFromFeeds},
       ${photo.hidden},
       ${photo.takenAt},
-      ${photo.takenAtNaive}
+      ${photo.takenAtNaive},
+      ${photo.lockedBy},
+      ${photo.lockedAt}
     )
   `, 'insertPhoto');
 
@@ -276,6 +282,8 @@ export const updatePhoto = (photo: PhotoDbInsert) =>
     hidden=${photo.hidden},
     taken_at=${photo.takenAt},
     taken_at_naive=${photo.takenAtNaive},
+    locked_by=${photo.lockedBy},
+    locked_at=${photo.lockedAt},
     updated_at=${(new Date()).toISOString()}
     WHERE id=${photo.id}
   `, 'updatePhoto');
@@ -662,3 +670,31 @@ export const getPhotosInNeedOfUpdateCount = async (
   WHERE updated_at < ${updatedBefore}
 `.then(({ rows }) => parseInt(rows[0].count, 10))
 , 'getPhotosInNeedOfUpdateCount');
+
+export const lockPhotos = async (photoIds: string[], userId: string) => {
+  const lockedAt = new Date();
+  return safelyQueryPhotos(() => query(`
+    UPDATE photos
+    SET
+      locked_by = $1,
+      locked_at = $2
+    WHERE id = ANY($3)
+  `, [
+    userId,
+    lockedAt,
+    convertArrayToPostgresString(photoIds),
+  ]), 'lockPhotos');
+};
+
+export const unlockPhotos = async (photoIds: string[], userId: string) => {
+  return safelyQueryPhotos(() => query(`
+    UPDATE photos
+    SET
+      locked_by = NULL,
+      locked_at = NULL
+    WHERE id = ANY($1) AND locked_by = $2
+  `, [
+    convertArrayToPostgresString(photoIds),
+    userId,
+  ]), 'unlockPhotos');
+};

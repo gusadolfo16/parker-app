@@ -22,7 +22,7 @@ export const titleForLens = (
   explicitCount?: number,
 ) => [
   `${appText.category.lens}:`,
-  formatLensText(lensFromPhoto(photos[0], lens)),
+  formatLensText(photos.length > 0 ? lensFromPhoto(photos[0], lens) : lens),
   photoQuantityText(explicitCount ?? photos.length, appText),
 ].join(' ');
 

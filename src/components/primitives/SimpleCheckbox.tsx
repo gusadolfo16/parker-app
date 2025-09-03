@@ -11,6 +11,7 @@ export default function SimpleCheckbox(props: {
     children,
     className,
     type: _type,
+    disabled,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -19,10 +20,11 @@ export default function SimpleCheckbox(props: {
       className={clsx(
         'inline-flex items-center gap-2 text-main',
         'cursor-pointer active:opacity-50',
+        disabled && 'opacity-50 cursor-not-allowed',
         className,
       )}
       onClick={() => {
-        if (inputRef.current) {
+        if (inputRef.current && !disabled) {
           inputRef.current.checked = !inputRef.current.checked;
         }
       }}
@@ -32,6 +34,7 @@ export default function SimpleCheckbox(props: {
         ref={inputRef}
         type="checkbox"
         className="hidden"
+        disabled={disabled}
       />
       <span>
         {rest.checked 

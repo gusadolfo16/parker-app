@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth/server';
+import { lockPhotos, unlockPhotos } from '@/photo/db/query';
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -8,12 +9,31 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { photoIds } = await req.json();
+  const { photoIds, userId } = await req.json();
 
-  // Here, you would typically store photoIds in a database
-  // associated with the user's session or a temporary storage.
-  // For now, we'll just log them.
-  console.log('Received selected photo IDs:', photoIds);
+  if (session.user.id !== userId) {
+    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+  }
+
+  await lockPhotos(photoIds, userId);
 
   return NextResponse.json({ message: 'Selection received' });
+}
+
+export async function DELETE(req: NextRequest) {
+  const session = await auth();
+
+  if (!session) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { photoIds, userId } = await req.json();
+
+  if (session.user.id !== userId) {
+    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
+  }
+
+  await unlockPhotos(photoIds, userId);
+
+  return NextResponse.json({ message: 'Selection updated' });
 }

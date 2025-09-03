@@ -8,22 +8,25 @@ import Spinner from './Spinner';
 export default function SelectTileOverlay({
   isSelected,
   onSelectChange,
+  disabled,
 }: {
   isSelected: boolean
   onSelectChange: () => void
+  disabled?: boolean
 }) {
   const { isPerformingSelectEdit } = useAppState();
 
   return (
     <div className={clsx(
-      'absolute w-full h-full cursor-pointer',
+      'absolute w-full h-full',
+      !disabled && 'cursor-pointer',
       'active:bg-gray-950/40 dark:active:bg-gray-950/60',
       isPerformingSelectEdit && 'pointer-events-none',
     )}>
       {/* Admin Select Border */}
       <div
         className="w-full h-full"
-        onClick={onSelectChange}
+        onClick={() => !disabled && onSelectChange()}
       >
         <div
           className={clsx(
@@ -53,6 +56,7 @@ export default function SelectTileOverlay({
             )}
             checked={isSelected}
             onChange={onSelectChange}
+            disabled={disabled}
           />}
       </div>
     </div>

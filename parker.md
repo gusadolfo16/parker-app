@@ -561,3 +561,47 @@ Se ha corregido un error de compilación que ocurría al generar páginas para l
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/index.ts`.
 - Se añadió una comprobación en la función `dateRangeForPhotos` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para lentes sin fotos.
+
+### 32. Correcciones y Mejoras (Iteración 18)
+
+**Paso 32.1: Corregir error de compilación en la generación de metadatos de cámaras sin fotos**
+
+Se ha corregido un error de compilación que ocurría al generar páginas para cámaras que no tenían fotos asociadas. El error se debía a que la función `titleForCamera` no manejaba correctamente el caso en el que recibía un array de fotos vacío.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/camera/meta.ts`.
+- Se añadió una comprobación en la función `titleForCamera` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío.
+
+**Paso 32.2: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
+
+Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `titleForLens` no manejaba correctamente el caso en el que recibía un array de fotos vacío.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/meta.ts`.
+- Se añadió una comprobación en la función `titleForLens` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío.
+
+**Paso 32.3: Mejorar la legibilidad del botón de selección**
+
+Se ha mejorado la legibilidad del botón de selección en la barra de navegación eliminando un ancho fijo que impedía que el texto se mostrara completo.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se eliminó la clase `w-20` del `div` que envuelve el `SwitcherItem` del botón de selección.
+
+**Paso 32.4: Evitar la superposición del botón de confirmación de selección**
+
+Se ha evitado que el botón de confirmación de selección y el número de fotos seleccionadas se superpongan en la barra de navegación.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se movió el contador de fotos seleccionadas fuera del botón de confirmación, mostrándolo como un elemento de texto separado.
+
+**Paso 32.5: Implementar el bloqueo de fotos seleccionadas**
+
+Se ha implementado un mecanismo para bloquear las fotos que un usuario ha seleccionado, evitando que otros usuarios puedan seleccionarlas.
+
+**Detalles de la acción:**
+- Se ha añadido un campo `locked_by` y `locked_at` a la tabla `photos` en la base de datos.
+- Se ha actualizado la función `confirmSelection` en `src/selection/SelectionContext.tsx` para que envíe el ID del usuario al API de selección.
+- Se ha creado un nuevo endpoint de API (`DELETE /api/selection`) para desbloquear las fotos.
+- Se ha actualizado la interfaz de usuario en `src/photo/PhotoGrid.tsx` and `src/photo/PhotoLarge.tsx` para mostrar las fotos bloqueadas con un filtro de escala de grises y deshabilitar la selección.

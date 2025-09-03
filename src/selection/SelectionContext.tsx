@@ -9,6 +9,7 @@ import {
   ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 interface SelectionContextType {
   selectionMode: boolean;
@@ -27,6 +28,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
   const router = useRouter();
+  const { data: session } = useSession();
 
   const toggleSelectionMode = useCallback(() => {
     setSelectionMode(prevMode => !prevMode);
@@ -47,20 +49,44 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  const clearSelection = useCallback(() => {
+  const clearSelection = useCallback(async () => {
+    const photoIds = selectedPhotos.map(photo => photo.id);
+    const userId = session?.user?.id;
+
+    if (userId && photoIds.length > 0) {
+      try {
+        await fetch('/api/selection', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ photoIds, userId }),
+        });
+      } catch (error) {
+        console.error('Error clearing selection:', error);
+      }
+    }
+
     setSelectedPhotos([]);
     setSelectionMode(false);
-  }, []);
+  }, [selectedPhotos, session]);
 
   const confirmSelection = useCallback(async () => {
     const photoIds = selectedPhotos.map(photo => photo.id);
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      console.error('User is not authenticated');
+      return;
+    }
+
     try {
       const response = await fetch('/api/selection', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ photoIds }),
+        body: JSON.stringify({ photoIds, userId }),
       });
 
       if (response.ok) {
@@ -73,7 +99,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error('Error confirming selection:', error);
     }
-  }, [selectedPhotos, router]);
+  }, [selectedPhotos, router, session]);
 
   return (
     <SelectionContext.Provider

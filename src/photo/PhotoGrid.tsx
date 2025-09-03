@@ -70,12 +70,14 @@ export default function PhotoGrid({
       onAnimationComplete={onAnimationComplete}
       items={photos.map((photo, index) =>{
         const isSelected = selectedPhotos.some(p => p.id === photo.id);
+        const isLocked = photo.lockedBy != null;
         return <div
           key={photo.id}
           className={clsx(
             'flex relative overflow-hidden',
             'group',
             isSelected && 'border-4 border-green-500', // Added green border
+            isLocked && 'grayscale cursor-not-allowed',
           )}
           style={{
             ...GRID_ASPECT_RATIO !== 0 && {
@@ -102,7 +104,8 @@ export default function PhotoGrid({
           {selectionMode &&
             <SelectTileOverlay
               isSelected={isSelected}
-              onSelectChange={() => togglePhotoSelection(photo)}
+              onSelectChange={() => !isLocked && togglePhotoSelection(photo)}
+              disabled={isLocked}
             />}
         </div>;
       }).concat(additionalTile ? <>{additionalTile}</> : [])}

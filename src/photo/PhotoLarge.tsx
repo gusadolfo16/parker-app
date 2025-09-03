@@ -188,7 +188,8 @@ export default function PhotoLarge({
         ? 'w-[80%]'
         : undefined;
 
-  const isSelected = selectedPhotos.includes(photo);
+  const isSelected = selectedPhotos.some(p => p.id === photo.id);
+  const isLocked = photo.lockedBy != null;
 
   const renderLargePhoto =
     <div className={clsx(
@@ -198,8 +199,8 @@ export default function PhotoLarge({
       arePhotosMatted && 'h-[90%]',
       arePhotosMatted && matteContentWidthForAspectRatio,
       isSelected && 'border-4 border-green-500',
+      isLocked && 'grayscale',
     )}>
-      <ZoomControls
         ref={refZoomControls}
         selectImageElement={selectZoomImageElement}
         {...{ isEnabled: false, shouldZoomOnFKeydown }}
@@ -287,7 +288,11 @@ export default function PhotoLarge({
                   {isUserAdmin && renderAdminMenu}
                 </div>
                 {selectionMode && (
-                  <button onClick={() => togglePhotoSelection(photo)}>
+                  <button
+                    onClick={() => !isLocked && togglePhotoSelection(photo)}
+                    disabled={isLocked}
+                    className={clsx(isLocked && 'cursor-not-allowed')}
+                  >
                     {isSelected ? 'Deselect' : 'Select'}
                   </button>
                 )}

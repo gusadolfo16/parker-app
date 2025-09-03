@@ -92,15 +92,18 @@ export interface PhotoDbInsert extends PhotoExif {
   hidden?: boolean
   takenAt: string
   takenAtNaive: string
+  lockedBy?: string
+  lockedAt?: Date
 }
 
 // Raw db response
 export interface PhotoDb extends
-  Omit<PhotoDbInsert, 'takenAt' | 'tags'> {
+  Omit<PhotoDbInsert, 'takenAt' | 'tags' | 'lockedAt'> {
   updatedAt: Date
   createdAt: Date
   takenAt: Date
   tags: string[] | null
+  lockedAt: Date | null
 }
 
 // Parsed db response
