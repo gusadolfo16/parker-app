@@ -625,3 +625,13 @@ Se ha corregido un error de tipo que ocurría en la ruta de la API de selección
 **Detalles de la acción:**
 - Se modificó el archivo `app/api/selection/route.ts`.
 - Se añadió una comprobación para asegurar que `session.user` existe antes de intentar acceder a sus propiedades en las funciones `POST` y `DELETE`.
+
+### 35. Correcciones y Mejoras (Iteración 21)
+
+**Paso 35.1: Corregir error de tipo `lockedAt` en `src/photo/db/query.ts`**
+
+Se ha corregido un error de tipo que ocurría en la función `insertPhoto` y `updatePhoto` en `src/photo/db/query.ts` al intentar insertar o actualizar el campo `lockedAt` con un objeto `Date` en lugar de una cadena de texto.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/query.ts`.
+- Se añadió una comprobación para convertir `photo.lockedAt` a una cadena de texto ISO (`photo.lockedAt.toISOString()`) si es un objeto `Date`, o a `null` si es `undefined` antes de pasarlo a la consulta SQL.

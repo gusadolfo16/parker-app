@@ -244,7 +244,7 @@ export const insertPhoto = (photo: PhotoDbInsert) =>
       ${photo.takenAt},
       ${photo.takenAtNaive},
       ${photo.lockedBy},
-      ${photo.lockedAt}
+      ${photo.lockedAt ? photo.lockedAt.toISOString() : null}
     )
   `, 'insertPhoto');
 
@@ -283,7 +283,7 @@ export const updatePhoto = (photo: PhotoDbInsert) =>
     taken_at=${photo.takenAt},
     taken_at_naive=${photo.takenAtNaive},
     locked_by=${photo.lockedBy},
-    locked_at=${photo.lockedAt},
+    locked_at=${photo.lockedAt ? photo.lockedAt.toISOString() : null},
     updated_at=${(new Date()).toISOString()}
     WHERE id=${photo.id}
   `, 'updatePhoto');
@@ -681,7 +681,7 @@ export const lockPhotos = async (photoIds: string[], userId: string) => {
     WHERE id = ANY($3)
   `, [
     userId,
-    lockedAt,
+    lockedAt.toISOString(),
     convertArrayToPostgresString(photoIds),
   ]), 'lockPhotos');
 };
