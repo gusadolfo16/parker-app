@@ -615,3 +615,13 @@ Se han corregido errores de sintaxis en los archivos `src/photo/PhotoLarge.tsx` 
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/PhotoLarge.tsx` para corregir una etiqueta de cierre en el componente `ZoomControls`.
 - Se modificó el archivo `src/app/NavClient.tsx` para envolver los botones de selección y el contador de fotos en un `div` para proporcionar un único elemento raíz.
+
+### 34. Correcciones y Mejoras (Iteración 20)
+
+**Paso 34.1: Corregir error de tipo `session.user` posiblemente `undefined` en la ruta de la API de selección**
+
+Se ha corregido un error de tipo que ocurría en la ruta de la API de selección (`app/api/selection/route.ts`) al intentar acceder a `session.user.id` sin verificar si `session.user` era `undefined`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/api/selection/route.ts`.
+- Se añadió una comprobación para asegurar que `session.user` existe antes de intentar acceder a sus propiedades en las funciones `POST` y `DELETE`.
