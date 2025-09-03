@@ -317,14 +317,14 @@ export const dateRangeForPhotos = (
     const startNaive = explicitDateRange?.start ?? photosSorted[photos.length - 1]?.takenAtNaive;
     const endNaive = explicitDateRange?.end ?? photosSorted[0]?.takenAtNaive;
 
-    if (startNaive) {
+    if (startNaive !== null && startNaive !== undefined) {
       start = formatDateFromPostgresString(
         startNaive,
         'short',
       );
     }
 
-    if (endNaive) {
+    if (endNaive !== null && endNaive !== undefined) {
       end = formatDateFromPostgresString(
         endNaive,
         'short',

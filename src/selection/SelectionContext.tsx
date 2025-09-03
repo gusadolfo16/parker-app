@@ -28,7 +28,9 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
   const router = useRouter();
-  const { data: session } = useSession();
+  const sessionData = useSession();
+
+  const session = sessionData?.data;
 
   const toggleSelectionMode = useCallback(() => {
     setSelectionMode(prevMode => !prevMode);

@@ -373,8 +373,6 @@ Se ha refactorizado la lógica de prueba de conexión en el panel de administrac
 - Se modificó `src/admin/config/AdminAppConfigurationClient.tsx`.
 - Se eliminaron las props `databaseError`, `storageError`, `redisError`, `aiError` y `isAnalyzingConfiguration` de la interfaz de props del componente.
 - Se añadieron estados locales (`connectionErrors` y `isAnalyzingConfiguration`) utilizando `useState`.
-- Se implementó un `useEffect` para llamar a `testConnectionsAction` (una acción de servidor) una vez que el componente se monta, actualizando los estados locales con los resultados de la prueba de conexión.
-- Se actualizó el renderizado condicional de los mensajes de error (`renderError`) para utilizar los errores del estado local `connectionErrors`.
 
 **Paso 20.2: Ajustar Propiedades de `AdminAppConfigurationClient`**
 
@@ -645,3 +643,23 @@ Se ha corregido un error de tipo que ocurría en la función `convertFormDataToP
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/form/index.ts`.
 - Se añadió una comprobación para convertir `photoForm.lockedAt` a un objeto `Date` si es una cadena de texto, o a `undefined` si es `null` o `undefined` antes de asignarlo a la propiedad `lockedAt`.
+
+### 37. Correcciones y Mejoras (Iteración 23)
+
+**Paso 37.1: Corregir error de tipo `lockedAt` en `src/photo/index.ts`**
+
+Se ha corregido un error de tipo que ocurría en la función `convertPhotoToPhotoDbInsert` en `src/photo/index.ts` al intentar asignar un valor de tipo `Date | null` a la propiedad `lockedAt` de tipo `Date | undefined`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/index.ts`.
+- Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
+
+### 38. Correcciones y Mejoras (Iteración 24)
+
+**Paso 38.1: Corregir error de tipo `lockedAt` en `app/api/selection/route.ts`**
+
+Se ha corregido un error de tipo que ocurría en la ruta de la API de selección (`app/api/selection/route.ts`) al intentar asignar un valor de tipo `Date | null` a la propiedad `lockedAt` de tipo `Date | undefined`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/api/selection/route.ts`.
+- Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
