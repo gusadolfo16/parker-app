@@ -635,3 +635,13 @@ Se ha corregido un error de tipo que ocurría en la función `insertPhoto` y `up
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/db/query.ts`.
 - Se añadió una comprobación para convertir `photo.lockedAt` a una cadena de texto ISO (`photo.lockedAt.toISOString()`) si es un objeto `Date`, o a `null` si es `undefined` antes de pasarlo a la consulta SQL.
+
+### 36. Correcciones y Mejoras (Iteración 22)
+
+**Paso 36.1: Corregir error de tipo `lockedAt` en `src/photo/form/index.ts`**
+
+Se ha corregido un error de tipo que ocurría en la función `convertFormDataToPhotoDbInsert` en `src/photo/form/index.ts` al intentar asignar un valor de tipo `string` a la propiedad `lockedAt` de tipo `Date`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/form/index.ts`.
+- Se añadió una comprobación para convertir `photoForm.lockedAt` a un objeto `Date` si es una cadena de texto, o a `undefined` si es `null` o `undefined` antes de asignarlo a la propiedad `lockedAt`.
