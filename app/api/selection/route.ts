@@ -5,7 +5,7 @@ import { lockPhotos, unlockPhotos } from '@/photo/db/query';
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  if (!session) {
+  if (!session || !session.user) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
