@@ -176,6 +176,7 @@ export const convertPhotoToPhotoDbInsert = (
   takenAt: photo.takenAt.toISOString(),
   recipeData: JSON.stringify(photo.recipeData),
   colorData: JSON.stringify(photo.colorData),
+  lockedAt: photo.lockedAt ?? undefined, // Convert null to undefined
 });
 
 export const descriptionForPhoto = (
