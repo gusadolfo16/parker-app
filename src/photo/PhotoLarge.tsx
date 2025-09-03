@@ -201,6 +201,7 @@ export default function PhotoLarge({
       isSelected && 'border-4 border-green-500',
       isLocked && 'grayscale',
     )}>
+      <ZoomControls
         ref={refZoomControls}
         selectImageElement={selectZoomImageElement}
         {...{ isEnabled: false, shouldZoomOnFKeydown }}

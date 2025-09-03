@@ -108,27 +108,40 @@ export default function NavClient({
               />
               {/* Selection Buttons */}
               {selectionMode ? (
-                <Switcher type="borderless" className="mr-2">
-                  <SwitcherItem
-                    icon={<span>Confirm</span>}
-                    onClick={() => confirmSelection()}
-                    tooltip={{
-                      content: 'Confirm Selection',
-                    }}
-                    width="narrow"
-                  />
-                  <SwitcherItem
-                    icon={<span>Cancel</span>}
-                    onClick={() => clearSelection()}
-                    tooltip={{
-                      content: 'Cancel Selection',
-                    }}
-                    width="narrow"
-                  />
-                </Switcher>
-                <span className="text-dim ml-2">({selectedPhotos.length})</span>
+                <div className="flex items-center">
+                  <Switcher type="borderless" className="mr-2">
+                    <SwitcherItem
+                      icon={<span>Confirm</span>}
+                      onClick={() => confirmSelection()}
+                      tooltip={{
+                        content: 'Confirm Selection',
+                      }}
+                      width="narrow"
+                    />
+                    <SwitcherItem
+                      icon={<span>Cancel</span>}
+                      onClick={() => clearSelection()}
+                      tooltip={{
+                        content: 'Cancel Selection',
+                      }}
+                      width="narrow"
+                    />
+                  </Switcher>
+                  <span className="text-dim ml-2">({selectedPhotos.length})</span>
+                </div>
               ) : (
                 <div className="mr-2">
+                  <Switcher type="borderless">
+                    <SwitcherItem
+                      icon={<span>Select</span>}
+                      onClick={() => toggleSelectionMode()}
+                      tooltip={{
+                        content: 'Select Photos',
+                      }}
+                      width="narrow"
+                    />
+                  </Switcher>
+                </div>
               )}
               {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
               {!selectionMode && selectedPhotos.length > 0 && (
