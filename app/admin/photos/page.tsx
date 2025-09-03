@@ -32,9 +32,9 @@ export default async function AdminPhotosPage() {
       limit: INFINITE_SCROLL_INITIAL_ADMIN_PHOTOS,
     }).catch(() => []),
     getPhotosMetaCached({ hidden: 'include'})
-      .then(({ count }) => count)
+      .then(({ count }: { count: number }) => count)
       .catch(() => 0),
-    getPhotosInNeedOfUpdateCount()
+    getPhotosInNeedOfUpdateCount(new Date().toISOString())
       .catch(() => 0),
     DEBUG_PHOTO_BLOBS
       ? getStoragePhotoUrlsNoStore()

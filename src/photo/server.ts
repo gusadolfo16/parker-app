@@ -130,7 +130,7 @@ export const extractImageDataFromBlobPath = async (
         },
         ...generateBlurData && { blurData },
         ...convertExifToFormData(exifData, exifrData, film, recipe),
-        ...colorFields,
+        ...colorFields && { colorData: JSON.stringify(colorFields.colorData) },
       },
     },
     imageResizedBase64,

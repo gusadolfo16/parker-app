@@ -427,3 +427,137 @@ Se han eliminado los `console.log` temporales que se habían añadido para depur
 - Se eliminaron los `console.log` dentro del `useEffect` que maneja el estado de autenticación y el `console.log` antes del `return` del componente.
 - Se modificó el archivo `src/app/AppViewSwitcher.tsx`.
 - Se eliminó el `console.log` al inicio del componente que mostraba el estado de `isUserAdmin`.
+
+### 24. Correcciones y Mejoras (Iteración 10)
+
+**Paso 24.1: Ocultar el botón de menú de administrador para usuarios no administradores**
+
+Se ha corregido un error que provocaba que el botón de menú de administrador de una foto (el icono de tres puntos) fuera visible para los usuarios no administradores.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/PhotoLarge.tsx`.
+- Se aseguró de que el componente `AdminPhotoMenu` solo se renderice si el usuario es un administrador, envolviendo su renderización en una comprobación `isUserAdmin && renderAdminMenu`.
+
+**Paso 24.2: Corregir la visualización de miniaturas de fotos anteriores y siguientes**
+
+Se ha solucionado un problema por el que al ver una foto no se mostraba la miniatura de la foto anterior en la cuadrícula de fotos relacionadas.
+
+**Detalles de la acción:**
+- Se modificó la consulta de la base de datos en `src/photo/db/query.ts` para obtener fotos antes y después de la foto actual.
+- Se actualizó la lógica de almacenamiento en caché en `src/photo/cache.ts` para filtrar correctamente la foto actual de la cuadrícula de fotos relacionadas.
+
+**Paso 24.3: Implementar la confirmación de la selección y la redirección**
+
+Se ha implementado la lógica para que, al confirmar una selección de fotos, el usuario sea redirigido a la página `/selected`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se utilizó el hook `useRouter` de `next/navigation` para redirigir al usuario a la página `/selected` cuando se llama a la función `confirmSelection`.
+
+**Paso 24.4: Corregir error de compilación: `operator does not exist: character varying = integer`**
+
+Se ha corregido un error de compilación relacionado con una operación SQL que intentaba comparar un tipo de dato `character varying` con un `integer` en la función `getPhotosNearId`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/query.ts`.
+- Se ajustó la consulta SQL para asegurar que los parámetros de `limit` se pasen y se utilicen correctamente como valores numéricos en las operaciones de comparación de `row_number`.
+
+**Paso 24.5: Implementar el backend para registrar la selección de fotos**
+
+Se ha creado un nuevo endpoint de API para recibir y procesar las fotos seleccionadas por el usuario.
+
+**Detalles de la acción:**
+- Se creó el archivo `app/api/selection/route.ts`.
+- Este endpoint recibe un array de IDs de fotos y, por ahora, los registra en la consola.
+- Se modificó la función `confirmSelection` en `src/selection/SelectionContext.tsx` para enviar los IDs de las fotos seleccionadas a este nuevo endpoint.
+
+**Paso 24.6: Controlar la visibilidad del botón "Ver Selección"**
+
+Se ha ajustado la lógica para que el botón "Ver Selección" solo sea visible cuando el modo de selección está inactivo y hay fotos seleccionadas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición para renderizar el botón "Ver Selección" solo cuando `!selectionMode && selectedPhotos.length > 0`.
+
+**Paso 24.7: Corregir la funcionalidad del botón "Cancelar Selección"**
+
+Se ha corregido el botón "Cancelar Selección" para que no solo borre la selección de fotos, sino que también desactive el modo de selección, devolviendo la interfaz a su estado inicial.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se añadió `setSelectionMode(false)` a la función `clearSelection`.
+
+### 25. Correcciones y Mejoras (Iteración 11)
+
+**Paso 25.1: Corregir errores de importación en `app/api/selection/route.ts`**
+
+Se han corregido los errores de compilación relacionados con la importación de `getServerSession` y `authOptions` en el archivo de la ruta de la API de selección.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/api/selection/route.ts`.
+- Se cambió la importación de `getServerSession` de `next-auth` a `auth` desde `@/auth/server`.
+- Se eliminó la importación de `authOptions` ya que no era necesaria con el nuevo enfoque de importación de `auth`.
+
+### 26. Correcciones y Mejoras (Iteración 12)
+
+**Paso 26.1: Corregir error de tipo `limit` en `src/photo/db/query.ts`**
+
+Se ha corregido un error de tipo (`TypeError: 'limit' is possibly 'undefined'`) en la función `getPhotosNearId` que ocurría al intentar realizar operaciones aritméticas con la variable `limit` sin asegurar que estuviera definida.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/query.ts`.
+- Se añadió un valor por defecto a la desestructuración de `limit` (`const { limit = RELATED_GRID_PHOTOS_TO_SHOW + 2 } = options;`) para asegurar que siempre tenga un valor numérico.
+- Se importó `RELATED_GRID_PHOTOS_TO_SHOW` desde `@/photo` para utilizarlo como valor por defecto.
+
+### 27. Correcciones y Mejoras (Iteración 13)
+
+**Paso 27.1: Corregir error de compilación `operator does not exist: character varying = integer` en `src/photo/db/query.ts`**
+
+Se ha corregido un error de compilación recurrente (`operator does not exist: character varying = integer`) en la función `getPhotosNearId`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/query.ts`.
+- Se refactorizó la construcción de la consulta SQL para utilizar directamente el template literal `sql` de `@/platforms/postgres`.
+- Esto asegura que los parámetros se pasen correctamente a la consulta SQL como valores tipados, resolviendo el problema de la inferencia de tipos y la comparación incorrecta de `character varying` con `integer`.
+
+### 28. Correcciones y Mejoras (Iteración 14)
+
+**Paso 28.1: Corregir error de tipo en `src/photo/db/query.ts` al mapear resultados de la base de datos**
+
+Se ha corregido un error de tipo (`Type error: Argument of type '(photoDbRaw: PhotoDb) => Photo' is not assignable to parameter of type '(value: QueryResultRow, index: number, array: QueryResultRow[]) => Photo'.`) que ocurría al intentar mapear los resultados de la base de datos a objetos `Photo`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/query.ts`.
+- Se añadió un casting explícito (`row as PhotoDb`) al mapear cada fila de la base de datos a `PhotoDb` antes de pasarla a `parsePhotoFromDb`, asegurando la compatibilidad de tipos.
+
+### 29. Correcciones y Mejoras (Iteración 15)
+
+**Paso 29.1: Corregir error de compilación `syntax error at or near "$1"` en `src/photo/db/query.ts`**
+
+Se ha corregido un error de sintaxis (`syntax error at or near "$1"`) en la función `getPhotosNearId`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/query.ts`.
+- Se ajustó la construcción de la consulta SQL para asegurar que los parámetros de `wheresValues` se pasen correctamente al template literal `sql`.
+- Se introdujo una variable `paramIndex` para gestionar el índice de los parámetros de forma dinámica, asegurando que los placeholders `$N` en la consulta SQL se correspondan correctamente con los valores proporcionados.
+
+### 30. Correcciones y Mejoras (Iteración 16)
+
+**Paso 30.1: Corregir error de tipo `Property 'photos' does not exist on type 'QueryResult<QueryResultRow>'` en `src/photo/cache.ts`**
+
+Se ha corregido un error de tipo (`Property 'photos' does not exist on type 'QueryResult<QueryResultRow>'`) en la función `getPhotosNearIdCached`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/cache.ts`.
+- Se refactorizó la función `getPhotosNearId` en `src/photo/db/query.ts` para que devuelva directamente un objeto con las propiedades `photos` e `indexNumber`.
+- Se ajustó la llamada a `query` en `getPhotosNearId` para que utilice `await query(queryString, values)` en lugar del template literal `sql` con `.then()`, lo que permite un control más directo sobre el tipo de retorno y evita el error de tipo al desestructurar el resultado en `getPhotosNearIdCached`.
+
+### 31. Correcciones y Mejoras (Iteración 17)
+
+**Paso 31.1: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
+
+Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `dateRangeForPhotos` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/index.ts`.
+- Se añadió una comprobación en la función `dateRangeForPhotos` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para lentes sin fotos.

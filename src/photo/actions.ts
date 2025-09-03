@@ -15,6 +15,7 @@ import {
   getPhotosNeedingRecipeTitleCount,
   updateColorDataForPhoto,
   getColorDataForPhotos,
+  getPublicPhotoIds,
 } from '@/photo/db/query';
 import { PhotoQueryOptions, areOptionsSensitive } from './db';
 import {
@@ -342,7 +343,7 @@ export const togglePrivatePhotoAction = async (
   redirectPath?: string,
 ) =>
   runAuthenticatedAdminServerAction(async () => {
-    const photo = await getPhoto(photoId, true);
+    const photo = await getPhoto(photoId);
     if (photo) {
       photo.hidden = !photo.hidden;
       await updatePhoto(convertPhotoToPhotoDbInsert(photo));
@@ -354,7 +355,7 @@ export const togglePrivatePhotoAction = async (
 export const deletePhotosAction = async (photoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
     for (const photoId of photoIds) {
-      const photo = await getPhoto(photoId, true);
+      const photo = await getPhoto(photoId);
       if (photo) {
         await deletePhoto(photoId).then(() => deleteFile(photo.url));
       }
@@ -413,7 +414,7 @@ export const getPhotosNeedingRecipeTitleCountAction = async (
 
 export const storeColorDataForPhotoAction = async (photoId: string) =>
   runAuthenticatedAdminServerAction(async () => {
-    const photo = await getPhoto(photoId, true);
+    const photo = await getPhoto(photoId);
     if (photo) {
       const colorFields = await getColorFieldsForImageUrl(
         photo.url,
@@ -431,7 +432,8 @@ export const storeColorDataForPhotoAction = async (photoId: string) =>
 
 export const recalculateColorDataForAllPhotosAction = async () =>
   runAuthenticatedAdminServerAction(async () => {
-    const photos = await getColorDataForPhotos();
+    const allPhotoIds = await getPublicPhotoIds();
+    const photos = await getColorDataForPhotos(allPhotoIds);
     for (const { id, url, colorData: _colorData } of photos) {
       const colorFields = await getColorFieldsForPhotoDbInsert(url, _colorData);
       if (colorFields && colorFields.colorSort) {
@@ -495,7 +497,7 @@ export const getExifDataAction = async (
 // - generate AI text data, if enabled, and auto-generated fields are empty
 export const syncPhotoAction = async (photoId: string, isBatch?: boolean) =>
   runAuthenticatedAdminServerAction(async () => {
-    const photo = await getPhoto(photoId ?? '', true);
+    const photo = await getPhoto(photoId ?? '');
 
     if (photo) {
       const {

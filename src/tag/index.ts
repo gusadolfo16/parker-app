@@ -118,13 +118,7 @@ export const generateMetaForTag = (
 ) => ({
   url: absolutePathForTag(tag),
   title: titleForTag(tag, photos, appText, explicitCount),
-  description: descriptionForTaggedPhotos(
-    photos,
-    appText,
-    true,
-    explicitCount,
-    explicitDateRange,
-  ),
+  description: 'Temporary Description',
   images: absolutePathForTagImage(tag),
 });
 

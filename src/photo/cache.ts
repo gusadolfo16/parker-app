@@ -186,10 +186,7 @@ export const getPhotosNearIdCached = (
     photo: photo ? parseCachedPhotoDates(photo) : undefined,
     photos: parseCachedPhotosDates(photos),
     ...limit && {
-      photosGrid: photos.slice(
-        isPhotoFirst ? 1 : 2,
-        isPhotoFirst ? limit - 1 : limit,
-      ),
+      photosGrid: photos.filter(p => p.id !== photoId),
     },
     indexNumber,
   };

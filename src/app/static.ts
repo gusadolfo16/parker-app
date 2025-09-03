@@ -27,9 +27,8 @@ export const staticallyGeneratePhotosIfConfigured = (type: StaticOutput) =>
     (type === 'image' && STATICALLY_OPTIMIZED_PHOTO_OG_IMAGES)
   )
     ? async () => {
-      const photoIds = await getPublicPhotoIds({
-        limit: GENERATE_STATIC_PARAMS_LIMIT,
-      })
+      const photoIds = await getPublicPhotoIds()
+        .then(ids => ids.slice(0, GENERATE_STATIC_PARAMS_LIMIT))
         .catch(e => {
           console.error(`Error fetching static photo data: ${e}`);
           return [];

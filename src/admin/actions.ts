@@ -38,7 +38,7 @@ export const getAdminDataAction = async () =>
       getPhotosMeta({ hidden: 'only' })
         .then(({ count }) => count)
         .catch(() => 0),
-      getPhotosInNeedOfUpdateCount(),
+      getPhotosInNeedOfUpdateCount(new Date().toISOString()),
       getGitHubMetaForCurrentApp(),
       getStorageUploadUrlsNoStore()
         .then(urls => urls.length)

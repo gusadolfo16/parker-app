@@ -97,7 +97,7 @@ export const getColorFieldsForPhotoDbInsert = async (
   const { colorData, ...rest } = await getColorFieldsForImageUrl(...args) ?? {};
   if (colorData !== undefined) {
     return {
-      colorData: JSON.stringify(colorData),
+      colorData,
       ...rest,
     };
   }

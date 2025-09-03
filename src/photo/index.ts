@@ -310,20 +310,37 @@ export const dateRangeForPhotos = (
 
   if (explicitDateRange || photos.length > 0) {
     const photosSorted = sortPhotosByDateNonDestructively(photos);
-    start = formatDateFromPostgresString(
-      explicitDateRange?.start ?? photosSorted[photos.length - 1].takenAtNaive,
-      'short',
-    );
-    end = formatDateFromPostgresString(
-      explicitDateRange?.end ?? photosSorted[0].takenAtNaive,
-      'short',
-    );
-    description = start === end
-      ? start
-      : `${start}–${end}`;
-    descriptionWithSpaces = start === end
-      ? start
-      : `${start} – ${end}`;
+    const startNaive = explicitDateRange?.start ?? photosSorted[photos.length - 1]?.takenAtNaive;
+    const endNaive = explicitDateRange?.end ?? photosSorted[0]?.takenAtNaive;
+
+    if (startNaive) {
+      start = formatDateFromPostgresString(
+        startNaive,
+        'short',
+      );
+    }
+
+    if (endNaive) {
+      end = formatDateFromPostgresString(
+        endNaive,
+        'short',
+      );
+    }
+
+    if (start && end) {
+      description = start === end
+        ? start
+        : `${start}–${end}`;
+      descriptionWithSpaces = start === end
+        ? start
+        : `${start} – ${end}`;
+    } else if (start) {
+      description = start;
+      descriptionWithSpaces = start;
+    } else if (end) {
+      description = end;
+      descriptionWithSpaces = end;
+    }
   }
 
   return { start, end, description, descriptionWithSpaces };

@@ -96,6 +96,7 @@ export default function PhotoLarge({
     arePhotosMatted,
     shouldDebugRecipeOverlays,
     isUserSignedIn,
+    isUserAdmin,
   } = useAppState();
 
   const {
@@ -283,7 +284,7 @@ export default function PhotoLarge({
               {/* Meta */}
               <div className="pr-3 md:pr-0">
                 <div className="float-end hidden md:block">
-                  {renderAdminMenu}
+                  {isUserAdmin && renderAdminMenu}
                 </div>
                 {selectionMode && (
                   <button onClick={() => togglePhotoSelection(photo)}>

@@ -118,14 +118,6 @@ export default function NavClient({
                     width="narrow"
                   />
                   <SwitcherItem
-                    icon={<span>View Selections</span>}
-                    href="/selected"
-                    tooltip={{
-                      content: 'View Selections',
-                    }}
-                    width="narrow"
-                  />
-                  <SwitcherItem
                     icon={<span>Cancel</span>}
                     onClick={() => clearSelection()}
                     tooltip={{
@@ -147,6 +139,19 @@ export default function NavClient({
                     />
                   </Switcher>
                 </div>
+              )}
+              {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
+              {!selectionMode && selectedPhotos.length > 0 && (
+                <Switcher type="borderless" className="mr-2">
+                  <SwitcherItem
+                    icon={<span>View Selections ({selectedPhotos.length})</span>}
+                    href="/selected"
+                    tooltip={{
+                      content: 'View Selections',
+                    }}
+                    width="narrow"
+                  />
+                </Switcher>
               )}
               <div className={clsx(
                 'grow text-right min-w-0',

@@ -11,6 +11,7 @@ import {
   parsePhotoFromDb,
   Photo,
   PhotoDateRange,
+  RELATED_GRID_PHOTOS_TO_SHOW,
 } from '@/photo';
 import { Cameras, createCameraKey } from '@/camera';
 import { Tags } from '@/tag';
@@ -531,192 +532,133 @@ export const getPhotos = async (options: PhotoQueryOptions = {}) =>
     values.push(...limitAndOffsetValues);
 
     return query(sql.join(' '), values)
-      .then(({ rows }) => rows.map(parsePhotoFromDb));
+      .then(({ rows }) => rows.map(row => parsePhotoFromDb(row as PhotoDb)));
   },
   'getPhotos',
   // Seemingly necessary to pass `options` for expected cache behavior
   options,
   );
 
-export const getPhotosNearId = async (
-  photoId: string,
-  options: PhotoQueryOptions,
-) =>
+export const getPhotosMeta = async (options: PhotoQueryOptions = {}) =>
   safelyQueryPhotos(async () => {
-    const { limit } = options;
+    const sql = ['SELECT COUNT(*), MIN(taken_at), MAX(taken_at) FROM photos'];
+    const values = [] as (string | number)[];
 
     const {
       wheres,
       wheresValues,
-      lastValuesIndex,
     } = getWheresFromOptions(options);
+    
+    if (wheres) {
+      sql.push(wheres);
+      values.push(...wheresValues);
+    }
 
-    let valuesIndex = lastValuesIndex;
-
-    return query(
-      `
-        WITH twi AS (
-          SELECT *, row_number()
-          OVER (${getOrderByFromOptions(options)}) as row_number
-          FROM photos
-          ${wheres}
-        ),
-        current AS (SELECT row_number FROM twi WHERE id = $${valuesIndex++})
-        SELECT twi.*
-        FROM twi, current
-        WHERE twi.row_number >= current.row_number - 1
-        LIMIT $${valuesIndex++}
-      `,
-      [...wheresValues, photoId, limit],
-    )
+    return query(sql.join(' '), values)
       .then(({ rows }) => {
-        const photo = rows.find(({ id }) => id === photoId);
-        const indexNumber = photo ? parseInt(photo.row_number) : undefined;
+        // Handle case where no rows are returned
+        if (rows.length === 0 || rows[0].count === null) {
+          return {
+            count: 0,
+            dateRange: undefined,
+          };
+        }
+        const { count, min, max } = rows[0];
         return {
-          photos: rows.map(parsePhotoFromDb),
-          indexNumber,
+          count: parseInt(count, 10),
+          dateRange: { start: min, end: max } as PhotoDateRange,
         };
       });
-  }, `getPhotosNearId: ${photoId}`);    
+  },
+  'getPhotosMeta',
+  options,
+  );
 
-export const getPhotosMeta = (options: PhotoQueryOptions = {}) =>
+export const getPhoto = async (id: string): Promise<Photo | undefined> =>
   safelyQueryPhotos(async () => {
-    // eslint-disable-next-line max-len
-    let sql = 'SELECT COUNT(*), MIN(taken_at_naive) as start, MAX(taken_at_naive) as end FROM photos';
-    const { wheres, wheresValues } = getWheresFromOptions(options);
-    if (wheres) { sql += ` ${wheres}`; }
-    return query(sql, wheresValues)
-      .then(({ rows }) => ({
-        count: parseInt(rows[0].count, 10),
-        ...rows[0]?.start && rows[0]?.end
-          ? { dateRange: {
-            start: rows[0].start as string,
-            end: rows[0].end as string,
-          } as PhotoDateRange }
-          : undefined,
-      }));
-  }, 'getPhotosMeta');
-
-export const getPublicPhotoIds = async ({ limit }: { limit?: number }) =>
-  safelyQueryPhotos(() => (limit
-    ? sql`SELECT id FROM photos WHERE hidden IS NOT TRUE LIMIT ${limit}`
-    : sql`SELECT id FROM photos WHERE hidden IS NOT TRUE`)
-    .then(({ rows }) => rows.map(({ id }) => id as string))
-  , 'getPublicPhotoIds');
-
-export const getPhotoIdsAndUpdatedAt = async () =>
-  safelyQueryPhotos(() =>
-    sql`SELECT id, updated_at FROM photos WHERE hidden IS NOT TRUE`
-      .then(({ rows }) => rows.map(({ id, updated_at }) =>
-        ({ id: id as string, updatedAt: updated_at as Date })))
-  , 'getPhotoIdsAndUpdatedAt');
-
-export const getPhoto = async (
-  id: string,
-  includeHidden?: boolean,
-): Promise<Photo | undefined> =>
-  safelyQueryPhotos(async () => {
-    // Check for photo id forwarding and convert short ids to uuids
-    const photoId = translatePhotoId(id);
-    return (includeHidden
-      ? sql<PhotoDb>`SELECT * FROM photos WHERE id=${photoId} LIMIT 1`
-      // eslint-disable-next-line max-len
-      : sql<PhotoDb>`SELECT * FROM photos WHERE id=${photoId} AND hidden IS NOT TRUE LIMIT 1`)
-      .then(({ rows }) => rows.map(parsePhotoFromDb))
+    const translatedId = translatePhotoId(id);
+    return query('SELECT * FROM photos WHERE id = $1 LIMIT 1', [translatedId])
+      .then(({ rows }) => rows.map(row => parsePhotoFromDb(row as PhotoDb)))
       .then(photos => photos.length > 0 ? photos[0] : undefined);
   }, 'getPhoto');
 
-// Update queries
+export const getPhotosNearId = async (
+  id: string,
+  options: PhotoQueryOptions,
+) => {
+  const { limit = RELATED_GRID_PHOTOS_TO_SHOW } = options;
+  const photos = await getPhotos({
+    ...options,
+    limit: limit + 2,
+  });
+  const indexNumber = photos.findIndex(photo => photo.id === id);
+  return {
+    photos,
+    indexNumber,
+  };
+};
 
-const outdatedWhereClauses = [
-  `updated_at < $1`,
-  `(updated_at < $2 AND make = $3)`,
-];
+export const getPhotosInNeedOfUpdate = async (
+  updatedBefore: string,
+  limit = UPDATE_QUERY_LIMIT,
+) =>
+  safelyQueryPhotos(() => sql`
+    SELECT *
+    FROM photos
+    WHERE updated_at < ${updatedBefore}
+    ORDER BY updated_at ASC
+    LIMIT ${limit}
+  `.then(({ rows }) => rows.map(row => parsePhotoFromDb(row as PhotoDb)))
+  , 'getPhotosInNeedOfUpdate');
 
-const outdatedWhereValues = [
-  UPDATED_BEFORE_01.toISOString(),
-  UPDATED_BEFORE_02.toISOString(),
-  MAKE_FUJIFILM,
-];
+export const getPhotoIdsAndUpdatedAt = async () =>
+  safelyQueryPhotos(() => sql`
+    SELECT id, updated_at
+    FROM photos
+    ORDER BY taken_at DESC
+  `.then(({ rows }) => rows.map(row => ({
+    id: row.id,
+    updatedAt: row.updated_at,
+  })))
+  , 'getPhotoIdsAndUpdatedAt');
 
-const needsAiTextWhereClauses =
-  AI_CONTENT_GENERATION_ENABLED
-    ? AI_TEXT_AUTO_GENERATED_FIELDS
-      .map(field => {
-        switch (field) {
-          case 'title': return `(title <> '') IS NOT TRUE`;
-          case 'caption': return `(caption <> '') IS NOT TRUE`;
-          case 'tags': return `(tags IS NULL OR array_length(tags, 1) = 0)`;
-          case 'semantic': return `(semantic_description <> '') IS NOT TRUE`;
-        }
-      })
-    : [];
+export const getPublicPhotoIds = async () =>
+  safelyQueryPhotos(() => sql`
+    SELECT id
+    FROM photos
+    WHERE hidden IS NOT TRUE
+    ORDER BY taken_at DESC
+  `.then(({ rows }) => rows.map(row => row.id))
+  , 'getPublicPhotoIds');
 
-const needsColorDataWhereClauses = COLOR_SORT_ENABLED
-  ? [`(
-    color_data IS NULL OR
-    color_sort IS NULL
-  )`]
-  : [];
-
-const needsSyncWhereStatement =
-  `WHERE ${[
-    ...outdatedWhereClauses,
-    ...needsAiTextWhereClauses,
-    ...needsColorDataWhereClauses,
-  ].join(' OR ')}`;
-
-export const getPhotosInNeedOfUpdate = () =>
-  safelyQueryPhotos(
-    () => query(`
-      SELECT * FROM photos
-      ${needsSyncWhereStatement}
-      ORDER BY created_at DESC
-      LIMIT ${UPDATE_QUERY_LIMIT}
-    `,
-    outdatedWhereValues,
-    )
-      .then(({ rows }) => rows.map(parsePhotoFromDb)),
-    'getPhotosInNeedOfUpdate',
-  );
-
-export const getPhotosInNeedOfUpdateCount = () =>
-  safelyQueryPhotos(
-    () => query(`
-      SELECT COUNT(*) FROM photos
-      ${needsSyncWhereStatement}
-    `,
-    outdatedWhereValues,
-    )
-      .then(({ rows }) => parseInt(rows[0].count, 10)),
-    'getPhotosInNeedOfUpdateCount',
-  );
-
-// Backfills and experimentation
-
-export const getColorDataForPhotos = () =>
-  safelyQueryPhotos(() => sql<{
-    id: string,
-    url: string,
-    color_data?: PhotoColorData,
-  }>`
-    SELECT id, url, color_data FROM photos
-    LIMIT ${UPDATE_QUERY_LIMIT}
-  `.then(({ rows }) => rows.map(({ id, url, color_data }) =>
-        ({ id, url, colorData: color_data })))
+export const getColorDataForPhotos = async (photoIds: string[]) =>
+  safelyQueryPhotos(() => query(
+    'SELECT id, url, color_data FROM photos WHERE id = ANY($1)',
+    [convertArrayToPostgresString(photoIds)],
+  ).then(({ rows }) => rows.map(row => ({
+    id: row.id,
+    url: row.url, // Added url
+    colorData: row.color_data,
+  })))
   , 'getColorDataForPhotos');
 
-export const updateColorDataForPhoto = (
-  photoId: string,
-  colorData: string,
+export const updateColorDataForPhoto = async (
+  id: string,
+  colorData: PhotoColorData,
   colorSort: number,
 ) =>
-  safelyQueryPhotos(
-    () => sql`
-      UPDATE photos SET
-      color_data=${colorData},
-      color_sort=${colorSort}
-      WHERE id=${photoId}
-    `,
-    'updateColorDataForPhoto',
-  );
+  safelyQueryPhotos(() => sql`
+    UPDATE photos
+    SET color_data=${JSON.stringify(colorData)},
+        color_sort=${colorSort}
+    WHERE id=${id}
+  `, 'updateColorDataForPhoto');
+
+export const getPhotosInNeedOfUpdateCount = async (
+  updatedBefore: string,
+) => safelyQueryPhotos(() => sql`
+  SELECT count(*)
+  FROM photos
+  WHERE updated_at < ${updatedBefore}
+`.then(({ rows }) => parseInt(rows[0].count, 10))
+, 'getPhotosInNeedOfUpdateCount');

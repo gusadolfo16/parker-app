@@ -82,11 +82,19 @@ export const formatDate = ({
 export const formatDateFromPostgresString = (
   date: string,
   length?: Length,
-) =>
-  formatDate({
-    date: parse(date, DATE_FORMAT_POSTGRES, new Date()),
+) => {
+  if (!date) {
+    return '';
+  }
+  const parsedDate = parse(date, DATE_FORMAT_POSTGRES, new Date());
+  if (isNaN(parsedDate.getTime())) {
+    return '';
+  }
+  return formatDate({
+    date: parsedDate,
     length,
   });
+};
 
 export const formatDateForPostgres = (date: Date) =>
   date.toISOString().replace(

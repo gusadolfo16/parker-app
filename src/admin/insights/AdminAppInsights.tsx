@@ -27,7 +27,7 @@ export default async function AdminAppInsights() {
   ] = await Promise.all([
     getPhotosMeta({ hidden: 'include' }),
     getPhotosMeta({ hidden: 'only' }),
-    getPhotosInNeedOfUpdateCount(),
+    getPhotosInNeedOfUpdateCount(new Date().toISOString()),
     getPhotosMeta({ maximumAspectRatio: 0.9 }),
     getGitHubMetaForCurrentApp(),
     getUniqueCameras(),

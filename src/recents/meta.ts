@@ -12,13 +12,14 @@ export const generateMetaForRecents = (
   _dateRange?: PhotoDateRange,
 ) => {
   const title = appText.category.recentTitle;
-  const description = descriptionForPhotoSet(
-    photos,
-    appText,
-    undefined,
-    undefined,
-    count,
-  );
+  // const description = descriptionForPhotoSet(
+  //   photos,
+  //   appText,
+  //   undefined,
+  //   undefined,
+  //   count,
+  // );
+  const description = '';
   const url = absolutePathForRecents();
   const images = absolutePathForRecentsImage();
 

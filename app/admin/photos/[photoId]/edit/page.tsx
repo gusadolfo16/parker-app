@@ -28,7 +28,7 @@ export default async function PhotoEditPage({
     uniqueRecipes,
     uniqueFilms,
   ] = await Promise.all([
-    getPhotoNoStore(photoId, true),
+    getPhotoNoStore(photoId),
     getUniqueTagsCached(),
     getUniqueRecipesCached(),
     getUniqueFilmsCached(),

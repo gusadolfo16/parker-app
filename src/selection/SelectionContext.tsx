@@ -8,6 +8,7 @@ import {
   useCallback,
   ReactNode,
 } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface SelectionContextType {
   selectionMode: boolean;
@@ -15,7 +16,7 @@ interface SelectionContextType {
   toggleSelectionMode: () => void;
   togglePhotoSelection: (photo: Photo) => void;
   clearSelection: () => void;
-  confirmSelection: () => void; // Placeholder for now
+  confirmSelection: () => void;
 }
 
 const SelectionContext = createContext<SelectionContextType | undefined>(
@@ -25,6 +26,7 @@ const SelectionContext = createContext<SelectionContextType | undefined>(
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
+  const router = useRouter();
 
   const toggleSelectionMode = useCallback(() => {
     setSelectionMode(prevMode => !prevMode);
@@ -47,14 +49,31 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
 
   const clearSelection = useCallback(() => {
     setSelectedPhotos([]);
+    setSelectionMode(false);
   }, []);
 
-  const confirmSelection = useCallback(() => {
-    // TODO: Implement actual confirmation logic
-    console.log('Confirmed selection:', selectedPhotos);
-    setSelectionMode(false);
-    setSelectedPhotos([]);
-  }, [selectedPhotos]);
+  const confirmSelection = useCallback(async () => {
+    const photoIds = selectedPhotos.map(photo => photo.id);
+    try {
+      const response = await fetch('/api/selection', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ photoIds }),
+      });
+
+      if (response.ok) {
+        console.log('Selection confirmed and sent to API');
+        router.push('/selected');
+        setSelectionMode(false);
+      } else {
+        console.error('Failed to confirm selection:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error confirming selection:', error);
+    }
+  }, [selectedPhotos, router]);
 
   return (
     <SelectionContext.Provider
