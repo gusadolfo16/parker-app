@@ -209,6 +209,8 @@ const FORM_METADATA = (
     excludeFromInsert: true,
     staticValue: shouldStripGpsData ? 'true' : 'false',
   },
+  lockedBy: { label: 'locked by', readOnly: true, hideIfEmpty: true },
+  lockedAt: { label: 'locked at', readOnly: true, hideIfEmpty: true },
 });
 
 export const FIELDS_WITH_JSON = Object.entries(FORM_METADATA())
