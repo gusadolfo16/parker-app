@@ -869,3 +869,11 @@ Se ha corregido un error de prerenderizado que ocurría en las páginas de lente
 **Detalles de la acción:**
 - Se modificó el archivo `src/lens/meta.ts`.
 - Se añadió una comprobación `photos.length > 0` antes de llamar a `lensFromPhoto` en `shareTextForLens` para asegurar que se pase un objeto `Lens` válido, incluso si no hay fotos.
+
+**Paso 48.12: Aislar la causa del error de prerenderizado en `generateMetadata` de las páginas de lentes**
+
+Se ha comentado temporalmente la generación de la descripción y las imágenes en la función `generateMetadata` de las páginas de lentes para aislar la causa del error de prerenderizado.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
+- Se comentaron las líneas que asignan `description` e `images` en el objeto `Metadata` devuelto por `generateMetadata`.

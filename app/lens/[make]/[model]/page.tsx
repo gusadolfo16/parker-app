@@ -64,7 +64,7 @@ export async function generateMetadata({
       description,
       card: 'summary_large_image',
     },
-    description,
+    // description,
   };
 }
 
