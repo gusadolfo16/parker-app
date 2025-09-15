@@ -17,6 +17,6 @@ export const getPhotosLensDataCached = async (
     .then(([photos, meta]) => [
       photos,
       meta,
-      lensFromPhoto(photos[0], lens),
+      lensFromPhoto(photos[0] || undefined, lens),
     ] as const);
 };

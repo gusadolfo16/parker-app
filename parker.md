@@ -187,7 +187,7 @@ Se ha habilitado el proveedor de autenticación de Google en la configuración d
 - Se añadió `GoogleProvider` a la lista de proveedores de NextAuth, configurando `clientId` y `clientSecret` a partir de las variables de entorno (`process.env.GOOGLE_CLIENT_ID` y `process.env.GOOGLE_CLIENT_SECRET`).
 - Se importó `GoogleProvider` desde `next-auth/providers/google` en la parte superior del archivo.
 
-### 11. Deshabilitar Funcionalidad de Zoom de Lupa
+### 11. Deshabilitar Funcionalidades de Zoom de Lupa
 
 **Paso 11.1: Deshabilitar la funcionalidad de la lupa para hacer zoom en la foto**
 
@@ -273,7 +273,7 @@ Se ha mejorado la seguridad en el lado del cliente para asegurar que el enlace d
 Se ha corregido un error por el que el menú de administrador seguía siendo visible para los usuarios no administradores. El problema estaba en el componente `AppViewSwitcher`, que mostraba el menú basándose en si el usuario había iniciado sesión, en lugar de si era un administrador.
 
 **Detalles de la acción:**
-- Se modificó `src/app/AppViewSwitcher.tsx` para usar el estado `isUserAdmin` del contexto de la aplicación para controlar la visibilidad del menú de administrador.
+- Se modificó el archivo `src/app/AppViewSwitcher.tsx` para usar el estado `isUserAdmin` del contexto de la aplicación para controlar la visibilidad del menú de administrador.
 
 **Paso 16.2: Eliminar la Vista "Full"**
 
@@ -846,18 +846,18 @@ Se ha corregido el error de la base de datos "column 'locked_by' of relation 'ph
 - Se modificó el archivo `src/photo/db/migration.ts`.
 - Se añadió una nueva entrada al array `MIGRATIONS` con la etiqueta "08: Photo Locking" y las sentencias SQL para añadir las columnas `locked_by` (VARCHAR) y `locked_at` (TIMESTAMP WITH TIME ZONE) a la tabla `photos` si no existen.
 
-**Paso 48.9: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx (confirmSelection)**
+**Paso 48.9: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx**
 
-Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad para la función `confirmSelection`.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se añadió una comprobación `session?.user?.id` antes de llamar a `confirmSelection` para asegurar que `session.user.id` esté definido.
-
-**Paso 48.10: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx (clearSelection)**
-
-Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad para la función `clearSelection`.
+Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/app/NavClient.tsx`.
-- Se añadió una comprobación `session?.user?.id` antes de llamar a `clearSelection` para asegurar que `session.user.id` esté definido.
+- Se añadió una comprobación `session?.user?.id` antes de llamar a `confirmSelection` y `clearSelection` para asegurar que `session.user.id` esté definido.
+
+**Paso 48.10: Manejar correctamente la ausencia de fotos en las páginas de lentes**
+
+Se ha corregido un error de prerenderizado que ocurría en las páginas de lentes cuando no se encontraban fotos asociadas. El error se debía a que se intentaba acceder a `photos[0]` cuando el array `photos` estaba vacío.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/data.ts`.
+- Se añadió una comprobación `photos[0] || undefined` al llamar a `lensFromPhoto` para asegurar que se pase `undefined` si no hay fotos, evitando así el error.
