@@ -115,7 +115,7 @@ export default function NavClient({
                   <Switcher type="borderless" className="mr-2">
                     <SwitcherItem
                       icon={<span>Confirm</span>}
-                      onClick={() => confirmSelection(session.user.id)}
+                      onClick={() => session?.user?.id && confirmSelection(session.user.id)}
                       tooltip={{
                         content: 'Confirm Selection',
                       }}
@@ -123,7 +123,7 @@ export default function NavClient({
                     />
                     <SwitcherItem
                       icon={<span>Cancel</span>}
-                      onClick={() => clearSelection(session.user.id)}
+                      onClick={() => session?.user?.id && clearSelection(session.user.id)}
                       tooltip={{
                         content: 'Cancel Selection',
                       }}

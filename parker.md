@@ -611,6 +611,7 @@ Se ha implementado un mecanismo para bloquear las fotos que un usuario ha selecc
 - Se ha añadido un campo `locked_by` y `locked_at` a la tabla `photos` en la base de datos.
 - Se ha actualizado la función `confirmSelection` en `src/selection/SelectionContext.tsx` para que envíe el ID del usuario al API de selección.
 - Se ha creado un nuevo endpoint de API (`DELETE /api/selection`) para desbloquear las fotos.
+
 - Se ha actualizado la interfaz de usuario en `src/photo/PhotoGrid.tsx` and `src/photo/PhotoLarge.tsx` para mostrar las fotos bloqueadas con un filtro de escala de grises y deshabilitar la selección.
 
 ### 33. Correcciones y Mejoras (Iteración 19)
@@ -844,3 +845,19 @@ Se ha corregido el error de la base de datos "column 'locked_by' of relation 'ph
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/db/migration.ts`.
 - Se añadió una nueva entrada al array `MIGRATIONS` con la etiqueta "08: Photo Locking" y las sentencias SQL para añadir las columnas `locked_by` (VARCHAR) y `locked_at` (TIMESTAMP WITH TIME ZONE) a la tabla `photos` si no existen.
+
+**Paso 48.9: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx (confirmSelection)**
+
+Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad para la función `confirmSelection`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una comprobación `session?.user?.id` antes de llamar a `confirmSelection` para asegurar que `session.user.id` esté definido.
+
+**Paso 48.10: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx (clearSelection)**
+
+Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad para la función `clearSelection`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una comprobación `session?.user?.id` antes de llamar a `clearSelection` para asegurar que `session.user.id` esté definido.
