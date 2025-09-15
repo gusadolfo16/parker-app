@@ -146,6 +146,7 @@ Se ha reubicado el botón de selección de fotos a la izquierda del título de l
 
 **Detalles de la acción:**
 - Se modificó el componente `src/app/AppViewSwitcher.tsx` para eliminar el `SwitcherItem` del botón de selección.
+
 - Se modificó el componente `src/app/NavClient.tsx`:
   - Se añadió un nuevo `SwitcherItem` para el botón de selección justo después de `AppViewSwitcher` y antes del `div` que contiene el título de la navegación.
   - Se importaron `Switcher`, `SwitcherItem` y `useSelection` en `NavClient.tsx` para soportar el nuevo botón.
@@ -885,3 +886,11 @@ Se ha añadido una comprobación en la función `generateMetaForLens` para devol
 **Detalles de la acción:**
 - Se modificó el archivo `src/lens/meta.ts`.
 - Se añadió una condición `if (photos.length === 0)` al inicio de la función `generateMetaForLens` para devolver un objeto con `url` y `title` solamente.
+
+**Paso 48.14: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de lentes**
+
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/lens/[make]/[model]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de lentes sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
+- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
