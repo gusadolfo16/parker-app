@@ -563,7 +563,7 @@ Se ha corregido un error de tipo (`Property 'photos' does not exist on type 'Que
 
 **Paso 31.1: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
 
-Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `dateRangeForPhotos` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `dateRangeForPhotos` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/index.ts`.
@@ -573,19 +573,19 @@ Se ha corregido un error de compilación que ocurría al generar páginas para l
 
 **Paso 32.1: Corregir error de compilación en la generación de metadatos de cámaras sin fotos**
 
-Se ha corregido un error de compilación que ocurría al generar páginas para cámaras que no tenían fotos asociadas. El error se debía a que la función `titleForCamera` no manejaba correctamente el caso en el que recibía un array de fotos vacío.
+Se ha corregido un error de compilación que ocurría al generar páginas para cámaras que no tenían fotos asociadas. El error se debía a que la función `titleForCamera` no manejaba correctamente el caso en que recibía un array de fotos vacío.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/camera/meta.ts`.
-- Se añadió una comprobación en la función `titleForCamera` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío.
+- Se añadió una comprobación en la función `titleForCamera` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
 **Paso 32.2: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
 
-Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `titleForLens` no manejaba correctamente el caso en el que recibía un array de fotos vacío.
+Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `titleForLens` no manejaba correctamente el caso en que recibía un array de fotos vacío.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/lens/meta.ts`.
-- Se añadió una comprobación en la función `titleForLens` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío.
+- Se añadió una comprobación en la función `titleForLens` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para lentes sin fotos.
 
 **Paso 32.3: Mejorar la legibilidad del botón de selección**
 
@@ -688,7 +688,7 @@ Se ha corregido un error de compilación (`TypeError: b.match is not a function`
 
 **Paso 40.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
 
-Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la página no manejaba correctamente el caso en el que no se encontraban fotos para una cámara específica, lo que provocaba un error en el renderizado del lado del servidor.
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la página no manejaba correctamente el caso en que no se encontraban fotos para una cámara específica, lo que provocaba un error en el renderizado del lado del servidor.
 
 **Detalles de la acción:**
 - Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
@@ -699,7 +699,7 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 
 **Paso 41.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
 
-Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `getPhotosCameraDataCached` en `src/camera/data.ts` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `getPhotosCameraDataCached` en `src/camera/data.ts` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/camera/data.ts`.
@@ -709,7 +709,7 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 
 **Paso 42.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (shareTextForCamera)**
 
-Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `shareTextForCamera` en `src/camera/meta.ts` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `shareTextForCamera` en `src/camera/meta.ts` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/camera/meta.ts`.
@@ -719,7 +719,7 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 
 **Paso 43.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (CameraHeader)**
 
-Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `CameraHeader` en `src/camera/CameraHeader.tsx` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `CameraHeader` en `src/camera/CameraHeader.tsx` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/camera/CameraHeader.tsx`.
@@ -861,3 +861,11 @@ Se ha corregido un error de prerenderizado que ocurría en las páginas de lente
 **Detalles de la acción:**
 - Se modificó el archivo `src/lens/data.ts`.
 - Se añadió una comprobación `photos[0] || undefined` al llamar a `lensFromPhoto` para asegurar que se pase `undefined` si no hay fotos, evitando así el error.
+
+**Paso 48.11: Manejar correctamente la ausencia de fotos en los metadatos de lentes**
+
+Se ha corregido un error de prerenderizado que ocurría en las páginas de lentes cuando no se encontraban fotos asociadas, específicamente en la generación de metadatos. El error se debía a que la función `shareTextForLens` no manejaba correctamente el caso en que el array `photos` estaba vacío.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/meta.ts`.
+- Se añadió una comprobación `photos.length > 0` antes de llamar a `lensFromPhoto` en `shareTextForLens` para asegurar que se pase un objeto `Lens` válido, incluso si no hay fotos.

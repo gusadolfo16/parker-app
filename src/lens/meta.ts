@@ -33,7 +33,7 @@ export const shareTextForLens = (
 ) =>
   [
     `${appText.category.lens}:`,
-    formatLensText(lensFromPhoto(photos[0], lens)),
+    formatLensText(photos.length > 0 ? lensFromPhoto(photos[0], lens) : lens),
   ].join(' ');
 
 export const descriptionForLensPhotos = (
