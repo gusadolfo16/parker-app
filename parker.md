@@ -721,7 +721,7 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 
 Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `CameraHeader` en `src/camera/CameraHeader.tsx` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
-**Detalles de la acción:**
+**Details of the action:**
 - Se modificó el archivo `src/camera/CameraHeader.tsx`.
 - Se añadió una comprobación en la función `CameraHeader` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
@@ -877,3 +877,11 @@ Se ha comentado temporalmente la generación de la descripción y las imágenes 
 **Detalles de la acción:**
 - Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
 - Se comentaron las líneas que asignan `description` e `images` en el objeto `Metadata` devuelto por `generateMetadata`.
+
+**Paso 48.13: Manejar la ausencia de fotos en `generateMetaForLens`**
+
+Se ha añadido una comprobación en la función `generateMetaForLens` para devolver un objeto de metadatos mínimo si no se encuentran fotos para la lente. Esto evita errores al intentar generar metadatos con datos incompletos.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/meta.ts`.
+- Se añadió una condición `if (photos.length === 0)` al inicio de la función `generateMetaForLens` para devolver un objeto con `url` y `title` solamente.

@@ -58,16 +58,24 @@ export const generateMetaForLens = (
   appText: AppTextState,
   explicitCount?: number,
   explicitDateRange?: PhotoDateRange,
-) => ({
-  url: absolutePathForLens(lens),
-  title: titleForLens(lens, photos, appText, explicitCount),
-  description:
-    descriptionForLensPhotos(
-      photos,
-      appText,
-      true,
-      explicitCount,
-      explicitDateRange,
-    ),
-  images: absolutePathForLensImage(lens),
-});
+) => {
+  if (photos.length === 0) {
+    return {
+      url: absolutePathForLens(lens),
+      title: titleForLens(lens, photos, appText, explicitCount),
+    };
+  }
+  return {
+    url: absolutePathForLens(lens),
+    title: titleForLens(lens, photos, appText, explicitCount),
+    description:
+      descriptionForLensPhotos(
+        photos,
+        appText,
+        true,
+        explicitCount,
+        explicitDateRange,
+      ),
+    images: absolutePathForLensImage(lens),
+  };
+};
