@@ -8,6 +8,8 @@ import { cache } from 'react';
 import { getUniqueCameras } from '@/photo/db/query';
 import { staticallyGenerateCategoryIfConfigured } from '@/app/static';
 import { getAppText } from '@/i18n/state/server';
+import { redirect } from 'next/navigation';
+import { PATH_ROOT } from '@/app/path';
 
 const getPhotosCameraDataCachedCached = cache((
   make: string,
@@ -18,12 +20,12 @@ const getPhotosCameraDataCachedCached = cache((
   INFINITE_SCROLL_GRID_INITIAL,
 ));
 
-export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
-  'cameras',
-  'page',
-  getUniqueCameras,
-  cameras => cameras.map(({ camera }) => formatCameraParams(camera)),
-);
+// export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
+//   'cameras',
+//   'page',
+//   getUniqueCameras,
+//   cameras => cameras.map(({ camera }) => formatCameraParams(camera)),
+// );
 
 export async function generateMetadata({
   params,
@@ -36,7 +38,15 @@ export async function generateMetadata({
     camera,
   ] = await getPhotosCameraDataCachedCached(make, model);
 
+  if (photos.length === 0) {
+    return {};
+  }
+
   const appText = await getAppText();
+
+  if (photos.length === 0) {
+    return {};
+  }
 
   const {
     url,
@@ -72,6 +82,14 @@ export default async function CameraPage({
     { count, dateRange },
     camera,
   ] = await getPhotosCameraDataCachedCached(make, model);
+
+  if (photos.length === 0) {
+    redirect(PATH_ROOT);
+  }
+
+  if (photos.length === 0) {
+    return null; // Temporarily return null if no photos
+  }
 
   return (
     <CameraOverview {...{ camera, photos, count, dateRange }} />

@@ -17,6 +17,6 @@ export const getPhotosCameraDataCached = async (
     .then(([photos, meta]) => [
       photos,
       meta,
-      cameraFromPhoto(photos[0], camera),
+      photos.length > 0 ? cameraFromPhoto(photos[0], camera) : camera,
     ] as const);
 };

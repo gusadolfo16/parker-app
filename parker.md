@@ -114,11 +114,20 @@ Se ha modificado el componente `PhotoGrid` para permitir la selección de fotos 
 **Detalles de la acción:**
 - Se modificó el componente `src/photo/PhotoGrid.tsx`.
 - Se reemplazó el uso de `selectedPhotoIds` y `setSelectedPhotoIds` de `useAppState` por `selectionMode`, `selectedPhotos` y `togglePhotoSelection` del nuevo `useSelection` hook.
+
 - Se actualizó la lógica para determinar si una foto está seleccionada (`isSelected`).
 - Se actualizó la función `onSelectChange` de `SelectTileOverlay` para usar `togglePhotoSelection`.
 - Se modificó la condición de renderizado de `SelectTileOverlay` para que dependa de `selectionMode`.
 - Se añadió una clase condicional (`border-4 border-green-500`) al `div` que envuelve `PhotoMedium` para mostrar un borde verde cuando la foto está seleccionada.
-- Se añadió la importación de `useSelection` en `src/photo/PhotoGrid.tsx`.
+
+**Paso 6.4: Crear Nueva Vista para Fotos Seleccionadas**
+
+Se ha creado una nueva página en `/selected` que muestra todas las fotos que el usuario ha seleccionado. Esta vista permite a los usuarios revisar su selección y deseleccionar imágenes si es necesario.
+
+**Detalles de la acción:**
+- Se creó un nuevo componente de página en `app/selected/page.tsx`.
+- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
+- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
 ### 7. Ajustes de Interfaz de Usuario
 
@@ -279,7 +288,7 @@ Se ha eliminado la opción de vista "Full" de la interfaz de usuario, dejando la
 Se ha añadido la funcionalidad de selección de fotos a la vista de foto individual (grande). Ahora los usuarios pueden seleccionar y deseleccionar fotos directamente desde esta vista, además de la vista de cuadrícula.
 
 **Detalles de la acción:**
-- Se modificó `src/photo/PhotoLarge.tsx` para incluir el hook `useSelection`.
+- Se modificó el componente `src/photo/PhotoLarge.tsx` para incluir el hook `useSelection`.
 - Se añadió un indicador visual (un borde verde) para mostrar cuándo una foto está seleccionada.
 - Se añadió un botón de "Select"/"Deselect" en el panel lateral de metadatos, visible solo cuando el modo de selección está activo.
 
@@ -663,3 +672,175 @@ Se ha corregido un error de tipo que ocurría en la ruta de la API de selección
 **Detalles de la acción:**
 - Se modificó el archivo `app/api/selection/route.ts`.
 - Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
+
+### 39. Corrección de Errores de Build (Iteración 25)
+
+**Paso 39.1: Corregir error de pre-renderizado en páginas de etiquetas**
+
+Se ha corregido un error de compilación (`TypeError: b.match is not a function`) que ocurría al pre-renderizar las páginas de etiquetas (por ejemplo, `/tag/avila`). El error se debía a que la función `generateMetaForTag` en `src/tag/index.ts` estaba utilizando una descripción de metadatos codificada como `'Temporary Description'` en lugar de generar una descripción dinámica basada en las fotos de la etiqueta.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/tag/index.ts`.
+- Se actualizó la función `generateMetaForTag` para que utilice la función `descriptionForTaggedPhotos` para generar una descripción de metadatos dinámica. Esto resuelve el error de compilación y proporciona descripciones más significativas para las páginas de etiquetas.
+
+### 40. Corrección de Errores de Build (Iteración 26)
+
+**Paso 40.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la página no manejaba correctamente el caso en el que no se encontraban fotos para una cámara específica, lo que provocaba un error en el renderizado del lado del servidor.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
+- Se añadió una comprobación en la función `generateMetadata` para devolver un objeto de metadatos vacío si no se encuentran fotos, evitando así el error de renderizado.
+- Se añadió una redirección en el componente de la página para enviar al usuario a la página de inicio si no se encuentran fotos para la cámara especificada.
+
+### 41. Corrección de Errores de Build (Iteración 27)
+
+**Paso 41.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `getPhotosCameraDataCached` en `src/camera/data.ts` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/camera/data.ts`.
+- Se añadió una comprobación en la función `getPhotosCameraDataCached` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
+
+### 42. Corrección de Errores de Build (Iteración 28)
+
+**Paso 42.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (shareTextForCamera)**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `shareTextForCamera` en `src/camera/meta.ts` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/camera/meta.ts`.
+- Se añadió una comprobación en la función `shareTextForCamera` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
+
+### 43. Corrección de Errores de Build (Iteración 29)
+
+**Paso 43.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (CameraHeader)**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `CameraHeader` en `src/camera/CameraHeader.tsx` no manejaba correctamente el caso en el que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/camera/CameraHeader.tsx`.
+- Se añadió una comprobación en la función `CameraHeader` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
+
+### 44. Corrección de Errores de Build (Iteración 30)
+
+**Paso 44.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage)**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que, a pesar de las comprobaciones existentes, algún componente o función seguía intentando acceder a propiedades de un array de fotos vacío o `undefined` durante la generación de metadatos o el renderizado de la página.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
+- En la función `generateMetadata`, se añadió una comprobación explícita para que `generateMetaForCamera` solo se llame si `photos.length > 0`. Si no hay fotos, se devuelve un objeto de metadatos vacío.
+- En el componente `CameraPage` (exportación por defecto), se añadió una comprobación explícita para que `CameraOverview` solo se renderice si `photos.length > 0`. Si no hay fotos, se renderiza `null` (o un componente que indique la ausencia de fotos).
+- Estas medidas defensivas adicionales aseguran que no se pasen arrays vacíos o `undefined` a componentes o funciones que puedan no manejarlos correctamente durante el proceso de prerenderizado, incluso si las comprobaciones anteriores no capturaron todos los casos.
+
+### 45. Corrección de Errores de Build (Iteración 31)
+
+**Paso 45.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage - Refuerzo)**
+
+Se ha corregido un error de compilación persistente que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). A pesar de las correcciones anteriores, el error seguía manifestándose, lo que sugiere un problema más profundo en la forma en que Next.js maneja los componentes del servidor y la generación de metadatos cuando los datos son escasos o inexistentes.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
+- En la función `generateMetadata`, se eliminó la lógica condicional dentro de la asignación de `url`, `title`, `description`, `images` y se confió en la comprobación `if (photos.length === 0) { return {}; }` al inicio de la función. Esto simplifica la lógica y asegura que `generateMetaForCamera` solo se llame con un array `photos` no vacío.
+- En el componente `CameraPage` (exportación por defecto), se eliminó la lógica condicional dentro del `return` y se añadió una comprobación `if (photos.length === 0) { return null; }` al inicio de la función. Esto garantiza que `CameraOverview` solo se renderice si hay fotos, y que la página no intente renderizar nada si no las hay.
+- Estas modificaciones son un refuerzo de las medidas defensivas, simplificando la lógica y asegurando que los componentes y funciones solo operen con datos válidos, lo que debería resolver el error de prerenderizado.
+
+### 46. Corrección de Errores de Build (Iteración 32)
+
+**Paso 46.1: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de cámaras**
+
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/shot-on/[make]/[model]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de cámaras sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
+- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
+
+### 47. Corrección de Errores de Build (Iteración 33)
+
+**Paso 47.1: Envolver `SelectionProvider` con `SessionProvider` en `app/layout.tsx`**
+
+Se ha corregido el error de compilación `[next-auth]: useSession must be wrapped in a <SessionProvider />` que ocurría al intentar utilizar el hook `useSession` dentro de `SelectionProvider` sin que este último estuviera anidado correctamente dentro de un `SessionProvider` de NextAuth.js.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/layout.tsx`.
+- Se importó `SessionProvider` desde `next-auth/react`.
+- Se envolvió el componente `AppStateProvider` (que a su vez contiene `SelectionProvider`) con `SessionProvider` para asegurar que el contexto de sesión esté disponible para todos los componentes que lo requieran.
+
+### 48. Corrección de Errores de Autenticación (Iteración 2)
+
+**Paso 48.1: Ocultar el botón de selección para usuarios no autenticados**
+
+Se ha corregido un error que permitía a los usuarios no autenticados acceder al modo de selección de fotos, lo que provocaba un error de "Usuario no autenticado" al intentar confirmar la selección. Ahora, el botón "Seleccionar" solo es visible para los usuarios que han iniciado sesión.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición `isUserSignedIn` para renderizar el botón "Seleccionar", asegurando que solo los usuarios autenticados puedan iniciar el modo de selección.
+
+**Paso 48.2: Ocultar el botón de confirmación para usuarios no autenticados**
+
+Se ha corregido un error que permitía a los usuarios no autenticados ver el botón de "Confirmar" si estaban en modo de selección y luego cerraban la sesión. Ahora, el botón "Confirmar" solo es visible para los usuarios que han iniciado sesión y están en modo de selección.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición `isUserSignedIn` para renderizar el botón "Confirmar", asegurando que solo los usuarios autenticados puedan confirmar una selección.
+
+**Paso 48.3: Prevenir la renderización de los botones de selección durante la comprobación de la autenticación**
+
+Se ha corregido una condición de carrera en la que los botones de selección podían renderizarse antes de que se completara la comprobación de autenticación, lo que provocaba errores. Ahora, los botones de selección solo se renderizan después de que se haya verificado el estado de autenticación del usuario.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición `!isCheckingAuth` para renderizar los botones "Seleccionar" y "Confirmar", asegurando que no se muestren mientras la autenticación está en curso.
+
+**Paso 48.4: Usar el estado de la sesión directamente en NavClient.tsx**
+
+Para solucionar de forma definitiva el error de "Usuario no autenticado", se ha modificado `NavClient.tsx` para que utilice el hook `useSession` de `next-auth/react` directamente. Esto asegura que el estado de autenticación sea siempre el más actual y evita las condiciones de carrera que se producían al depender del estado propagado a través de `AppStateProvider`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se importó y utilizó el hook `useSession` para obtener el estado de la sesión (`status`).
+- Se actualizó la lógica de renderizado de los botones de selección para que dependa directamente del `status` de la sesión, utilizando `status !== 'loading'` y `status === 'authenticated'` para controlar su visibilidad.
+
+**Paso 48.5: Hacer la función `confirmSelection` más robusta**
+
+Se ha corregido un error que permitía a los usuarios no autenticados acceder al modo de selección de fotos, lo que provocaba un error de "Usuario no autenticado" al intentar confirmar la selección. Para solucionarlo de forma definitiva, se ha modificado la función `confirmSelection` en `src/selection/SelectionContext.tsx` para que sea más robusta. Ahora, la función comprueba el estado de la sesión directamente y muestra un mensaje de error al usuario si no está autenticado, en lugar de fallar silenciosamente.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se importó la función `toast` de `sonner`.
+- Se actualizó la función `confirmSelection` para que compruebe el `status` de la sesión.
+- Si el `status` es `loading`, se registra un error en la consola.
+- Si el `status` es `unauthenticated`, se registra un error en la consola y se muestra un mensaje de error al usuario utilizando `toast.error`.
+- Si el `status` es `authenticated`, se procede con la confirmación de la selección.
+
+**Paso 48.6: Corregir la dependencia de `useCallback` en `confirmSelection`**
+
+El error persistía debido a que la función `confirmSelection` no se estaba actualizando cuando cambiaba el estado de la sesión. Esto se debía a que la dependencia del `useCallback` era incorrecta.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se actualizó el array de dependencias del `useCallback` de `confirmSelection` de `[selectedPhotos, router, session]` a `[selectedPhotos, router, sessionData]`. Esto asegura que la función se vuelva a crear cada vez que cambie el objeto `sessionData`, lo que garantiza que siempre tenga el estado de sesión más reciente.
+
+**Paso 48.7: Refactorizar `SelectionContext.tsx` para ser independiente de la sesión**
+
+Para eliminar la dependencia circular y asegurar la robustez del manejo de la sesión, se ha refactorizado `SelectionContext.tsx` para que no dependa directamente del hook `useSession`. En su lugar, las funciones `confirmSelection` y `clearSelection` ahora reciben el `userId` como parámetro.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se eliminó la importación de `useSession` y cualquier referencia a `sessionData` o `session` dentro del componente.
+- Se actualizaron las firmas de `confirmSelection` y `clearSelection` en `SelectionContextType` y en sus implementaciones para aceptar `userId` como parámetro.
+- Se eliminaron las comprobaciones de autenticación dentro de `confirmSelection`, ya que ahora se espera que el `userId` se proporcione desde el componente que llama.
+- Se actualizaron los arrays de dependencia de `useCallback` para `confirmSelection` y `clearSelection` para reflejar los cambios.
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se actualizó la llamada a `confirmSelection` y `clearSelection` para pasar `session.user.id` como argumento.
+
+**Paso 48.8: Añadir migración para las columnas `locked_by` y `locked_at`**
+
+Se ha corregido el error de la base de datos "column 'locked_by' of relation 'photos' does not exist" añadiendo una nueva migración que crea las columnas `locked_by` y `locked_at` en la tabla `photos`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/migration.ts`.
+- Se añadió una nueva entrada al array `MIGRATIONS` con la etiqueta "08: Photo Locking" y las sentencias SQL para añadir las columnas `locked_by` (VARCHAR) y `locked_at` (TIMESTAMP WITH TIME ZONE) a la tabla `photos` si no existen.

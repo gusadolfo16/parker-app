@@ -24,6 +24,7 @@ import { useAppState } from '@/app/AppState';
 import Switcher from '@/components/switcher/Switcher';
 import SwitcherItem from '@/components/switcher/SwitcherItem';
 import { useSelection } from '@/selection/SelectionContext';
+import { useSession } from 'next-auth/react';
 
 const NAV_HEIGHT_CLASS = NAV_CAPTION
   ? 'min-h-[4rem] sm:min-h-[5rem]'
@@ -43,10 +44,12 @@ export default function NavClient({
   const pathname = usePathname();
   const showNav = !isPathSignIn(pathname);
 
+  const { data: session, status } = useSession();
   const {
     hasLoadedWithAnimations,
     isUserSignedIn,
     isUserAdmin,
+    isCheckingAuth,
   } = useAppState();
 
   const {
@@ -107,12 +110,12 @@ export default function NavClient({
                 animate={hasLoadedWithAnimations && isNavVisible}
               />
               {/* Selection Buttons */}
-              {selectionMode ? (
+              {status !== 'loading' && selectionMode && status === 'authenticated' ? (
                 <div className="flex items-center">
                   <Switcher type="borderless" className="mr-2">
                     <SwitcherItem
                       icon={<span>Confirm</span>}
-                      onClick={() => confirmSelection()}
+                      onClick={() => confirmSelection(session.user.id)}
                       tooltip={{
                         content: 'Confirm Selection',
                       }}
@@ -120,7 +123,7 @@ export default function NavClient({
                     />
                     <SwitcherItem
                       icon={<span>Cancel</span>}
-                      onClick={() => clearSelection()}
+                      onClick={() => clearSelection(session.user.id)}
                       tooltip={{
                         content: 'Cancel Selection',
                       }}
@@ -130,18 +133,20 @@ export default function NavClient({
                   <span className="text-dim ml-2">({selectedPhotos.length})</span>
                 </div>
               ) : (
-                <div className="mr-2">
-                  <Switcher type="borderless">
-                    <SwitcherItem
-                      icon={<span>Select</span>}
-                      onClick={() => toggleSelectionMode()}
-                      tooltip={{
-                        content: 'Select Photos',
-                      }}
-                      width="narrow"
-                    />
-                  </Switcher>
-                </div>
+                status !== 'loading' && status === 'authenticated' && (
+                  <div className="mr-2">
+                    <Switcher type="borderless">
+                      <SwitcherItem
+                        icon={<span>Select</span>}
+                        onClick={() => toggleSelectionMode()}
+                        tooltip={{
+                          content: 'Select Photos',
+                        }}
+                        width="narrow"
+                      />
+                    </Switcher>
+                  </div>
+                )
               )}
               {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
               {!selectionMode && selectedPhotos.length > 0 && (

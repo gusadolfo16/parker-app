@@ -32,9 +32,11 @@ export const shareTextForCamera = (
   photos: Photo[],
   appText: AppTextState,
 ) =>
-  appText.category.cameraShare(
-    formatCameraText(cameraFromPhoto(photos[0], camera)),
-  );
+  photos.length > 0
+    ? appText.category.cameraShare(
+        formatCameraText(cameraFromPhoto(photos[0], camera)),
+      )
+    : appText.category.cameraShare(formatCameraText(camera));
 
 export const descriptionForCameraPhotos = (
   photos: Photo[],

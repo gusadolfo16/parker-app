@@ -22,7 +22,7 @@ export default async function CameraHeader({
   dateRange?: PhotoDateRange
 }) {
   const appText = await getAppText();
-  const camera = cameraFromPhoto(photos[0], cameraProp);
+  const camera = photos.length > 0 ? cameraFromPhoto(photos[0], cameraProp) : cameraProp;
 
   return (
     <PhotoHeader

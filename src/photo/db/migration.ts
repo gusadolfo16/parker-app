@@ -86,6 +86,14 @@ export const MIGRATIONS: Migration[] = [{
     ADD COLUMN IF NOT EXISTS color_data JSONB,
     ADD COLUMN IF NOT EXISTS color_sort SMALLINT
   `,
+}, {
+  label: '08: Photo Locking',
+  fields: ['locked_by', 'locked_at'],
+  run: () => sql`
+    ALTER TABLE photos
+    ADD COLUMN IF NOT EXISTS locked_by VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS locked_at TIMESTAMP WITH TIME ZONE
+  `,
 }];
 
 export const migrationForError = (e: any) =>
