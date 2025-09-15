@@ -894,3 +894,11 @@ Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app
 **Detalles de la acción:**
 - Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
 - Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
+
+**Paso 48.15: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de etiquetas**
+
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/tag/[tag]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de etiquetas sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/tag/[tag]/page.tsx`.
+- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
