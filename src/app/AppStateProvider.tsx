@@ -170,7 +170,7 @@ export default function AppStateProvider({
     mutate: refreshAdminData,
     isLoading: isLoadingAdminData,
   } = useSWR(
-    isUserSignedIn ? SWR_KEYS.GET_ADMIN_DATA : null,
+    isUserAdmin ? SWR_KEYS.GET_ADMIN_DATA : null,
     getAdminDataAction,
   );
   const updateAdminData = useCallback(

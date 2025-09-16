@@ -16,7 +16,7 @@ export const {
           process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
           process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD === password
         ) {
-          const user: User = { email, name: 'Admin User' };
+          const user: User = { id: email, email, name: 'Admin User' };
           return user;
         } else {
           return null;
@@ -29,6 +29,18 @@ export const {
     }),
   ],
   callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        (session.user as any).id = token.id;
+      }
+      return session;
+    },
     authorized({ auth, request }) {
       const { pathname } = request.nextUrl;
 

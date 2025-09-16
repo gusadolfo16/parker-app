@@ -1,7 +1,7 @@
 'use client';
 
 import { clsx } from 'clsx/lite';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AppGrid from '../components/AppGrid';
 import AppViewSwitcher, { SwitcherSelection } from '@/app/AppViewSwitcher';
@@ -42,6 +42,7 @@ export default function NavClient({
   const ref = useRef<HTMLElement>(null);
 
   const pathname = usePathname();
+  const router = useRouter();
   const showNav = !isPathSignIn(pathname);
 
   const { data: session, status } = useSession();
@@ -115,7 +116,14 @@ export default function NavClient({
                   <Switcher type="borderless" className="mr-2">
                     <SwitcherItem
                       icon={<span>Confirm</span>}
-                      onClick={() => session?.user?.id && confirmSelection(session.user.id)}
+                      onClick={async () => {
+                        if (session?.user?.id) {
+                          const success = await confirmSelection(session.user.id);
+                          if (success) {
+                            router.push('/selected');
+                          }
+                        }
+                      }}
                       tooltip={{
                         content: 'Confirm Selection',
                       }}
@@ -123,7 +131,7 @@ export default function NavClient({
                     />
                     <SwitcherItem
                       icon={<span>Cancel</span>}
-                      onClick={() => session?.user?.id && clearSelection(session.user.id)}
+                      onClick={() => clearSelection(session?.user?.id)}
                       tooltip={{
                         content: 'Cancel Selection',
                       }}

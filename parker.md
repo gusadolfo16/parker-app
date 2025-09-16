@@ -49,7 +49,7 @@ Se ha deshabilitado la función de clic derecho (`onContextMenu`) en las imágen
 
 **Paso 3.2: Eliminar botones de Zoom y Compartir**
 
-Se han eliminado los botones de "Zoom In" y "Compartir Foto" de la vista por defecto de las imágenes. Esto simplifica la interfaz y prepara el camino para la implementación de la funcionalidad de selección de fotos.
+Se han eliminado los bloques de código correspondientes a `LoaderButton` (para el zoom) y `ShareButton` (para compartir).
 
 **Detalles de la acción:**
 - Se modificó el componente `src/photo/PhotoLarge.tsx`.
@@ -74,9 +74,7 @@ Se ha añadido un botón de "Sign In" a la derecha del título/logo de la aplica
 - Se añadió un componente `Link` con el texto "Sign In" y la ruta `/sign-in`.
 - Se utilizó `ml-auto` para alinear el botón a la derecha y se aplicaron clases de estilo para mantener la coherencia visual con el resto de la navegación.
 
-### 5. Configuración de Inicio de Sesión con Google
-
-**Paso 5.1: Añadir botón de "Sign in with Google"**
+**Paso 4.2: Configuración de Inicio de Sesión con Google**
 
 Se ha añadido un botón para iniciar sesión con Google en la pantalla de inicio de sesión. Este botón permite a los usuarios regulares autenticarse a través de su cuenta de Google.
 
@@ -86,9 +84,9 @@ Se ha añadido un botón para iniciar sesión con Google en la pantalla de inici
 - Se importó `signIn` desde `next-auth/react` en la parte superior del archivo.
 - El botón se estilizó para integrarse visualmente con el formulario existente.
 
-### 6. Implementación de la Función de Selección de Fotos
+### 5. Implementación de la Función de Selección de Fotos
 
-**Paso 6.1: Añadir botón de selección a la navegación**
+**Paso 5.1: Añadir botón de selección a la navegación**
 
 Se ha añadido un botón de "Seleccionar" junto al icono de búsqueda en la barra de navegación. Este es el primer paso para implementar la funcionalidad de selección de fotos.
 
@@ -97,7 +95,7 @@ Se ha añadido un botón de "Seleccionar" junto al icono de búsqueda en la barr
 - Se añadió un nuevo `SwitcherItem` que contiene un texto "Select" (marcador de posición) y un `onClick` que actualmente solo registra un mensaje en la consola.
 - Se colocó este `SwitcherItem` justo antes del `SwitcherItem` que contiene el `IconSearch`.
 
-**Paso 6.2: Configurar Contexto de Selección de Fotos**
+**Paso 5.2: Configurar Contexto de Selección de Fotos**
 
 Se ha creado un nuevo contexto de React (`SelectionContext`) para gestionar el estado de selección de fotos a nivel global en la aplicación. Esto permitirá que los componentes de fotos y otros elementos de la interfaz de usuario accedan y modifiquen el estado de selección de manera centralizada.
 
@@ -107,7 +105,7 @@ Se ha creado un nuevo contexto de React (`SelectionContext`) para gestionar el e
 - El `SelectionProvider` se envolvió alrededor de la aplicación en `app/layout.tsx` para que el contexto esté disponible globalmente.
 - Se importó `SelectionProvider` en `app/layout.tsx`.
 
-**Paso 6.3: Hacer fotos seleccionables y añadir feedback visual**
+**Paso 5.3: Hacer fotos seleccionables y añadir feedback visual**
 
 Se ha modificado el componente `PhotoGrid` para permitir la selección de fotos y proporcionar una guía visual cuando una foto está seleccionada. Esto es parte de la implementación de la funcionalidad de selección de fotos.
 
@@ -120,7 +118,7 @@ Se ha modificado el componente `PhotoGrid` para permitir la selección de fotos 
 - Se modificó la condición de renderizado de `SelectTileOverlay` para que dependa de `selectionMode`.
 - Se añadió una clase condicional (`border-4 border-green-500`) al `div` que envuelve `PhotoMedium` para mostrar un borde verde cuando la foto está seleccionada.
 
-**Paso 6.4: Crear Nueva Vista para Fotos Seleccionadas**
+**Paso 5.4: Crear Nueva Vista para Fotos Seleccionadas**
 
 Se ha creado una nueva página en `/selected` que muestra todas las fotos que el usuario ha seleccionado. Esta vista permite a los usuarios revisar su selección y deseleccionar imágenes si es necesario.
 
@@ -129,9 +127,9 @@ Se ha creado una nueva página en `/selected` que muestra todas las fotos que el
 - Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
 - Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
-### 7. Ajustes de Interfaz de Usuario
+### 6. Ajustes de Interfaz de Usuario
 
-**Paso 7.1: Agregar espacio entre el título y el botón de "Sign In"**
+**Paso 6.1: Agregar espacio entre el título y el botón de "Sign In"**
 
 Se ha añadido un espacio entre el título de la aplicación y el botón de "Sign In" en la barra de navegación para mejorar la legibilidad y la estética.
 
@@ -140,7 +138,7 @@ Se ha añadido un espacio entre el título de la aplicación y el botón de "Sig
 - Se añadió la clase `mr-4` (margin-right de 16px) al `div` que contiene el título y la descripción de la navegación.
 - Se eliminó la clase `ml-auto` del `div` que envuelve el botón de "Sign In" para permitir que el `mr-4` del elemento anterior cree el espacio deseado.
 
-**Paso 7.2: Mover el botón de selección a la izquierda del título**
+**Paso 6.2: Mover el botón de selección a la izquierda del título**
 
 Se ha reubicado el botón de selección de fotos a la izquierda del título de la aplicación en la barra de navegación. Esto mejora la accesibilidad y la coherencia visual con otras funcionalidades de la interfaz.
 
@@ -151,9 +149,9 @@ Se ha reubicado el botón de selección de fotos a la izquierda del título de l
   - Se añadió un nuevo `SwitcherItem` para el botón de selección justo después de `AppViewSwitcher` y antes del `div` que contiene el título de la navegación.
   - Se importaron `Switcher`, `SwitcherItem` y `useSelection` en `NavClient.tsx` para soportar el nuevo botón.
 
-### 8. Corrección de Errores
+### 7. Corrección de Errores
 
-**Paso 8.1: Corregir `ReferenceError: selectedPhotoIds is not defined` en `PhotoGrid.tsx`**
+**Paso 7.1: Corregir `ReferenceError: selectedPhotoIds is not defined` en `PhotoGrid.tsx`**
 
 Se ha corregido un error de referencia (`ReferenceError`) que ocurría en el componente `PhotoGrid.tsx` debido a una variable no definida (`selectedPhotoIds`). Este error se introdujo durante la refactorización para utilizar el nuevo contexto de selección de fotos.
 
@@ -161,7 +159,7 @@ Se ha corregido un error de referencia (`ReferenceError`) que ocurría en el com
 - Se modificó el componente `src/photo/PhotoGrid.tsx`.
 - Se reemplazó la expresión `selectedPhotoIds?.length !== undefined && 'pointer-events-none'` por `selectionMode && 'pointer-events-none'` en la línea 93. Esto asegura que la lógica para prevenir la navegación de fotos cuando el modo de selección está activo utilice la variable correcta (`selectionMode`) del contexto de selección.
 
-**Paso 8.2: Corregir `ReferenceError: isUserSignedIn is not defined` en `NavClient.tsx`**
+**Paso 7.2: Corregir `ReferenceError: isUserSignedIn is not defined` en `NavClient.tsx`**
 
 Se ha corregido un error de referencia (`ReferenceError`) que ocurría en el componente `NavClient.tsx` debido a que la variable `isUserSignedIn` no estaba siendo desestructurada correctamente del hook `useAppState()`.
 
@@ -169,9 +167,9 @@ Se ha corregido un error de referencia (`ReferenceError`) que ocurría en el com
 - Se modificó el componente `src/app/NavClient.tsx`.
 - Se añadió `isUserSignedIn` a la desestructuración del objeto retornado por `useAppState()`.
 
-### 9. Gestión de Autenticación
+### 8. Gestión de Autenticación
 
-**Paso 9.1: Ocultar/Mostrar botón de "Sign In" según el estado de la sesión**
+**Paso 8.1: Ocultar/Mostrar botón de "Sign In" según el estado de la sesión**
 
 Se ha implementado la lógica para ocultar el botón de "Sign In" en la barra de navegación cuando el usuario ha iniciado sesión y mostrarlo cuando no hay una sesión activa. Esto mejora la experiencia del usuario al presentar solo las opciones relevantes.
 
@@ -179,7 +177,7 @@ Se ha implementado la lógica para ocultar el botón de "Sign In" en la barra de
 - Se modificó el componente `src/app/NavClient.tsx`.
 - Se envolvió el `div` que contiene el `Link` del botón de "Sign In" con una condición `{!isUserSignedIn && (...) }` para controlar su visibilidad.
 
-**Paso 9.2: Habilitar inicio de sesión con Google**
+**Paso 8.2: Habilitar inicio de sesión con Google**
 
 Se ha habilitado el proveedor de autenticación de Google en la configuración de NextAuth. Esto permite a los usuarios iniciar sesión utilizando sus cuentas de Google.
 
@@ -188,9 +186,9 @@ Se ha habilitado el proveedor de autenticación de Google en la configuración d
 - Se añadió `GoogleProvider` a la lista de proveedores de NextAuth, configurando `clientId` y `clientSecret` a partir de las variables de entorno (`process.env.GOOGLE_CLIENT_ID` y `process.env.GOOGLE_CLIENT_SECRET`).
 - Se importó `GoogleProvider` desde `next-auth/providers/google` en la parte superior del archivo.
 
-### 11. Deshabilitar Funcionalidades de Zoom de Lupa
+### 9. Deshabilitar Funcionalidades de Zoom de Lupa
 
-**Paso 11.1: Deshabilitar la funcionalidad de la lupa para hacer zoom en la foto**
+**Paso 9.1: Deshabilitar la funcionalidad de la lupa para hacer zoom en la foto**
 
 Se ha deshabilitado la funcionalidad de la lupa (zoom) en la vista de fotos grandes. Esto elimina la capacidad de los usuarios de hacer zoom en las imágenes, simplificando la interacción y alineándose con los requisitos del proyecto.
 
@@ -198,9 +196,9 @@ Se ha deshabilitado la funcionalidad de la lupa (zoom) en la vista de fotos gran
 - Se modificó el componente `src/photo/PhotoLarge.tsx`.
 - Se cambió la propiedad `isEnabled` del componente `ZoomControls` a `false` (`isEnabled: false`). Esto asegura que la funcionalidad de zoom proporcionada por `ZoomControls` esté siempre deshabilitada, independientemente de otras condiciones.
 
-### 12. Configuración de Credenciales de Google OAuth
+### 10. Configuración de Credenciales de Google OAuth
 
-**Paso 12.1: Añadir `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` a `.env.local`**
+**Paso 10.1: Añadir `GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET` a `.env.local`**
 
 Se han añadido las credenciales de cliente de Google OAuth (`GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`) al archivo de variables de entorno local (`.env.local`). Estas credenciales son necesarias para que la aplicación pueda autenticarse con Google y permitir el inicio de sesión a través de cuentas de Google.
 
@@ -211,9 +209,9 @@ Se han añadido las credenciales de cliente de Google OAuth (`GOOGLE_CLIENT_ID` 
 
 **Nota Importante:** Es crucial que estas mismas variables de entorno (`GOOGLE_CLIENT_ID` y `GOOGLE_CLIENT_SECRET`) sean añadidas en la configuración de tu proyecto en Vercel (en la sección "Environment Variables") para que el inicio de sesión con Google funcione correctamente en el entorno de despliegue.
 
-### 13. Corrección de Errores de Autenticación
+### 11. Corrección de Errores de Autenticación
 
-**Paso 13.1: Resolver error de URI de redireccionamiento de Google OAuth**
+**Paso 11.1: Resolver error de URI de redireccionamiento de Google OAuth**
 
 Se ha identificado la causa del error "No puedes acceder a esta app porque no cumple con la política OAuth 2.0 de Google" al intentar iniciar sesión con Google. Este error se debe a que el URI de redireccionamiento de la aplicación no está registrado o no coincide con las configuraciones en el proyecto de Google Cloud Console.
 
@@ -221,9 +219,9 @@ Se ha identificado la causa del error "No puedes acceder a esta app porque no cu
 - Se proporcionaron instrucciones detalladas al usuario sobre cómo registrar el URI de redireccionamiento (`http://localhost:3000/api/auth/callback/google`) en Google Cloud Console.
 - Se enfatizó la necesidad de añadir también la URL de despliegue de Vercel (`https://parker-app-one.vercel.app/api/auth/callback/google`) una vez que el dominio esté configurado.
 
-### 14. Restricción de Acceso de Administrador
+### 12. Restricción de Acceso de Administrador
 
-**Paso 14.1: Restringir funcionalidades de administrador a usuarios no-admin**
+**Paso 12.1: Restringir funcionalidades de administrador a usuarios no-admin**
 
 Se ha modificado la lógica de autorización para asegurar que solo el usuario administrador (`process.env.ADMIN_EMAIL`) tenga acceso a las rutas protegidas. Los usuarios autenticados a través de Google que no sean el administrador no podrán acceder a estas funcionalidades.
 
@@ -232,9 +230,9 @@ Se ha modificado la lógica de autorización para asegurar que solo el usuario a
 - En el callback `authorized` de NextAuth, se añadió una verificación para `isAdminUser` (`auth?.user?.email === process.env.ADMIN_EMAIL`).
 - La condición `isRequestAuthorized` se actualizó para requerir que el usuario esté logueado Y sea el usuario administrador para las rutas protegidas (`!isUrlProtected || (isUserLoggedIn && isAdminUser)`).
 
-### 15. Corrección de Errores y Mejoras de Interfaz
+### 13. Corrección de Errores y Mejoras de Interfaz
 
-**Paso 15.1: Corregir Bucle de Redirección en Inicio de Sesión**
+**Paso 13.1: Corregir Bucle de Redirección en Inicio de Sesión**
 
 Se ha solucionado un bucle de redirección que ocurría después de que un usuario no administrador iniciara sesión con Google. El problema era que la página de inicio de sesión redirigía a todos los usuarios a la página de administrador, causando que el middleware de autenticación los enviara de vuelta a la página de inicio en un ciclo.
 
@@ -242,7 +240,7 @@ Se ha solucionado un bucle de redirección que ocurría después de que un usuar
 - Se modificó el archivo `app/sign-in/page.tsx`.
 - Se añadió una lógica para verificar si el usuario es un administrador después de iniciar sesión. Si es administrador, se le redirige a `/admin`; de lo contrario, se le redirige a la página de inicio (`/`).
 
-**Paso 15.2: Solucionar Error en el Botón de Selección**
+**Paso 13.2: Solucionar Error en el Botón de Selección**
 
 Se ha corregido un error de `ReferenceError: toggleSelectionMode is not defined` que se producía al hacer clic en el botón "Select" en la navegación.
 
@@ -250,7 +248,7 @@ Se ha corregido un error de `ReferenceError: toggleSelectionMode is not defined`
 - Se modificó el componente `src/app/NavClient.tsx`.
 - Se desestructuró correctamente la función `toggleSelectionMode` del hook `useSelection`.
 
-**Paso 15.3: Mejorar Visibilidad del Botón de Selección**
+**Paso 13.3: Mejorar Visibilidad del Botón de Selección**
 
 Se ha ajustado el diseño de la barra de navegación para asegurar que el botón "Select" sea siempre completamente visible y no quede parcialmente oculto.
 
@@ -258,7 +256,7 @@ Se ha ajustado el diseño de la barra de navegación para asegurar que el botón
 - Se modificó el componente `src/app/NavClient.tsx`.
 - Se eliminaron las clases de CSS (`md:w-[calc(100%+8px)] md:translate-x-[-4px] md:px-[4px]`) que causaban un desbordamiento y ocultaban parte del botón.
 
-**Paso 15.4: Reforzar Control de Acceso del Administrador en el Cliente**
+**Paso 13.4: Reforzar Control de Acceso del Administrador en el Cliente**
 
 Se ha mejorado la seguridad en el lado del cliente para asegurar que el enlace de navegación "Admin" solo sea visible para el usuario administrador. Esto evita que los usuarios no autorizados vean un enlace a una sección a la que no pueden acceder.
 
@@ -267,16 +265,16 @@ Se ha mejorado la seguridad en el lado del cliente para asegurar que el enlace d
 - Se actualizó `src/app/AppStateProvider.tsx` para usar esta nueva acción y almacenar el estado de administrador (`isUserAdmin`) en el contexto de la aplicación.
 - Se modificó `src/app/NavClient.tsx` para que el enlace "Admin" solo se renderice si `isUserAdmin` es verdadero.
 
-### 16. Mejoras Adicionales y Correcciones (Iteración 2)
+### 14. Mejoras Adicionales y Correcciones (Iteración 2)
 
-**Paso 16.1: Corregir Visibilidad del Menú de Administrador**
+**Paso 14.1: Corregir Visibilidad del Menú de Administrador**
 
 Se ha corregido un error por el que el menú de administrador seguía siendo visible para los usuarios no administradores. El problema estaba en el componente `AppViewSwitcher`, que mostraba el menú basándose en si el usuario había iniciado sesión, en lugar de si era un administrador.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/app/AppViewSwitcher.tsx` para usar el estado `isUserAdmin` del contexto de la aplicación para controlar la visibilidad del menú de administrador.
 
-**Paso 16.2: Eliminar la Vista "Full"**
+**Paso 14.2: Eliminar la Vista "Full"**
 
 Se ha eliminado la opción de vista "Full" de la interfaz de usuario, dejando la vista de cuadrícula ("Grid") como la única opción para visualizar las fotos. Esto simplifica la navegación y se alinea con los requisitos del proyecto.
 
@@ -284,7 +282,7 @@ Se ha eliminado la opción de vista "Full" de la interfaz de usuario, dejando la
 - Se confirmó que la constante `GRID_HOMEPAGE_ENABLED` en `src/app/config.ts` controla este comportamiento y debe establecerse en `true` (a través de la variable de entorno `NEXT_PUBLIC_GRID_HOMEPAGE=1`).
 - No se requirieron cambios de código adicionales, ya que la lógica existente ya utiliza esta constante para determinar la vista predeterminada.
 
-**Paso 16.3: Habilitar Selección en la Vista de Foto Grande**
+**Paso 14.3: Habilitar Selección en la Vista de Foto Grande**
 
 Se ha añadido la funcionalidad de selección de fotos a la vista de foto individual (grande). Ahora los usuarios pueden seleccionar y deseleccionar fotos directamente desde esta vista, además de la vista de cuadrícula.
 
@@ -293,7 +291,7 @@ Se ha añadido la funcionalidad de selección de fotos a la vista de foto indivi
 - Se añadió un indicador visual (un borde verde) para mostrar cuándo una foto está seleccionada.
 - Se añadió un botón de "Select"/"Deselect" en el panel lateral de metadatos, visible solo cuando el modo de selección está activo.
 
-**Paso 16.4: Crear Nueva Vista para Fotos Seleccionadas**
+**Paso 14.4: Crear Nueva Vista para Fotos Seleccionadas**
 
 Se ha creado una nueva página en `/selected` que muestra todas las fotos que el usuario ha seleccionado. Esta vista permite a los usuarios revisar su selección y deseleccionar imágenes si es necesario.
 
@@ -302,9 +300,9 @@ Se ha creado una nueva página en `/selected` que muestra todas las fotos que el
 - Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
 - Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
-### 17. Corrección de Errores (Iteración 3)
+### 15. Correcciones y Mejoras (Iteración 3)
 
-**Paso 17.1: Resolver Error de Módulo `@/selection`**
+**Paso 15.1: Resolver Error de Módulo `@/selection`**
 
 Se ha corregido un error de compilación (`Module not found: Can't resolve '@/selection'`) que ocurría en `src/photo/PhotoLarge.tsx`.
 
@@ -312,9 +310,9 @@ Se ha corregido un error de compilación (`Module not found: Can't resolve '@/se
 - Se modificó el archivo `src/photo/PhotoLarge.tsx`.
 - Se actualizó la ruta de importación de `useSelection` de `@/selection` a `@/selection/SelectionContext` para resolver correctamente el módulo.
 
-### 18. Correcciones y Mejoras (Iteración 4)
+### 16. Correcciones y Mejoras (Iteración 4)
 
-**Paso 18.1: Ocultar Botón de Menú de Administrador para Usuarios No Administradores**
+**Paso 16.1: Ocultar Botón de Menú de Administrador para Usuarios No Administradores**
 
 Se ha corregido un problema por el cual el botón del menú de administrador (el icono de tres puntos) era visible para los usuarios que iniciaban sesión con Google, incluso si no tenían privilegios de administrador. Esto se debía a que el componente `AppViewSwitcher` mostraba el botón basándose en si el usuario había iniciado sesión, en lugar de verificar específicamente el rol de administrador.
 
@@ -322,7 +320,7 @@ Se ha corregido un problema por el cual el botón del menú de administrador (el
 - Se modificó `src/app/AppViewSwitcher.tsx`.
 - Se eliminó el `SwitcherItem` que mostraba un spinner y un tooltip relacionado con el administrador cuando la autenticación estaba en progreso, ya que esto podía causar confusión y mostrar elementos relacionados con el administrador a usuarios no administradores.
 
-**Paso 18.2: Establecer Vista de Cuadrícula como Predeterminada**
+**Paso 16.2: Establecer Vista de Cuadrícula como Predeterminada**
 
 Se ha configurado la vista de cuadrícula ("Grid") como la vista predeterminada para toda la aplicación. Esto asegura una experiencia de usuario consistente y simplificada al eliminar la opción de vista "Full" y dirigir a todos los usuarios a la vista de cuadrícula por defecto.
 
@@ -330,7 +328,7 @@ Se ha configurado la vista de cuadrícula ("Grid") como la vista predeterminada 
 - Se confirmó que la constante `GRID_HOMEPAGE_ENABLED` en `src/app/config.ts` controla este comportamiento y debe establecerse en `true` (a través de la variable de entorno `NEXT_PUBLIC_GRID_HOMEPAGE=1`).
 - No se requirieron cambios de código adicionales, ya que la lógica existente ya utiliza esta constante para determinar la vista predeterminada.
 
-**Paso 18.3: Resolver Error de Compilación en `PhotosEmptyState`**
+**Paso 16.3: Resolver Error de Compilación en `PhotosEmptyState`**
 
 Se ha solucionado un error de compilación (`Build Error: Ecmascript file had an error`) que ocurría en `src/photo/PhotosEmptyState.tsx`.
 
@@ -338,17 +336,17 @@ Se ha solucionado un error de compilación (`Build Error: Ecmascript file had an
 - Se movió la lógica de `revalidatePath('/admin', 'layout')` a una nueva acción de servidor (`revalidateAdminPathAction`) en `src/admin/actions.ts`.
 - Se importó y utilizó `revalidateAdminPathAction` en `src/photo/PhotosEmptyState.tsx`, asegurando que la acción del servidor no se defina en línea dentro de un componente del cliente.
 
-**Paso 18.4: Optimizar Espacio de Botones en la Navegación**
+**Paso 16.4: Optimizar Espacio de Botones en la Navegación**
 
 Se ha mejorado la disposición de los botones "Confirmar Selección", "Ver Selección" y "Cancelar" en la barra de navegación para evitar que se amontonen, especialmente en pantallas más pequeñas.
 
 **Detalles de la acción:**
-- Se modificó `src/app/NavClient.tsx`.
+- Se modificó el archivo `src/app/NavClient.tsx`.
 - Se eliminó la clase `grow` del contenedor del título, permitiendo que los botones de selección utilicen más espacio disponible y se muestren correctamente.
 
-### 19. Correcciones y Mejoras (Iteración 5)
+### 17. Correcciones y Mejoras (Iteración 5)
 
-**Paso 19.1: Diagnóstico de Visibilidad del Botón de Administrador**
+**Paso 17.1: Diagnóstico de Visibilidad del Botón de Administrador**
 
 Se ha iniciado un diagnóstico para entender por qué el botón del menú de administrador sigue siendo visible para usuarios no administradores, a pesar de las correcciones anteriores. Se sospecha que el problema podría estar relacionado con la configuración de las variables de entorno o la propagación del estado de autenticación.
 
@@ -357,7 +355,7 @@ Se ha iniciado un diagnóstico para entender por qué el botón del menú de adm
 - Se añadieron sentencias `console.log` temporales dentro de la función `getAuthSessionAction` para imprimir el valor de `process.env.ADMIN_EMAIL`, el correo electrónico del usuario autenticado (`session?.user?.email`) y el resultado de la verificación `isAdmin` (`isAdmin`).
 - Se requiere que el usuario ejecute la aplicación, inicie sesión con Google y proporcione la salida de la consola para un análisis posterior.
 
-**Paso 19.2: Resolver Error de Módulo `@/components/SiteGrid`**
+**Paso 17.2: Resolver Error de Módulo `@/components/SiteGrid`**
 
 Se ha corregido un error de compilación (`Module not found: Can't resolve '@/components/SiteGrid'`) que ocurría en `app/selected/page.tsx`.
 
@@ -365,7 +363,7 @@ Se ha corregido un error de compilación (`Module not found: Can't resolve '@/co
 - Se modificó el archivo `app/selected/page.tsx`.
 - Se cambió la importación de `SiteGrid` a `AppGrid` y se actualizó el uso del componente en el JSX, ya que `AppGrid` es el componente correcto disponible en el proyecto.
 
-**Paso 19.3: Resolver Error de Módulo `@/selection` en `app/selected/page.tsx`**
+**Paso 17.3: Resolver Error de Módulo `@/selection` en `app/selected/page.tsx`**
 
 Se ha corregido un error de compilación (`Module not found: Can't resolve '@/selection'`) que ocurría en `app/selected/page.tsx`.
 
@@ -373,9 +371,9 @@ Se ha corregido un error de compilación (`Module not found: Can't resolve '@/se
 - Se modificó el archivo `app/selected/page.tsx`.
 - Se actualizó la ruta de importación de `useSelection` de `@/selection` a `@/selection/SelectionContext` para resolver correctamente el módulo.
 
-### 20. Correcciones y Mejoras (Iteración 6)
+### 18. Correcciones y Mejoras (Iteración 6)
 
-**Paso 20.1: Mover Lógica de Conexión a Cliente en `AdminAppConfigurationClient`**
+**Paso 18.1: Mover Lógica de Conexión a Cliente en `AdminAppConfigurationClient`**
 
 Se ha refactorizado la lógica de prueba de conexión en el panel de administración para que se ejecute en el lado del cliente, resolviendo errores relacionados con la actualización del estado del enrutador durante la renderización del servidor.
 
@@ -384,7 +382,7 @@ Se ha refactorizado la lógica de prueba de conexión en el panel de administrac
 - Se eliminaron las props `databaseError`, `storageError`, `redisError`, `aiError` y `isAnalyzingConfiguration` de la interfaz de props del componente.
 - Se añadieron estados locales (`connectionErrors` y `isAnalyzingConfiguration`) utilizando `useState`.
 
-**Paso 20.2: Ajustar Propiedades de `AdminAppConfigurationClient`**
+**Paso 18.2: Ajustar Propiedades de `AdminAppConfigurationClient`**
 
 Se han ajustado las propiedades que recibe el componente `AdminAppConfigurationClient` para reflejar los cambios en la gestión de errores de conexión, que ahora se manejan internamente en el cliente.
 
@@ -392,9 +390,9 @@ Se han ajustado las propiedades que recibe el componente `AdminAppConfigurationC
 - Se modificó el archivo `src/admin/config/AdminAppConfigurationClient.tsx`.
 - Se eliminaron las propiedades `databaseError`, `storageError`, `redisError`, `aiError` y `isAnalyzingConfiguration` de la interfaz de props del componente, ya que ahora se gestionan mediante estados internos.
 
-### 21. Correcciones y Mejoras (Iteración 7)
+### 19. Correcciones y Mejoras (Iteración 7)
 
-**Paso 21.1: Eliminar Declaraciones Duplicadas de `useState`**
+**Paso 19.1: Eliminar Declaraciones Duplicadas de `useState`**
 
 Se ha corregido un error de compilación (`the name 
 connectionErrors
@@ -404,9 +402,9 @@ connectionErrors
 - Se modificó el archivo `src/admin/config/AdminAppConfigurationClient.tsx`.
 - Se eliminaron las líneas duplicadas de `useState` para `hasScrolled`, `connectionErrors` y `isAnalyzingConfiguration`, asegurando que cada estado se declare solo una vez.
 
-### 22. Correcciones y Mejoras (Iteración 8)
+### 20. Correcciones y Mejoras (Iteración 8)
 
-**Paso 22.1: Corregir Error de Sintaxis en `AppStateProvider.tsx`**
+**Paso 20.1: Corregir Error de Sintaxis en `AppStateProvider.tsx`**
 
 Se ha corregido un error de sintaxis (`Parsing ecmascript source code failed: Expression expected`) en `src/app/AppStateProvider.tsx` causado por la colocación incorrecta de un bloque `else` dentro de un `if` anidado.
 
@@ -414,9 +412,9 @@ Se ha corregido un error de sintaxis (`Parsing ecmascript source code failed: Ex
 - Se modificó el archivo `src/app/AppStateProvider.tsx`.
 - Se corrigió la estructura del bloque `if/else` para asegurar que el `else` esté correctamente asociado a su `if` correspondiente, resolviendo el error de análisis sintáctico.
 
-### 23. Correcciones y Mejoras (Iteración 9)
+### 21. Correcciones y Mejoras (Iteración 9)
 
-**Paso 23.1: Aumentar Espacio de Botones de Selección**
+**Paso 21.1: Aumentar Espacio de Botones de Selección**
 
 Se ha aumentado el ancho de los botones de selección en la barra de navegación para mejorar su visibilidad y evitar que se amontonen.
 
@@ -424,7 +422,7 @@ Se ha aumentado el ancho de los botones de selección en la barra de navegación
 - Se modificó el archivo `src/components/switcher/SwitcherItem.tsx`.
 - Se cambió el valor de `WIDTH_CLASS_NARROW` de `w-[100px]` a `w-[120px]` para proporcionar más espacio al texto de los botones.
 
-**Paso 23.2: Eliminar Logs de Depuración Temporales**
+**Paso 21.2: Eliminar Logs de Depuración Temporales**
 
 Se han eliminado los `console.log` temporales que se habían añadido para depurar la visibilidad del botón de administrador y el estado de autenticación.
 
@@ -436,9 +434,9 @@ Se han eliminado los `console.log` temporales que se habían añadido para depur
 - Se modificó el archivo `src/app/AppViewSwitcher.tsx`.
 - Se eliminó el `console.log` al inicio del componente que mostraba el estado de `isUserAdmin`.
 
-### 24. Correcciones y Mejoras (Iteración 10)
+### 22. Correcciones y Mejoras (Iteración 10)
 
-**Paso 24.1: Ocultar el botón de menú de administrador para usuarios no administradores**
+**Paso 22.1: Ocultar el botón de menú de administrador para usuarios no administradores**
 
 Se ha corregido un error que provocaba que el botón de menú de administrador de una foto (el icono de tres puntos) fuera visible para los usuarios no administradores.
 
@@ -446,7 +444,7 @@ Se ha corregido un error que provocaba que el botón de menú de administrador d
 - Se modificó el archivo `src/photo/PhotoLarge.tsx`.
 - Se aseguró de que el componente `AdminPhotoMenu` solo se renderice si el usuario es un administrador, envolviendo su renderización en una comprobación `isUserAdmin && renderAdminMenu`.
 
-**Paso 24.2: Corregir la visualización de miniaturas de fotos anteriores y siguientes**
+**Paso 22.2: Corregir la visualización de miniaturas de fotos anteriores y siguientes**
 
 Se ha solucionado un problema por el que al ver una foto no se mostraba la miniatura de la foto anterior en la cuadrícula de fotos relacionadas.
 
@@ -454,7 +452,7 @@ Se ha solucionado un problema por el que al ver una foto no se mostraba la minia
 - Se modificó la consulta de la base de datos en `src/photo/db/query.ts` para obtener fotos antes y después de la foto actual.
 - Se actualizó la lógica de almacenamiento en caché en `src/photo/cache.ts` para filtrar correctamente la foto actual de la cuadrícula de fotos relacionadas.
 
-**Paso 24.3: Implementar la confirmación de la selección y la redirección**
+**Paso 22.3: Implementar la confirmación de la selección y la redirección**
 
 Se ha implementado la lógica para que, al confirmar una selección de fotos, el usuario sea redirigido a la página `/selected`.
 
@@ -462,7 +460,7 @@ Se ha implementado la lógica para que, al confirmar una selección de fotos, el
 - Se modificó el archivo `src/selection/SelectionContext.tsx`.
 - Se utilizó el hook `useRouter` de `next/navigation` para redirigir al usuario a la página `/selected` cuando se llama a la función `confirmSelection`.
 
-**Paso 24.4: Corregir error de compilación: `operator does not exist: character varying = integer`**
+**Paso 22.4: Corregir error de compilación: `operator does not exist: character varying = integer`**
 
 Se ha corregido un error de compilación relacionado con una operación SQL que intentaba comparar un tipo de dato `character varying` con un `integer` en la función `getPhotosNearId`.
 
@@ -470,7 +468,7 @@ Se ha corregido un error de compilación relacionado con una operación SQL que 
 - Se modificó el archivo `src/photo/db/query.ts`.
 - Se ajustó la consulta SQL para asegurar que los parámetros de `limit` se pasen y se utilicen correctamente como valores numéricos en las operaciones de comparación de `row_number`.
 
-**Paso 24.5: Implementar el backend para registrar la selección de fotos**
+**Paso 22.5: Implementar el backend para registrar la selección de fotos**
 
 Se ha creado un nuevo endpoint de API para recibir y procesar las fotos seleccionadas por el usuario.
 
@@ -479,7 +477,7 @@ Se ha creado un nuevo endpoint de API para recibir y procesar las fotos seleccio
 - Este endpoint recibe un array de IDs de fotos y, por ahora, los registra en la consola.
 - Se modificó la función `confirmSelection` en `src/selection/SelectionContext.tsx` para enviar los IDs de las fotos seleccionadas a este nuevo endpoint.
 
-**Paso 24.6: Controlar la visibilidad del botón "Ver Selección"**
+**Paso 22.6: Controlar la visibilidad del botón "Ver Selección"**
 
 Se ha ajustado la lógica para que el botón "Ver Selección" solo sea visible cuando el modo de selección está inactivo y hay fotos seleccionadas.
 
@@ -487,7 +485,7 @@ Se ha ajustado la lógica para que el botón "Ver Selección" solo sea visible c
 - Se modificó el archivo `src/app/NavClient.tsx`.
 - Se añadió una condición para renderizar el botón "Ver Selección" solo cuando `!selectionMode && selectedPhotos.length > 0`.
 
-**Paso 24.7: Corregir la funcionalidad del botón "Cancelar Selección"**
+**Paso 22.7: Corregir la funcionalidad del botón "Cancelar Selección"**
 
 Se ha corregido el botón "Cancelar Selección" para que no solo borre la selección de fotos, sino que también desactive el modo de selección, devolviendo la interfaz a su estado inicial.
 
@@ -495,9 +493,9 @@ Se ha corregido el botón "Cancelar Selección" para que no solo borre la selecc
 - Se modificó el archivo `src/selection/SelectionContext.tsx`.
 - Se añadió `setSelectionMode(false)` a la función `clearSelection`.
 
-### 25. Correcciones y Mejoras (Iteración 11)
+### 23. Correcciones y Mejoras (Iteración 11)
 
-**Paso 25.1: Corregir errores de importación en `app/api/selection/route.ts`**
+**Paso 23.1: Corregir errores de importación en `app/api/selection/route.ts`**
 
 Se han corregido los errores de compilación relacionados con la importación de `getServerSession` y `authOptions` en el archivo de la ruta de la API de selección.
 
@@ -506,9 +504,9 @@ Se han corregido los errores de compilación relacionados con la importación de
 - Se cambió la importación de `getServerSession` de `next-auth` a `auth` desde `@/auth/server`.
 - Se eliminó la importación de `authOptions` ya que no era necesaria con el nuevo enfoque de importación de `auth`.
 
-### 26. Correcciones y Mejoras (Iteración 12)
+### 24. Correcciones y Mejoras (Iteración 12)
 
-**Paso 26.1: Corregir error de tipo `limit` en `src/photo/db/query.ts`**
+**Paso 24.1: Corregir error de tipo `limit` en `src/photo/db/query.ts`**
 
 Se ha corregido un error de tipo (`TypeError: 'limit' is possibly 'undefined'`) en la función `getPhotosNearId` que ocurría al intentar realizar operaciones aritméticas con la variable `limit` sin asegurar que estuviera definida.
 
@@ -517,9 +515,9 @@ Se ha corregido un error de tipo (`TypeError: 'limit' is possibly 'undefined'`) 
 - Se añadió un valor por defecto a la desestructuración de `limit` (`const { limit = RELATED_GRID_PHOTOS_TO_SHOW + 2 } = options;`) para asegurar que siempre tenga un valor numérico.
 - Se importó `RELATED_GRID_PHOTOS_TO_SHOW` desde `@/photo` para utilizarlo como valor por defecto.
 
-### 27. Correcciones y Mejoras (Iteración 13)
+### 25. Correcciones y Mejoras (Iteración 13)
 
-**Paso 27.1: Corregir error de compilación `operator does not exist: character varying = integer` en `src/photo/db/query.ts`**
+**Paso 25.1: Corregir error de compilación `operator does not exist: character varying = integer` en `src/photo/db/query.ts`**
 
 Se ha corregido un error de compilación recurrente (`operator does not exist: character varying = integer`) en la función `getPhotosNearId`.
 
@@ -528,9 +526,9 @@ Se ha corregido un error de compilación recurrente (`operator does not exist: c
 - Se refactorizó la construcción de la consulta SQL para utilizar directamente el template literal `sql` de `@/platforms/postgres`.
 - Esto asegura que los parámetros se pasen correctamente a la consulta SQL como valores tipados, resolviendo el problema de la inferencia de tipos y la comparación incorrecta de `character varying` con `integer`.
 
-### 28. Correcciones y Mejoras (Iteración 14)
+### 26. Correcciones y Mejoras (Iteración 14)
 
-**Paso 28.1: Corregir error de tipo en `src/photo/db/query.ts` al mapear resultados de la base de datos**
+**Paso 26.1: Corregir error de tipo en `src/photo/db/query.ts` al mapear resultados de la base de datos**
 
 Se ha corregido un error de tipo (`Type error: Argument of type '(photoDbRaw: PhotoDb) => Photo' is not assignable to parameter of type '(value: QueryResultRow, index: number, array: QueryResultRow[]) => Photo'.`) que ocurría al intentar mapear los resultados de la base de datos a objetos `Photo`.
 
@@ -538,9 +536,9 @@ Se ha corregido un error de tipo (`Type error: Argument of type '(photoDbRaw: Ph
 - Se modificó el archivo `src/photo/db/query.ts`.
 - Se añadió un casting explícito (`row as PhotoDb`) al mapear cada fila de la base de datos a `PhotoDb` antes de pasarla a `parsePhotoFromDb`, asegurando la compatibilidad de tipos.
 
-### 29. Correcciones y Mejoras (Iteración 15)
+### 27. Correcciones y Mejoras (Iteración 15)
 
-**Paso 29.1: Corregir error de compilación `syntax error at or near "$1"` en `src/photo/db/query.ts`**
+**Paso 27.1: Corregir error de compilación `syntax error at or near "$1"` en `src/photo/db/query.ts`**
 
 Se ha corregido un error de sintaxis (`syntax error at or near "$1"`) en la función `getPhotosNearId`.
 
@@ -549,9 +547,9 @@ Se ha corregido un error de sintaxis (`syntax error at or near "$1"`) en la func
 - Se ajustó la construcción de la consulta SQL para asegurar que los parámetros de `wheresValues` se pasen correctamente al template literal `sql`.
 - Se introdujo una variable `paramIndex` para gestionar el índice de los parámetros de forma dinámica, asegurando que los placeholders `$N` en la consulta SQL se correspondan correctamente con los valores proporcionados.
 
-### 30. Correcciones y Mejoras (Iteración 16)
+### 28. Correcciones y Mejoras (Iteración 16)
 
-**Paso 30.1: Corregir error de tipo `Property 'photos' does not exist on type 'QueryResult<QueryResultRow>'` en `src/photo/cache.ts`**
+**Paso 28.1: Corregir error de tipo `Property 'photos' does not exist on type 'QueryResult<QueryResultRow>'` en `src/photo/cache.ts`**
 
 Se ha corregido un error de tipo (`Property 'photos' does not exist on type 'QueryResult<QueryResultRow>'`) en la función `getPhotosNearIdCached`.
 
@@ -560,9 +558,9 @@ Se ha corregido un error de tipo (`Property 'photos' does not exist on type 'Que
 - Se refactorizó la función `getPhotosNearId` en `src/photo/db/query.ts` para que devuelva directamente un objeto con las propiedades `photos` e `indexNumber`.
 - Se ajustó la llamada a `query` en `getPhotosNearId` para que utilice `await query(queryString, values)` en lugar del template literal `sql` con `.then()`, lo que permite un control más directo sobre el tipo de retorno y evita el error de tipo al desestructurar el resultado en `getPhotosNearIdCached`.
 
-### 31. Correcciones y Mejoras (Iteración 17)
+### 29. Correcciones y Mejoras (Iteración 17)
 
-**Paso 31.1: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
+**Paso 29.1: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
 
 Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `dateRangeForPhotos` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
@@ -570,9 +568,9 @@ Se ha corregido un error de compilación que ocurría al generar páginas para l
 - Se modificó el archivo `src/photo/index.ts`.
 - Se añadió una comprobación en la función `dateRangeForPhotos` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para lentes sin fotos.
 
-### 32. Correcciones y Mejoras (Iteración 18)
+### 30. Correcciones y Mejoras (Iteración 18)
 
-**Paso 32.1: Corregir error de compilación en la generación de metadatos de cámaras sin fotos**
+**Paso 30.1: Corregir error de compilación en la generación de metadatos de cámaras sin fotos**
 
 Se ha corregido un error de compilación que ocurría al generar páginas para cámaras que no tenían fotos asociadas. El error se debía a que la función `titleForCamera` no manejaba correctamente el caso en que recibía un array de fotos vacío.
 
@@ -580,7 +578,7 @@ Se ha corregido un error de compilación que ocurría al generar páginas para c
 - Se modificó el archivo `src/camera/meta.ts`.
 - Se añadió una comprobación en la función `titleForCamera` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
-**Paso 32.2: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
+**Paso 30.2: Corregir error de compilación en la generación de metadatos de lentes sin fotos**
 
 Se ha corregido un error de compilación que ocurría al generar páginas para lentes que no tenían fotos asociadas. El error se debía a que la función `titleForLens` no manejaba correctamente el caso en que recibía un array de fotos vacío.
 
@@ -588,7 +586,7 @@ Se ha corregido un error de compilación que ocurría al generar páginas para l
 - Se modificó el archivo `src/lens/meta.ts`.
 - Se añadió una comprobación en la función `titleForLens` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para lentes sin fotos.
 
-**Paso 32.3: Mejorar la legibilidad del botón de selección**
+**Paso 30.3: Mejorar la legibilidad del botón de selección**
 
 Se ha mejorado la legibilidad del botón de selección en la barra de navegación eliminando un ancho fijo que impedía que el texto se mostrara completo.
 
@@ -596,7 +594,7 @@ Se ha mejorado la legibilidad del botón de selección en la barra de navegació
 - Se modificó el archivo `src/app/NavClient.tsx`.
 - Se eliminó la clase `w-20` del `div` que envuelve el `SwitcherItem` del botón de selección.
 
-**Paso 32.4: Evitar la superposición del botón de confirmación de selección**
+**Paso 30.4: Evitar la superposición del botón de confirmación de selección**
 
 Se ha evitado que el botón de confirmación de selección y el número de fotos seleccionadas se superpongan en la barra de navegación.
 
@@ -604,7 +602,7 @@ Se ha evitado que el botón de confirmación de selección y el número de fotos
 - Se modificó el archivo `src/app/NavClient.tsx`.
 - Se movió el contador de fotos seleccionadas fuera del botón de confirmación, mostrándolo como un elemento de texto separado.
 
-**Paso 32.5: Implementar el bloqueo de fotos seleccionadas**
+**Paso 30.5: Implementar el bloqueo de fotos seleccionadas**
 
 Se ha implementado un mecanismo para bloquear las fotos que un usuario ha seleccionado, evitando que otros usuarios puedan seleccionarlas.
 
@@ -615,9 +613,9 @@ Se ha implementado un mecanismo para bloquear las fotos que un usuario ha selecc
 
 - Se ha actualizado la interfaz de usuario en `src/photo/PhotoGrid.tsx` and `src/photo/PhotoLarge.tsx` para mostrar las fotos bloqueadas con un filtro de escala de grises y deshabilitar la selección.
 
-### 33. Correcciones y Mejoras (Iteración 19)
+### 31. Correcciones y Mejoras (Iteración 19)
 
-**Paso 33.1: Corregir errores de sintaxis en el renderizado de componentes**
+**Paso 31.1: Corregir errores de sintaxis en el renderizado de componentes**
 
 Se han corregido errores de sintaxis en los archivos `src/photo/PhotoLarge.tsx` y `src/app/NavClient.tsx` que se introdujeron en la iteración anterior. Los errores se debían a etiquetas JSX mal formadas y a la falta de un elemento raíz al renderizar varios componentes.
 
@@ -625,9 +623,9 @@ Se han corregido errores de sintaxis en los archivos `src/photo/PhotoLarge.tsx` 
 - Se modificó el archivo `src/photo/PhotoLarge.tsx` para corregir una etiqueta de cierre en el componente `ZoomControls`.
 - Se modificó el archivo `src/app/NavClient.tsx` para envolver los botones de selección y el contador de fotos en un `div` para proporcionar un único elemento raíz.
 
-### 34. Correcciones y Mejoras (Iteración 20)
+### 32. Correcciones y Mejoras (Iteración 20)
 
-**Paso 34.1: Corregir error de tipo `session.user` posiblemente `undefined` en la ruta de la API de selección**
+**Paso 32.1: Corregir error de tipo `session.user` posiblemente `undefined` en la ruta de la API de selección**
 
 Se ha corregido un error de tipo que ocurría en la ruta de la API de selección (`app/api/selection/route.ts`) al intentar acceder a `session.user.id` sin verificar si `session.user` era `undefined`.
 
@@ -635,9 +633,9 @@ Se ha corregido un error de tipo que ocurría en la ruta de la API de selección
 - Se modificó el archivo `app/api/selection/route.ts`.
 - Se añadió una comprobación para asegurar que `session.user` existe antes de intentar acceder a sus propiedades en las funciones `POST` y `DELETE`.
 
-### 35. Correcciones y Mejoras (Iteración 21)
+### 33. Correcciones y Mejoras (Iteración 21)
 
-**Paso 35.1: Corregir error de tipo `lockedAt` en `src/photo/db/query.ts`**
+**Paso 33.1: Corregir error de tipo `lockedAt` en `src/photo/db/query.ts`**
 
 Se ha corregido un error de tipo que ocurría en la función `insertPhoto` y `updatePhoto` en `src/photo/db/query.ts` al intentar insertar o actualizar el campo `lockedAt` con un objeto `Date` en lugar de una cadena de texto.
 
@@ -645,9 +643,9 @@ Se ha corregido un error de tipo que ocurría en la función `insertPhoto` y `up
 - Se modificó el archivo `src/photo/db/query.ts`.
 - Se añadió una comprobación para convertir `photo.lockedAt` a una cadena de texto ISO (`photo.lockedAt.toISOString()`) si es un objeto `Date`, o a `null` si es `undefined` antes de pasarlo a la consulta SQL.
 
-### 36. Correcciones y Mejoras (Iteración 22)
+### 34. Correcciones y Mejoras (Iteración 22)
 
-**Paso 36.1: Corregir error de tipo `lockedAt` en `src/photo/form/index.ts`**
+**Paso 34.1: Corregir error de tipo `lockedAt` en `src/photo/form/index.ts`**
 
 Se ha corregido un error de tipo que ocurría en la función `convertFormDataToPhotoDbInsert` en `src/photo/form/index.ts` al intentar asignar un valor de tipo `string` a la propiedad `lockedAt` de tipo `Date`.
 
@@ -655,9 +653,9 @@ Se ha corregido un error de tipo que ocurría en la función `convertFormDataToP
 - Se modificó el archivo `src/photo/form/index.ts`.
 - Se añadió una comprobación para convertir `photoForm.lockedAt` a un objeto `Date` si es una cadena de texto, o a `undefined` si es `null` o `undefined` antes de asignarlo a la propiedad `lockedAt`.
 
-### 37. Correcciones y Mejoras (Iteración 23)
+### 35. Correcciones y Mejoras (Iteración 23)
 
-**Paso 37.1: Corregir error de tipo `lockedAt` en `src/photo/index.ts`**
+**Paso 35.1: Corregir error de tipo `lockedAt` en `src/photo/index.ts`**
 
 Se ha corregido un error de tipo que ocurría en la función `convertPhotoToPhotoDbInsert` en `src/photo/index.ts` al intentar asignar un valor de tipo `Date | null` a la propiedad `lockedAt` de tipo `Date | undefined`.
 
@@ -665,9 +663,9 @@ Se ha corregido un error de tipo que ocurría en la función `convertPhotoToPhot
 - Se modificó el archivo `src/photo/index.ts`.
 - Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
 
-### 38. Correcciones y Mejoras (Iteración 24)
+### 36. Correcciones y Mejoras (Iteración 24)
 
-**Paso 38.1: Corregir error de tipo `lockedAt` en `app/api/selection/route.ts`**
+**Paso 36.1: Corregir error de tipo `lockedAt` en `app/api/selection/route.ts`**
 
 Se ha corregido un error de tipo que ocurría en la ruta de la API de selección (`app/api/selection/route.ts`) al intentar asignar un valor de tipo `Date | null` a la propiedad `lockedAt` de tipo `Date | undefined`.
 
@@ -675,9 +673,9 @@ Se ha corregido un error de tipo que ocurría en la ruta de la API de selección
 - Se modificó el archivo `app/api/selection/route.ts`.
 - Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
 
-### 39. Corrección de Errores de Build (Iteración 25)
+### 37. Correcciones y Mejoras (Iteración 25)
 
-**Paso 39.1: Corregir error de pre-renderizado en páginas de etiquetas**
+**Paso 37.1: Corregir error de pre-renderizado en páginas de etiquetas**
 
 Se ha corregido un error de compilación (`TypeError: b.match is not a function`) que ocurría al pre-renderizar las páginas de etiquetas (por ejemplo, `/tag/avila`). El error se debía a que la función `generateMetaForTag` en `src/tag/index.ts` estaba utilizando una descripción de metadatos codificada como `'Temporary Description'` en lugar de generar una descripción dinámica basada en las fotos de la etiqueta.
 
@@ -685,9 +683,9 @@ Se ha corregido un error de compilación (`TypeError: b.match is not a function`
 - Se modificó el archivo `src/tag/index.ts`.
 - Se actualizó la función `generateMetaForTag` para que utilice la función `descriptionForTaggedPhotos` para generar una descripción de metadatos dinámica. Esto resuelve el error de compilación y proporciona descripciones más significativas para las páginas de etiquetas.
 
-### 40. Corrección de Errores de Build (Iteración 26)
+### 38. Correcciones y Mejoras (Iteración 26)
 
-**Paso 40.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
+**Paso 38.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
 
 Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la página no manejaba correctamente el caso en que no se encontraban fotos para una cámara específica, lo que provocaba un error en el renderizado del lado del servidor.
 
@@ -696,9 +694,9 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 - Se añadió una comprobación en la función `generateMetadata` para devolver un objeto de metadatos vacío si no se encuentran fotos, evitando así el error de renderizado.
 - Se añadió una redirección en el componente de la página para enviar al usuario a la página de inicio si no se encuentran fotos para la cámara especificada.
 
-### 41. Corrección de Errores de Build (Iteración 27)
+### 39. Correcciones y Mejoras (Iteración 27)
 
-**Paso 41.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
+**Paso 39.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos**
 
 Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `getPhotosCameraDataCached` en `src/camera/data.ts` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
@@ -706,9 +704,9 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 - Se modificó el archivo `src/camera/data.ts`.
 - Se añadió una comprobación en la función `getPhotosCameraDataCached` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
-### 42. Corrección de Errores de Build (Iteración 28)
+### 40. Correcciones y Mejoras (Iteración 28)
 
-**Paso 42.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (shareTextForCamera)**
+**Paso 40.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (shareTextForCamera)**
 
 Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `shareTextForCamera` en `src/camera/meta.ts` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
@@ -716,9 +714,9 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 - Se modificó el archivo `src/camera/meta.ts`.
 - Se añadió una comprobación en la función `shareTextForCamera` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
-### 43. Corrección de Errores de Build (Iteración 29)
+### 41. Correcciones y Mejoras (Iteración 29)
 
-**Paso 43.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (CameraHeader)**
+**Paso 41.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (CameraHeader)**
 
 Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que la función `CameraHeader` en `src/camera/CameraHeader.tsx` no manejaba correctamente el caso en que recibía un array de fotos vacío, lo que provocaba un `TypeError` al intentar acceder a propiedades de un objeto indefinido.
 
@@ -726,9 +724,9 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 - Se modificó el archivo `src/camera/CameraHeader.tsx`.
 - Se añadió una comprobación en la función `CameraHeader` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
-### 44. Corrección de Errores de Build (Iteración 30)
+### 42. Correcciones y Mejoras (Iteración 30)
 
-**Paso 44.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage)**
+**Paso 42.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage)**
 
 Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que, a pesar de las comprobaciones existentes, algún componente o función seguía intentando acceder a propiedades de un array de fotos vacío o `undefined` durante la generación de metadatos o el renderizado de la página.
 
@@ -738,9 +736,9 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 - En el componente `CameraPage` (exportación por defecto), se añadió una comprobación explícita para que `CameraOverview` solo se renderice si `photos.length > 0`. Si no hay fotos, se renderiza `null` (o un componente que indique la ausencia de fotos).
 - Estas medidas defensivas adicionales aseguran que no se pasen arrays vacíos o `undefined` a componentes o funciones que puedan no manejarlos correctamente durante el proceso de prerenderizado, incluso si las comprobaciones anteriores no capturaron todos los casos.
 
-### 45. Corrección de Errores de Build (Iteración 31)
+### 43. Correcciones y Mejoras (Iteración 31)
 
-**Paso 45.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage - Refuerzo)**
+**Paso 43.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage - Refuerzo)**
 
 Se ha corregido un error de compilación persistente que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). A pesar de las correcciones anteriores, el error seguía manifestándose, lo que sugiere un problema más profundo en la forma en que Next.js maneja los componentes del servidor y la generación de metadatos cuando los datos son escasos o inexistentes.
 
@@ -750,17 +748,168 @@ Se ha corregido un error de compilación persistente que ocurría al pre-renderi
 - En el componente `CameraPage` (exportación por defecto), se eliminó la lógica condicional dentro del `return` y se añadió una comprobación `if (photos.length === 0) { return null; }` al inicio de la función. Esto garantiza que `CameraOverview` solo se renderice si hay fotos, y que la página no intente renderizar nada si no las hay.
 - Estas modificaciones son un refuerzo de las medidas defensivas, simplificando la lógica y asegurando que los componentes y funciones solo operen con datos válidos, lo que debería resolver el error de prerenderizado.
 
-### 46. Corrección de Errores de Build (Iteración 32)
+### 44. Correcciones y Mejoras (Iteración 32)
 
-**Paso 46.1: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de cámaras**
+**Paso 44.1: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de cámaras**
 
-Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/shot-on/[make]/[model]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de cámaras sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/shot-on/[make]/[model/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de cámaras sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
 
 **Detalles de la acción:**
 - Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
 - Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
 
-### 47. Corrección de Errores de Build (Iteración 33)
+### 45. Correcciones y Mejoras (Iteración 33)
+
+**Paso 45.1: Envolver `SelectionProvider` con `SessionProvider` en `app/layout.tsx`**
+
+Se ha corregido el error de compilación `[next-auth]: useSession must be wrapped in a <SessionProvider />` que ocurría al intentar utilizar el hook `useSession` dentro de `SelectionProvider` sin que este último estuviera anidado correctamente dentro de un `SessionProvider` de NextAuth.js.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/layout.tsx`.
+- Se importó `SessionProvider` desde `next-auth/react`.
+- Se envolvió el componente `AppStateProvider` (que a su vez contiene `SelectionProvider`) con `SessionProvider` para asegurar que el contexto de sesión esté disponible para todos los componentes que lo requieran.
+
+### 46. Correcciones y Mejoras (Iteración 34)
+
+**Paso 46.1: Ocultar el botón de selección para usuarios no autenticados**
+
+Se ha corregido un error que permitía a los usuarios no autenticados acceder al modo de selección de fotos, lo que provocaba un error de "Usuario no autenticado" al intentar confirmar la selección. Ahora, el botón "Seleccionar" solo es visible para los usuarios que han iniciado sesión.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición `isUserSignedIn` para renderizar el botón "Seleccionar", asegurando que solo los usuarios autenticados puedan iniciar el modo de selección.
+
+**Paso 46.2: Ocultar el botón de confirmación para usuarios no autenticados**
+
+Se ha corregido un error que permitía a los usuarios no autenticados ver el botón de "Confirmar" si estaban en modo de selección y luego cerraban la sesión. Ahora, el botón "Confirmar" solo es visible para los usuarios que han iniciado sesión y están en modo de selección.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición `isUserSignedIn` para renderizar el botón "Confirmar", asegurando que solo los usuarios autenticados puedan confirmar una selección.
+
+**Paso 46.3: Prevenir la renderización de los botones de selección durante la comprobación de la autenticación**
+
+Se ha corregido una condición de carrera en la que los botones de selección podían renderizarse antes de que se completara la comprobación de autenticación, lo que provocaba errores. Ahora, los botones de selección solo se renderizan después de que se haya verificado el estado de autenticación del usuario.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una condición `!isCheckingAuth` para renderizar los botones "Seleccionar" y "Confirmar", asegurando que no se muestren mientras la autenticación está en curso.
+
+**Paso 46.4: Usar el estado de la sesión directamente en NavClient.tsx**
+
+Para solucionar de forma definitiva el error de "Usuario no autenticado", se ha modificado `NavClient.tsx` para que utilice el hook `useSession` de `next-auth/react` directamente. Esto asegura que el estado de autenticación sea siempre el más actual y evita las condiciones de carrera que se producían al depender del estado propagado a través de `AppStateProvider`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se importó y utilizó el hook `useSession` para obtener el estado de la sesión (`status`).
+- Se actualizó la lógica de renderizado de los botones de selección para que dependa directamente del `status` de la sesión, utilizando `status !== 'loading'` y `status === 'authenticated'` para controlar su visibilidad.
+
+**Paso 46.5: Hacer la función `confirmSelection` más robusta**
+
+Se ha corregido un error que permitía a los usuarios no autenticados acceder al modo de selección de fotos, lo que provocaba un error de "Usuario no autenticado" al intentar confirmar la selección. Para solucionarlo de forma definitiva, se ha modificado la función `confirmSelection` en `src/selection/SelectionContext.tsx` para que sea más robusta. Ahora, la función comprueba el estado de la sesión directamente y muestra un mensaje de error al usuario si no está autenticado, en lugar de fallar silenciosamente.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se importó la función `toast` de `sonner`.
+- Se actualizó la función `confirmSelection` para que compruebe el `status` de la sesión.
+- Si el `status` es `loading`, se registra un error en la consola.
+- Si el `status` es `unauthenticated`, se registra un error en la consola y se muestra un mensaje de error al usuario utilizando `toast.error`.
+- Si el `status` es `authenticated`, se procede con la confirmación de la selección.
+
+**Paso 46.6: Corregir la dependencia de `useCallback` en `confirmSelection`**
+
+El error persistía debido a que la función `confirmSelection` no se estaba actualizando cuando cambiaba el estado de la sesión. Esto se debía a que la dependencia del `useCallback` era incorrecta.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se actualizó el array de dependencias del `useCallback` de `confirmSelection` de `[selectedPhotos, router, session]` a `[selectedPhotos, router, sessionData]`. Esto asegura que la función se vuelva a crear cada vez que cambie el objeto `sessionData`, lo que garantiza que siempre tenga el estado de sesión más reciente.
+
+**Paso 46.7: Refactorizar `SelectionContext.tsx` para ser independiente de la sesión**
+
+Para eliminar la dependencia circular y asegurar la robustez del manejo de la sesión, se ha refactorizado `SelectionContext.tsx` para que no dependa directamente del hook `useSession`. En su lugar, las funciones `confirmSelection` y `clearSelection` ahora reciben el `userId` como parámetro.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se eliminó la importación de `useSession` y cualquier referencia a `sessionData` o `session` dentro del componente.
+- Se actualizaron las firmas de `confirmSelection` y `clearSelection` en `SelectionContextType` y en sus implementaciones para aceptar `userId` como parámetro.
+- Se eliminaron las comprobaciones de autenticación dentro de `confirmSelection`, ya que ahora se espera que el `userId` se proporcione desde el componente que llama.
+- Se actualizaron los arrays de dependencia de `useCallback` para `confirmSelection` y `clearSelection` para reflejar los cambios.
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se actualizó la llamada a `confirmSelection` y `clearSelection` para pasar `session.user.id` como argumento.
+
+**Paso 46.8: Añadir migración para las columnas `locked_by` y `locked_at`**
+
+Se ha corregido el error de la base de datos "column 'locked_by' of relation 'photos' does not exist" añadiendo una nueva migración que crea las columnas `locked_by` y `locked_at` en la tabla `photos`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/db/migration.ts`.
+- Se añadió una nueva entrada al array `MIGRATIONS` con la etiqueta "08: Photo Locking" y las sentencias SQL para añadir las columnas `locked_by` (VARCHAR) y `locked_at` (TIMESTAMP WITH TIME ZONE) a la tabla `photos` si no existen.
+
+**Paso 46.9: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx**
+
+Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se añadió una comprobación `session?.user?.id` antes de llamar a `confirmSelection` y `clearSelection` para asegurar que `session.user.id` esté definido.
+
+**Paso 46.10: Manejar correctamente la ausencia de fotos en las páginas de lentes**
+
+Se ha corregido un error de prerenderizado que ocurría en las páginas de lentes cuando no se encontraban fotos asociadas. El error se debía a que se intentaba acceder a `photos[0]` cuando el array `photos` estaba vacío.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/data.ts`.
+- Se añadió una comprobación `photos[0] || undefined` al llamar a `lensFromPhoto` para asegurar que se pase `undefined` si no hay fotos, evitando así el error.
+
+**Paso 46.11: Manejar correctamente la ausencia de fotos en los metadatos de lentes**
+
+Se ha corregido un error de prerenderizado que ocurría en las páginas de lentes cuando no se encontraban fotos asociadas, específicamente en la generación de metadatos. El error se debía a que la función `shareTextForLens` no manejaba correctamente el caso en que el array `photos` estaba vacío.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/meta.ts`.
+- Se añadió una comprobación `photos.length > 0` antes de llamar a `lensFromPhoto` en `shareTextForLens` para asegurar que se pase un objeto `Lens` válido, incluso si no hay fotos.
+
+**Paso 46.12: Aislar la causa del error de prerenderizado en `generateMetadata` de las páginas de lentes**
+
+Se ha comentado temporalmente la generación de la descripción y las imágenes en la función `generateMetadata` de las páginas de lentes para aislar la causa del error de prerenderizado.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
+- Se comentaron las líneas que asignan `description` e `images` en el objeto `Metadata` devuelto por `generateMetadata`.
+
+**Paso 46.13: Manejar la ausencia de fotos en `generateMetaForLens`**
+
+Se ha añadido una comprobación en la función `generateMetaForLens` para devolver un objeto de metadatos mínimo si no se encuentran fotos para la lente. Esto evita errores al intentar generar metadatos con datos incompletos.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/lens/meta.ts`.
+- Se añadió una condición `if (photos.length === 0)` al inicio de la función `generateMetaForLens` para devolver un objeto con `url` y `title` solamente.
+
+**Paso 46.14: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de lentes**
+
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/lens/[make]/[model]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de lentes sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
+- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
+
+**Paso 46.15: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de etiquetas**
+
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/tag/[tag]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de etiquetas sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/tag/[tag]/page.tsx`.
+- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
+
+**Paso 46.16: Corregir `dateString.match is not a function` en `dateRangeForPhotos`**
+
+Se ha corregido el error `dateString.match is not a function` que ocurría en la función `dateRangeForPhotos` al intentar acceder a la propiedad `takenAtNaive` de un objeto `Photo` que podría ser `undefined` o `null`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/index.ts`.
+- Se añadió el operador de coalescencia nula (`?? ''`) al acceder a `photosSorted[photos.length - 1]?.takenAtNaive` y `photosSorted[0]?.takenAtNaive` para asegurar que siempre se pase una cadena vacía si el valor es `null` o `undefined`.
+
+### 47. Correcciones y Mejoras (Iteración 35)
 
 **Paso 47.1: Envolver `SelectionProvider` con `SessionProvider` en `app/layout.tsx`**
 
@@ -771,7 +920,7 @@ Se ha corregido el error de compilación `[next-auth]: useSession must be wrappe
 - Se importó `SessionProvider` desde `next-auth/react`.
 - Se envolvió el componente `AppStateProvider` (que a su vez contiene `SelectionProvider`) con `SessionProvider` para asegurar que el contexto de sesión esté disponible para todos los componentes que lo requieran.
 
-### 48. Corrección de Errores de Autenticación (Iteración 2)
+### 48. Correcciones y Mejoras (Iteración 36)
 
 **Paso 48.1: Ocultar el botón de selección para usuarios no autenticados**
 
@@ -902,3 +1051,90 @@ Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app
 **Detalles de la acción:**
 - Se modificó el archivo `app/tag/[tag]/page.tsx`.
 - Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
+
+**Paso 48.16: Corregir `dateString.match is not a function` en `dateRangeForPhotos`**
+
+Se ha corregido el error `dateString.match is not a function` que ocurría en la función `dateRangeForPhotos` al intentar acceder a la propiedad `takenAtNaive` de un objeto `Photo` que podría ser `undefined` o `null`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/index.ts`.
+- Se añadió el operador de coalescencia nula (`?? ''`) al acceder a `photosSorted[photos.length - 1]?.takenAtNaive` y `photosSorted[0]?.takenAtNaive` para asegurar que siempre se pase una cadena vacía si el valor es `null` o `undefined`.
+
+### 49. Corrección del Flujo de Selección de Fotos (Iteración 34)
+
+Tras una larga investigación sobre por qué los botones de selección de fotos no funcionaban, se identificaron y corrigieron varios problemas subyacentes.
+
+**Paso 49.1: Diagnóstico del Problema de Sesión**
+
+El problema principal era que el botón "Confirmar" no funcionaba. A través de un proceso de depuración, se descubrió que el objeto de la sesión del usuario (`session`) no contenía el `user.id`, a pesar de que el usuario estaba autenticado. Esto causaba que la lógica del botón, que requiere un ID de usuario para asignar la selección, fallara silenciosamente.
+
+**Detalles de la acción:**
+- Se añadió temporalmente código de depuración (usando `toast` y `console.log`) a los componentes `NavClient.tsx` y `SelectionContext.tsx` para rastrear el flujo de ejecución y el estado de la sesión en el momento del clic.
+- El diagnóstico final reveló el mensaje "Cannot confirm: session.user.id is missing!", confirmando la causa raíz del problema.
+
+**Paso 49.2: Corrección de la Configuración de NextAuth**
+
+La causa raíz era que la configuración de NextAuth en `src/auth/server.ts` no estaba configurada para persistir el ID del usuario en el objeto de la sesión. Para solucionarlo, se añadieron los callbacks `jwt` y `session`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/auth/server.ts`.
+- Se añadió un callback `jwt` para tomar el `id` del objeto `user` (proporcionado por el proveedor de autenticación al iniciar sesión) y añadirlo al token JWT.
+- Se añadió un callback `session` para tomar el `id` del `token` JWT y añadirlo al objeto `session.user` que la aplicación consume.
+- Se requirió que el usuario cerrara la sesión y volviera a iniciarla para que los cambios en la estructura de la sesión tuvieran efecto.
+
+**Paso 49.3: Refactorización y Robustez del Contexto de Selección**
+
+Durante la depuración, se realizaron varias mejoras en el `SelectionContext` para hacerlo más robusto y desacoplar responsabilidades.
+
+**Detalles de la acción:**
+- Se refactorizó la función `confirmSelection` para que ya no se encargue de la navegación. En su lugar, ahora devuelve una `Promise<boolean>` que indica si la confirmación fue exitosa.
+- El componente `NavClient.tsx` se actualizó para que sea responsable de la navegación a la página `/selected` después de que la promesa de `confirmSelection` se resuelva con éxito.
+- Se mejoraron las funciones `toggleSelectionMode` y `clearSelection` para ser más predecibles y robustas en la gestión del estado.
+
+**Paso 49.4: Corrección de la Página de Selección**
+
+Después de que el botón "Confirmar" comenzó a funcionar, se descubrió que la página `/selected` aparecía vacía. Esto se debía a que la función `confirmSelection` estaba borrando la lista de fotos seleccionadas (`setSelectedPhotos([])`) antes de que la página `/selected` tuviera la oportunidad de leerla.
+
+**Detalles de la acción:**
+- Se modificó la función `confirmSelection` en `src/selection/SelectionContext.tsx`.
+- Se eliminó la línea `setSelectedPhotos([])` para asegurar que el estado de las fotos seleccionadas persista durante la navegación a la página `/selected`.
+
+### 50. Corrección de Errores en la Página `/selected` (Iteración 35)
+
+Se identificaron errores en la página `/selected` que impedían su correcto funcionamiento y visualización de las fotos seleccionadas.
+
+**Paso 50.1: Eliminación de `PhotosEmptyState` y Reemplazo por Mensaje Simple**
+
+El componente `PhotosEmptyState` estaba causando múltiples errores debido a su complejidad y a la inclusión de lógica y componentes relacionados con la administración del sitio que no eran apropiados para la página de selección. Se decidió reemplazarlo por un mensaje de estado vacío más simple y directo.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/selected/SelectedPageClient.tsx`.
+- Se eliminó la importación y el uso de `PhotosEmptyState`.
+- Se reemplazó el componente `PhotosEmptyState` por un `div` con un mensaje de texto simple ("No photos selected") y un icono, para indicar que no hay fotos seleccionadas.
+- Se ajustaron las importaciones y props del componente `SelectedPageClient.tsx` para reflejar estos cambios.
+
+**Paso 50.2: Ajuste del Componente Padre `page.tsx`**
+
+Debido a los cambios en `SelectedPageClient.tsx` (ya no requiere la prop `appText`), el componente padre que lo renderiza también necesitaba ser actualizado.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/selected/page.tsx`.
+- Se eliminó la importación de `getAppText` y la lógica asíncrona para obtener `appText`.
+- Se ajustó la llamada a `SelectedPageClient` para que ya no le pase la prop `appText`.
+
+**Paso 50.3: Corrección de Errores de Importación de Componentes**
+
+Durante la implementación del botón "Clear & Unlock Selection", se introdujo un error de importación al intentar usar un componente `Button` genérico que no existía en el proyecto.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/selected/SelectedPageClient.tsx`.
+- Se reemplazó la importación incorrecta de `Button` por la importación correcta de `LoaderButton` desde `components/primitives/LoaderButton`.
+- Se ajustó el uso del componente en el JSX para pasar la prop `isLoading` y otras props relevantes para `LoaderButton`.
+
+**Paso 50.4: Corrección de Errores de Sintaxis en la Interfaz de Contexto**
+
+Se identificó un error de sintaxis en la definición de la interfaz `SelectionContextType` en `src/selection/SelectionContext.tsx` que causaba fallos en la compilación.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- Se corrigió la definición de la interfaz `SelectionContextType` para asegurar que todos los miembros terminaran con un punto y coma y que la estructura general fuera válida.

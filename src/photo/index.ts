@@ -314,8 +314,8 @@ export const dateRangeForPhotos = (
 
   if (explicitDateRange || photos.length > 0) {
     const photosSorted = sortPhotosByDateNonDestructively(photos);
-    const startNaive = explicitDateRange?.start ?? photosSorted[photos.length - 1]?.takenAtNaive;
-    const endNaive = explicitDateRange?.end ?? photosSorted[0]?.takenAtNaive;
+    const startNaive = explicitDateRange?.start ?? photosSorted[photos.length - 1]?.takenAtNaive ?? '';
+    const endNaive = explicitDateRange?.end ?? photosSorted[0]?.takenAtNaive ?? '';
 
     if (startNaive !== null && startNaive !== undefined) {
       start = formatDateFromPostgresString(
