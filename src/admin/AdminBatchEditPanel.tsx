@@ -8,6 +8,9 @@ export default async function AdminBatchEditPanel({
 }) {
   const uniqueTags = await getUniqueTagsCached().catch(() => []);
   return (
-    <AdminBatchEditPanelClient {...{ uniqueTags, onBatchActionComplete }} />
+    <AdminBatchEditPanelClient
+      {...{ uniqueTags }}
+      onBatchActionComplete={onBatchActionComplete ?? (() => {})}
+    />
   );
 }

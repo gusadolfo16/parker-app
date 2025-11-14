@@ -23,7 +23,6 @@ export default function SelectTileOverlay({
       'active:bg-gray-950/40 dark:active:bg-gray-950/60',
       isPerformingSelectEdit && 'pointer-events-none',
     )}>
-      {/* Admin Select Border */}
       <div
         className="w-full h-full"
         onClick={() => !disabled && onSelectChange()}
@@ -48,7 +47,7 @@ export default function SelectTileOverlay({
               className="m-[1px]"
             />
             : null
-          : <SimpleCheckbox
+          : (isSelected || disabled) ? null : <SimpleCheckbox
             className={clsx(
               'text-white',
               // Required to prevent Safari jitter

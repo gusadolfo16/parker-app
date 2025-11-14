@@ -17,6 +17,7 @@ export default function PhotoGridContainer({
   sortWithPriority,
   excludeFromFeeds,
   animateOnFirstLoadOnly,
+  prioritizeInitialPhotos,
   header,
   sidebar,
   ...categories
@@ -26,6 +27,8 @@ export default function PhotoGridContainer({
   sortBy?: SortBy
   sortWithPriority?: boolean
   excludeFromFeeds?: boolean
+  animateOnFirstLoadOnly?: boolean
+  prioritizeInitialPhotos?: boolean
   header?: ReactNode
   sidebar?: ReactNode
 } & ComponentProps<typeof PhotoGrid>) {
@@ -53,9 +56,10 @@ export default function PhotoGridContainer({
             photos,
             ...categories,
             animateOnFirstLoadOnly,
+            prioritizeInitialPhotos,
             onAnimationComplete,
           }} />
-          {count > photos.length &&
+          {count > photos.length && (
             <PhotoGridInfinite {...{
               cacheKey,
               initialOffset: photos.length,
@@ -65,7 +69,8 @@ export default function PhotoGridContainer({
               ...categories,
               canStart: shouldAnimateDynamicItems,
               animateOnFirstLoadOnly,
-            }} />}
+            }} />
+          )}
         </div>
       </div>}
       contentSide={sidebar}

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, isValidElement } from 'react';
 import { clsx } from 'clsx/lite';
 import Spinner from '../Spinner';
 
@@ -29,7 +29,7 @@ export default function Icon({
       {loading
         ? <Spinner />
         : <span className={iconClassName}>
-          {children}
+          {isValidElement(children) ? children : null}
         </span>}
     </span>
   );

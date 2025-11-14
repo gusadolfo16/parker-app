@@ -3,7 +3,7 @@ import { Camera, createCameraKey } from '.';
 import CameraHeader from './CameraHeader';
 import PhotoGridContainer from '@/photo/PhotoGridContainer';
 
-export default function CameraOverview({
+export default async function CameraOverview({
   camera,
   photos,
   count,
@@ -16,6 +16,13 @@ export default function CameraOverview({
   dateRange?: PhotoDateRange,
   animateOnFirstLoadOnly?: boolean,
 }) {
+  const resolvedHeader = await CameraHeader({
+    camera,
+    photos,
+    count,
+    dateRange,
+  });
+
   return (
     <PhotoGridContainer {...{
       cacheKey: `camera-${createCameraKey(camera)}`,
@@ -23,12 +30,7 @@ export default function CameraOverview({
       count,
       camera,
       animateOnFirstLoadOnly,
-      header: <CameraHeader {...{
-        camera,
-        photos,
-        count,
-        dateRange,
-      }} />,
+      header: resolvedHeader,
     }} />
   );
 }

@@ -26,6 +26,7 @@ export default function MoreMenuItem({
   shouldPreventDefault = true,
   keyCommand,
   keyCommandModifier,
+  target,
 }: {
   label: string
   labelComplex?: ReactNode
@@ -40,6 +41,7 @@ export default function MoreMenuItem({
   shouldPreventDefault?: boolean
   keyCommand?: string
   keyCommandModifier?: ComponentProps<typeof KeyCommand>['modifier']
+  target?: string
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -127,6 +129,7 @@ export default function MoreMenuItem({
             dismissMenu?.();
           }}
           flickerThreshold={0}
+          target={target}
         >
           {buttonContent}
         </LoaderLink>

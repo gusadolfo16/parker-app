@@ -21,12 +21,12 @@ import Footer from '@/app/Footer';
 import CommandK from '@/cmdk/CommandK';
 import SwrConfigClient from '@/swr/SwrConfigClient';
 import AdminBatchEditPanel from '@/admin/AdminBatchEditPanel';
-import ShareModals from '@/share/ShareModals';
+import ShareModalsClient from './ShareModalsClient';
 import AdminUploadPanel from '@/admin/upload/AdminUploadPanel';
 import { revalidatePath } from 'next/cache';
 import RecipeModal from '@/recipe/RecipeModal';
 import ThemeColors from '@/app/ThemeColors';
-import { SessionProvider } from 'next-auth/react'; // Added SessionProvider
+import SessionProviderClient from '@/app/SessionProviderClient';
 import { SelectionProvider } from '@/selection/SelectionContext';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 import SharedHoverProvider from '@/components/shared-hover/SharedHoverProvider';
@@ -79,11 +79,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const appTextProvider = await AppTextProvider({ children: undefined });
+  const nav = await Nav();
+  const commandK = await CommandK();
   return (
     <html
       lang={HTML_LANG}
@@ -95,8 +98,8 @@ export default function RootLayout({
         '3xl:flex flex-col items-center',
       )}>
         <AppStateProvider areAdminDebugToolsEnabled={ADMIN_DEBUG_TOOLS_ENABLED}>
-          <AppTextProvider>
-            <SessionProvider>
+          {appTextProvider}
+            <SessionProviderClient>
               <SelectionProvider>
                 <ThemeColors />
                 <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
@@ -106,9 +109,9 @@ export default function RootLayout({
                         'mx-3 mb-3',
                         'lg:mx-6 lg:mb-6',
                       )}>
-                        <Nav />
+                        {nav}
                         <main>
-                          <ShareModals />
+                          <ShareModalsClient />
                           <RecipeModal />
                           <div className={clsx(
                             'min-h-[16rem] sm:min-h-[30rem]',
@@ -123,19 +126,12 @@ export default function RootLayout({
                                 revalidatePath('/admin', 'layout');
                               }}
                             />
-                            <AdminBatchEditPanel
-                              onBatchActionComplete={async () => {
-                                'use server';
-                                // Update upload count in admin nav
-                                revalidatePath('/admin', 'layout');
-                              }}
-                            />
                             {children}
                           </div>
                         </main>
                         <Footer />
                       </div>
-                      <CommandK />
+                      {commandK}
                     </SharedHoverProvider>
                   </SwrConfigClient>
                   <Analytics debug={false} />
@@ -144,8 +140,7 @@ export default function RootLayout({
                   <ToasterWithThemes />
                 </ThemeProvider>
               </SelectionProvider>
-            </SessionProvider>
-          </AppTextProvider>
+            </SessionProviderClient>
         </AppStateProvider>
       </body>
     </html>

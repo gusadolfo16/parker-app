@@ -8,8 +8,7 @@ import { cache } from 'react';
 import { getUniqueCameras } from '@/photo/db/query';
 import { staticallyGenerateCategoryIfConfigured } from '@/app/static';
 import { getAppText } from '@/i18n/state/server';
-import { redirect } from 'next/navigation';
-import { PATH_ROOT } from '@/app/path';
+import { notFound } from 'next/navigation';
 
 const getPhotosCameraDataCachedCached = cache((
   make: string,
@@ -20,12 +19,12 @@ const getPhotosCameraDataCachedCached = cache((
   INFINITE_SCROLL_GRID_INITIAL,
 ));
 
-// export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
-//   'cameras',
-//   'page',
-//   getUniqueCameras,
-//   cameras => cameras.map(({ camera }) => formatCameraParams(camera)),
-// );
+export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
+  'cameras',
+  'page',
+  getUniqueCameras,
+  cameras => cameras.map(({ camera }) => formatCameraParams(camera)),
+);
 
 export async function generateMetadata({
   params,
@@ -84,14 +83,10 @@ export default async function CameraPage({
   ] = await getPhotosCameraDataCachedCached(make, model);
 
   if (photos.length === 0) {
-    redirect(PATH_ROOT);
+    notFound();
   }
 
-  if (photos.length === 0) {
-    return null; // Temporarily return null if no photos
-  }
+  const cameraOverview = await CameraOverview({ camera, photos, count, dateRange });
 
-  return (
-    <CameraOverview {...{ camera, photos, count, dateRange }} />
-  );
+  return cameraOverview;
 }

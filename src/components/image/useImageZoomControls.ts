@@ -7,6 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
+  MutableRefObject,
 } from 'react';
 import Viewer from 'viewerjs';
 import ZoomControls from './ZoomControls';
@@ -20,7 +21,7 @@ export default function useImageZoomControls({
 } & Omit<ComponentProps<typeof ZoomControls>, 'ref' | 'children'>) {
   const viewerRef = useRef<Viewer | null>(null);
 
-  const refViewerContainer = useRef<HTMLDivElement>(null);
+  const refViewerContainer: MutableRefObject<HTMLDivElement | null> = useRef<HTMLDivElement>(null);
 
   const { setShouldRespondToKeyboardCommands } = useAppState();
 

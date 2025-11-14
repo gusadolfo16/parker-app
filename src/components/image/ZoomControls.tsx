@@ -1,5 +1,5 @@
 import clsx from 'clsx/lite';
-import { ReactNode, RefObject, useEffect, useRef } from 'react';
+import { ReactNode, RefObject, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 import useImageZoomControls from './useImageZoomControls';
 import { RiCollapseDiagonalLine, RiExpandDiagonalLine } from 'react-icons/ri';
@@ -9,17 +9,12 @@ export type ZoomControlsRef = {
   zoomTo: (zoomLevel?: number) => void
 }
 
-export default function ZoomControls({
-  ref,
-  children,
-  ...props
-}: {
-  ref?: RefObject<ZoomControlsRef | null>
+const ZoomControls = forwardRef<ZoomControlsRef, {
   children: ReactNode
   selectImageElement?: (container: HTMLElement | null) =>
     HTMLImageElement | null
   isEnabled?: boolean
-}) {
+}>(({ children, ...props }, ref) => {
   const refImageContainer = useRef<HTMLDivElement>(null);
 
   const {
@@ -33,9 +28,10 @@ export default function ZoomControls({
     ...props,
   });
 
-  useEffect(() => {
-    if (ref) { ref.current = { open, zoomTo }; }
-  }, [ref, open, zoomTo]);
+  useImperativeHandle(ref, () => ({
+    open,
+    zoomTo,
+  }), [open, zoomTo]);
 
   const shouldZoomTo2x = zoomLevel !== 2;
 
@@ -66,4 +62,6 @@ export default function ZoomControls({
         : null}
     </div>
   );
-}
+});
+
+export default ZoomControls;

@@ -1,4 +1,4 @@
 import { cache } from 'react';
-import { auth } from '@/auth/server';
+import { getServerSession } from '@/auth/server';
 
-export const authCachedSafe = cache(() => auth().catch(() => null));
+export const authCachedSafe = cache(() => getServerSession().catch(() => null));

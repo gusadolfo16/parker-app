@@ -52,7 +52,7 @@ function AnimateItems({
     clearNextPhotoAnimation,
   } = useAppState();
 
-  const nextPhotoAnimationId = useRef<string>(undefined);
+  const nextPhotoAnimationId = useRef<string | undefined>(undefined);
 
   const prefersReducedMotion = usePrefersReducedMotion();
   

@@ -14,6 +14,7 @@ import {
   staticallyGenerateCategoryIfConfigured,
 } from '@/app/static';
 import { getAppText } from '@/i18n/state/server';
+import { notFound } from 'next/navigation';
 
 const getPhotosLensDataCachedCached = cache((
   make: string | undefined,
@@ -24,12 +25,12 @@ const getPhotosLensDataCachedCached = cache((
   INFINITE_SCROLL_GRID_INITIAL,
 ));
 
-// export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
-//   'lenses',
-//   'page',
-//   getUniqueLenses,
-//   safelyGenerateLensStaticParams,
-// );
+export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
+  'lenses',
+  'page',
+  getUniqueLenses,
+  safelyGenerateLensStaticParams,
+);
 
 export async function generateMetadata({
   params,
@@ -78,6 +79,10 @@ export default async function LensPage({
     { count, dateRange },
     lens,
   ] = await getPhotosLensDataCachedCached(make, model);
+
+  if (photos.length === 0) {
+    notFound();
+  }
 
   return (
     <LensOverview {...{ lens, photos, count, dateRange }} />

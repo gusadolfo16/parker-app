@@ -61,4 +61,5 @@ export default function ShareModals() {
       return <FocalLengthShareModal {...{ focal, ...attributes }} />;
     }
   }
+  return null;
 }

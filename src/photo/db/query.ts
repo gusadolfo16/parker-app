@@ -698,3 +698,42 @@ export const unlockPhotos = async (photoIds: string[], userId: string) => {
     userId,
   ]), 'unlockPhotos');
 };
+
+export const unlockAllPhotos = async () => {
+  return safelyQueryPhotos(() => query(`
+    UPDATE photos
+    SET
+      locked_by = NULL,
+      locked_at = NULL
+  `), 'unlockAllPhotos');
+};
+
+export interface LockedPhotoWithUser extends Photo {
+  lockedBy: string;
+  lockedAt: Date;
+  userName?: string;
+  userEmail?: string;
+}
+
+export const getLockedPhotos = async () =>
+  safelyQueryPhotos(async () => {
+    const { rows } = await query(`
+      SELECT
+        p.*,
+        COALESCE(u.name, u2.name) as user_name,
+        COALESCE(u.email, u2.email) as user_email
+      FROM photos p
+      LEFT JOIN users u ON p.locked_by = u.email
+      LEFT JOIN accounts a ON p.locked_by = a."providerAccountId"
+      LEFT JOIN users u2 ON a."userId" = u2.id
+      WHERE p.locked_by IS NOT NULL
+    `);
+    return rows.map(row => {
+      const photo = parsePhotoFromDb(row as PhotoDb);
+      return {
+        ...photo,
+        userName: row.user_name,
+        userEmail: row.user_email,
+      } as LockedPhotoWithUser;
+    });
+  }, 'getLockedPhotos');

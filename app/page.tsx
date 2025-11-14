@@ -6,11 +6,11 @@ import { getPhotos } from '@/photo/db/query';
 import { GRID_HOMEPAGE_ENABLED, USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import { NULL_CATEGORY_DATA } from '@/category/data';
 import PhotoFullPage from '@/photo/PhotoFullPage';
-import PhotoGridPage from '@/photo/PhotoGridPage';
 import { getDataForCategoriesCached } from '@/category/cache';
 import { getPhotosMetaCached } from '@/photo/cache';
 import { FEED_META_QUERY_OPTIONS, getFeedQueryOptions } from '@/feed';
 import { getAppText } from '@/i18n/state/server';
+import HomePageClient from '@/app/HomePageClient';
 
 export const dynamic = 'force-static';
 export const maxDuration = 60;
@@ -50,13 +50,12 @@ export default async function HomePage() {
   return (
     photos.length > 0
       ? GRID_HOMEPAGE_ENABLED
-        ? <PhotoGridPage
+        ? <HomePageClient
           {...{
             photos,
             photosCount,
             photosCountWithExcludes,
-            ...USER_DEFAULT_SORT_OPTIONS,
-            ...categories,
+            categories,
           }}
         />
         : <PhotoFullPage {...{

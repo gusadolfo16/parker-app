@@ -14,7 +14,7 @@ import { PhotoQueryOptions } from '@/photo/db';
 import { MAX_PHOTOS_TO_SHOW_PER_CATEGORY } from '@/image-response';
 
 export interface EntityLinkExternalProps {
-  ref?: RefObject<HTMLSpanElement | null>
+  ref?: RefObject<HTMLSpanElement>
   type?: LabeledIconType
   badged?: boolean
   contrast?: ComponentProps<typeof Badge>['contrast']

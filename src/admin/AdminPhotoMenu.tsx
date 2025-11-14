@@ -1,201 +1,124 @@
-'use client';
-
-import { ComponentProps, useMemo } from 'react';
-import {
-  getPathComponents,
-  PATH_ROOT,
-  pathForAdminPhotoEdit,
-  pathForTag,
-} from '@/app/path';
-import {
-  deletePhotoAction,
-  syncPhotoAction,
-  toggleFavoritePhotoAction,
-  togglePrivatePhotoAction,
-} from '@/photo/actions';
-import {
-  Photo,
-  deleteConfirmationTextForPhoto,
-  downloadFileNameForPhoto,
-} from '@/photo';
-import { isPathFavs, isPhotoFav, TAG_PRIVATE } from '@/tag';
-import { usePathname } from 'next/navigation';
-import { BiTrash } from 'react-icons/bi';
-import MoreMenu, { MoreMenuSection } from '@/components/more/MoreMenu';
-import { useAppState } from '@/app/AppState';
-import { RevalidatePhoto } from '@/photo/InfinitePhotoScroll';
-import { MdOutlineFileDownload } from 'react-icons/md';
-import MoreMenuItem from '@/components/more/MoreMenuItem';
-import IconGrSync from '@/components/icons/IconGrSync';
-import InsightsIndicatorDot from './insights/InsightsIndicatorDot';
-import IconFavs from '@/components/icons/IconFavs';
-import IconEdit from '@/components/icons/IconEdit';
-import { photoNeedsToBeUpdated } from '@/photo/update';
-import { KEY_COMMANDS } from '@/photo/key-commands';
+import { Photo, titleForPhoto } from '@/photo';
 import { useAppText } from '@/i18n/state/client';
-import IconLock from '@/components/icons/IconLock';
+import { useAppState } from '@/app/AppState';
+import { PATH_ADMIN_PHOTOS, pathForAdminPhotoEdit } from '@/app/path';
+import { useRouter } from 'next/navigation';
+import { toastSuccess } from '@/toast';
+import { deletePhotoAction, toggleFavoritePhotoAction, togglePrivatePhotoAction, syncPhotoAction } from '@/photo/actions';
+import { clsx } from 'clsx/lite';
+import { isPhotoFav } from '@/tag';
+import { FaRegStarIcon, FaStarIcon } from '@/components/icons/FaStarIcon';
+import { IoMdEyeIcon, IoMdEyeOffIcon } from '@/components/icons/IoMdEyeIcon';
+import { MdOutlineModeEditIcon, MdOutlineDeleteIcon } from '@/components/icons/MdOutlineEditIcon';
+import { RiExternalLinkLineIcon } from '@/components/icons/RiExternalLinkLineIcon';
+import FaRegClockIcon from '@/components/icons/FaRegClockIcon';
+import MdOutlineFileDownloadIcon from '@/components/icons/MdOutlineFileDownloadIcon';
+import MoreMenu, { MoreMenuSection } from '@/components/more/MoreMenu';
+import MoreMenuItem from '@/components/more/MoreMenuItem';
 
 export default function AdminPhotoMenu({
   photo,
-  revalidatePhoto,
-  includeFavorite = true,
-  showKeyCommands,
-  ...props
-}: Omit<ComponentProps<typeof MoreMenu>, 'sections'> & {
-  photo: Photo
-  revalidatePhoto?: RevalidatePhoto
-  includeFavorite?: boolean
-  showKeyCommands?: boolean
+  className,
+}: {
+  photo: Photo,
+  className?: string,
 }) {
-  const { isUserSignedIn, registerAdminUpdate } = useAppState();
+  const { id, title, hidden } = photo;
+
+  const router = useRouter();
+
+  const { 
+    isUserAdmin,
+    isUserSignedIn,
+    adminUpdateTimes,
+  } = useAppState();
 
   const appText = useAppText();
 
-  const path = usePathname();
-  const pathComponents = getPathComponents(path);
-  const isOnPhotoDetail = pathComponents.photoId === photo.id;
+  const photoHasUpdate = adminUpdateTimes?.some(date => date > photo.updatedAt);
+
   const isFav = isPhotoFav(photo);
-  const shouldRedirectFav = isPathFavs(path) && isFav;
-  const shouldRedirectDelete = isOnPhotoDetail;
-  const redirectPathOnPrivateToggle = isOnPhotoDetail
-    ? photo.hidden
-      ? pathForTag(TAG_PRIVATE)
-      : PATH_ROOT
-    : undefined;
 
-
-  const sectionMain = useMemo(() => {
-    const items: ComponentProps<typeof MoreMenuItem>[] = [{
-      label: appText.admin.edit,
-      icon: <IconEdit
-        size={14}
-        className="translate-x-[0.5px] translate-y-[0.5px]"
-      />,
-      href: pathForAdminPhotoEdit(photo.id),
-      ...showKeyCommands && { keyCommand: KEY_COMMANDS.edit },
-    }];
-    if (includeFavorite) {
-      items.push({
-        label: isFav ? appText.admin.unfavorite : appText.admin.favorite,
-        icon: <IconFavs
-          size={14}
-          className="translate-x-[-1px] translate-y-[0.5px]"
-          highlight={isFav}
-        />,
-        action: () => toggleFavoritePhotoAction(
-          photo.id,
-          shouldRedirectFav,
-        ).then(() => revalidatePhoto?.(photo.id)),
-        ...showKeyCommands && {
-          keyCommand: isFav
-            ? KEY_COMMANDS.unfavorite
-            : KEY_COMMANDS.favorite,
+  const sections: MoreMenuSection[] = [
+    {
+      items: [
+        {
+          label: appText.admin.edit,
+          icon: <MdOutlineModeEditIcon size={17} />,
+          href: pathForAdminPhotoEdit(photo),
         },
-      });
-    }
-    items.push({
-      label: photo.hidden ? appText.admin.public : appText.admin.private,
-      icon: <IconLock
-        size={16}
-        className="translate-x-[-1.5px] translate-y-[0.5px]"
-        open={!photo.hidden}
-        narrow
-      />,
-      action: () => togglePrivatePhotoAction(
-        photo.id,
-        redirectPathOnPrivateToggle,
-      )
-        .then(() => revalidatePhoto?.(photo.id)),
-      ...showKeyCommands && {
-        keyCommand: KEY_COMMANDS.togglePrivate,
-      },
-    });
-    items.push({
-      label: appText.admin.download,
-      icon: <MdOutlineFileDownload
-        size={17}
-        className="translate-x-[-1px]"
-      />,
-      href: photo.url,
-      hrefDownloadName: downloadFileNameForPhoto(photo),
-      ...showKeyCommands && { keyCommand: KEY_COMMANDS.download },
-    });
-    items.push({
-      label: appText.admin.sync,
-      labelComplex: <span className="inline-flex items-center gap-2">
-        <span>{appText.admin.sync}</span>
-        {photoNeedsToBeUpdated(photo) &&
-          <InsightsIndicatorDot
-            colorOverride="blue"
-            className="ml-1 translate-y-[1.5px]"
-            size="small"
-          />}
-      </span>,
-      icon: <IconGrSync
-        className="translate-x-[-1px] translate-y-[0.5px]"
-      />,
-      action: () => syncPhotoAction(photo.id)
-        .then(() => revalidatePhoto?.(photo.id)),
-      ...showKeyCommands && { keyCommand: KEY_COMMANDS.sync },
-    });
-
-    return { items };
-  }, [
-    appText,
-    photo,
-    showKeyCommands,
-    includeFavorite,
-    isFav,
-    shouldRedirectFav,
-    redirectPathOnPrivateToggle,
-    revalidatePhoto,
-  ]);
-
-  const sectionDelete: MoreMenuSection = useMemo(() => ({
-    items: [{
-      label: appText.admin.delete,
-      icon: <BiTrash
-        size={15}
-        className="translate-x-[-1px]"
-      />,
-      className: 'text-error *:hover:text-error',
-      color: 'red',
-      action: () => {
-        if (confirm(deleteConfirmationTextForPhoto(photo, appText))) {
-          return deletePhotoAction(
-            photo.id,
-            photo.url,
-            shouldRedirectDelete,
-          ).then(() => {
-            revalidatePhoto?.(photo.id, true);
-            registerAdminUpdate?.();
-          });
-        }
-      },
-      ...showKeyCommands && {
-        keyCommandModifier: KEY_COMMANDS.delete[0],
-        keyCommand: KEY_COMMANDS.delete[1],
-      },
-    }],
-  }), [
-    appText,
-    photo,
-    showKeyCommands,
-    revalidatePhoto,
-    shouldRedirectDelete,
-    registerAdminUpdate,
-  ]);
-
-  const sections = useMemo(() =>
-    [sectionMain, sectionDelete]
-  , [sectionMain, sectionDelete]);
+        {
+          label: isFav ? appText.admin.unfavorite : appText.admin.favorite,
+          icon: isFav ? <FaStarIcon size={16} /> : <FaRegStarIcon size={16} />,
+          action: async () => {
+            await toggleFavoritePhotoAction(id, !isFav);
+            toastSuccess(
+              isFav
+                ? `Unfavorited ${title}`
+                : `Favorited ${title}`
+            );
+          },
+        },
+        {
+          label: hidden ? appText.admin.public : appText.admin.private,
+          icon: hidden ? <IoMdEyeIcon size={18} /> : <IoMdEyeOffIcon size={18} />,
+          action: async () => {
+            await togglePrivatePhotoAction(id);
+            toastSuccess(
+              hidden
+                ? `Made ${title} public`
+                : `Made ${title} private`
+            );
+          },
+        },
+        {
+          label: appText.admin.download,
+          icon: <MdOutlineFileDownloadIcon
+            size={17}
+            className="translate-x-[-1px]"
+          />,
+          href: photo.url,
+          target: '_blank',
+        },
+        {
+          label: appText.admin.sync,
+          icon: <FaRegClockIcon size={16} />,
+          action: async () => {
+            await syncPhotoAction(id);
+            toastSuccess(appText.admin.sync);
+          },
+        },
+        {
+          label: appText.admin.delete,
+          icon: <MdOutlineDeleteIcon size={18} />,
+          action: async () => {
+            if (confirm(appText.admin.deleteConfirm(titleForPhoto(photo)))) {
+              await deletePhotoAction(id, photo.url);
+              router.push(PATH_ADMIN_PHOTOS);
+              toastSuccess(`Deleted ${title}`);
+            }
+          },
+        },
+      ],
+    },
+  ];
 
   return (
-    isUserSignedIn
-      ? <MoreMenu {...{
-        ...props,
-        sections,
-      }}/>
-      : null
+    <MoreMenu
+      className={className}
+      ariaLabel={appText.admin.edit}
+      icon={
+        <div className={clsx(
+          'w-full h-full rounded-full',
+          'flex items-center justify-center',
+          'group-hover:bg-gray-100 group-hover:dark:bg-gray-800',
+          'transition-all duration-200 ease-in-out',
+          photoHasUpdate && 'text-main animate-pulse-slow',
+        )}>
+          <MdOutlineModeEditIcon size={18} />
+        </div>
+      }
+      sections={sections}
+    />
   );
 }

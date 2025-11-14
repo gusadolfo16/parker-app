@@ -6,7 +6,7 @@ import Spinner from '@/components/Spinner';
 import CopyButton from '@/components/CopyButton';
 import { useCallback, useEffect, useState } from 'react';
 import { generateAuthSecretAction } from '@/auth/actions';
-import { BiRefresh } from 'react-icons/bi';
+import BiRefreshIcon from '@/components/icons/BiRefreshIcon';
 
 export default function SecretGenerator() {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,11 +38,7 @@ export default function SecretGenerator() {
       {secret && <div className="flex items-center justify-center w-6">
         {isLoading
           ? <Spinner />
-          : <BiRefresh
-            className="cursor-pointer active:translate-y-[1px] shrink-0"
-            onClick={getSecret}
-            size={18}
-          />}
+          : <BiRefreshIcon />}
       </div>}
     </div>
   );

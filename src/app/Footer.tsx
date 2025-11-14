@@ -7,13 +7,12 @@ import Link from 'next/link';
 import { SHOW_REPO_LINK } from '@/app/config';
 import RepoLink from '../components/RepoLink';
 import { usePathname } from 'next/navigation';
-import { PATH_ADMIN_PHOTOS, isPathAdmin, isPathSignIn } from './path';
-import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import { signOutAction } from '@/auth/actions';
+import { PATH_ADMIN_PHOTOS, PATH_ROOT, isPathAdmin, isPathSignIn } from './path';
 import AnimateItems from '@/components/AnimateItems';
 import { useAppState } from '@/app/AppState';
 import Spinner from '@/components/Spinner';
 import { useAppText } from '@/i18n/state/client';
+import { signOut } from 'next-auth/react';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -22,7 +21,6 @@ export default function Footer() {
     userEmail,
     userEmailEager,
     isCheckingAuth,
-    clearAuthStateAndRedirectIfNecessary,
   } = useAppState();
 
   const appText = useAppText();
@@ -51,12 +49,17 @@ export default function Footer() {
                     <div className="truncate max-w-full">
                       {userEmail || userEmailEager}
                     </div>
-                    <form action={() => signOutAction()
-                      .then(clearAuthStateAndRedirectIfNecessary)}>
-                      <SubmitButtonWithStatus styleAs="link">
-                        {appText.auth.signOut}
-                      </SubmitButtonWithStatus>
-                    </form>
+                    <button
+                      onClick={() => signOut({ callbackUrl: PATH_ROOT })}
+                      className={clsx(
+                        'font-mono link h-4 active:text-medium',
+                        'disabled:bg-transparent! hover:text-dim',
+                        'inline-flex items-center gap-1.5 self-start',
+                        'whitespace-nowrap focus:outline-hidden text-medium',
+                      )}
+                    >
+                      {appText.auth.signOut}
+                    </button>
                   </>
                   : isCheckingAuth
                     ? <Spinner size={16} className="translate-y-[2px]" />

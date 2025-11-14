@@ -1,6 +1,6 @@
 import clsx from 'clsx/lite';
 import { InputHTMLAttributes, ReactNode, RefObject } from 'react';
-import { ImCheckmark } from 'react-icons/im';
+import ImCheckmarkIcon from './icons/ImCheckmarkIcon';
 
 const SIZE = 'size-4.5';
 
@@ -19,7 +19,7 @@ export default function Checkbox({
   type: _type,
   ...props
 }: Omit<InputHTMLAttributes<HTMLInputElement>, 'ref'> & {
-  ref?: RefObject<HTMLInputElement | null>
+  ref?: RefObject<HTMLInputElement>
   accessory?: ReactNode
 }) {
   return (
@@ -44,10 +44,9 @@ export default function Checkbox({
               ? 'bg-gray-300 dark:bg-gray-700'
               : 'bg-black',
           )}>
-            <ImCheckmark
+            <ImCheckmarkIcon
               size={11}
               className={clsx(
-                'text-white',
                 props.readOnly && 'dark:text-gray-400',
               )}
             />

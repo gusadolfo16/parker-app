@@ -1,7 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useRef } from 'react';
-import { useLinkStatus } from 'next/link';
+import { ReactNode, useEffect, useRef, useTransition } from 'react';
 
 const DEFAULT_FLICKER_THRESHOLD = 400;
 
@@ -16,49 +15,57 @@ export default function LinkWithStatusChild({
   onLoad?: () => void
   flickerThreshold?: number
 }) {
-  const { pending } = useLinkStatus();
+  const [isPending, startTransition] = useTransition();
 
-  const startLoadingTimeout = useRef<NodeJS.Timeout>(undefined);
-  const stopLoadingTimeout = useRef<NodeJS.Timeout>(undefined);
+  const startLoadingTimeout = useRef<NodeJS.Timeout | null>(null);
+  const stopLoadingTimeout = useRef<NodeJS.Timeout | null>(null);
   
-  const isLoadingStartTime = useRef<number>(undefined);
+  const isLoadingStartTime = useRef<number | null>(null);
 
   useEffect(() => {
-    if (pending) {
-      clearTimeout(stopLoadingTimeout.current);
-      stopLoadingTimeout.current = undefined;
+    if (isPending) {
+      if (stopLoadingTimeout.current) {
+        clearTimeout(stopLoadingTimeout.current);
+      }
+      stopLoadingTimeout.current = null;
       startLoadingTimeout.current = setTimeout(() => {
         setIsLoading(true);
         isLoadingStartTime.current = Date.now();
       }, flickerThreshold);
     } else if (startLoadingTimeout.current) {
-      clearTimeout(startLoadingTimeout.current);
-      startLoadingTimeout.current = undefined;
+      if (startLoadingTimeout.current) {
+        clearTimeout(startLoadingTimeout.current);
+      }
+      startLoadingTimeout.current = null;
       const loadingDuration = Date.now() - (isLoadingStartTime.current ?? 0);
       stopLoadingTimeout.current = setTimeout(() => {
         setIsLoading(false);
-        isLoadingStartTime.current = undefined;
+        isLoadingStartTime.current = null;
       }, Math.max(0, flickerThreshold - loadingDuration));
     }
-  }, [pending, setIsLoading, flickerThreshold]);
+  }, [isPending, setIsLoading, flickerThreshold]);
 
   useEffect(() => {
     return () => {
-      clearTimeout(startLoadingTimeout.current);
-      clearTimeout(stopLoadingTimeout.current);
+      if (startLoadingTimeout.current) {
+        clearTimeout(startLoadingTimeout.current);
+      }
+      if (stopLoadingTimeout.current) {
+        clearTimeout(stopLoadingTimeout.current);
+      }
     };
   }, []);
 
   useEffect(() => {
-    if (!pending && startLoadingTimeout.current) {
+    if (!isPending && startLoadingTimeout.current) {
       onLoad?.();
     }
     return () => {
-      if (pending && startLoadingTimeout.current) {
+      if (isPending && startLoadingTimeout.current) {
         onLoad?.();
       }
     };
-  }, [pending, onLoad]);
+  }, [isPending, onLoad]);
 
   return <>{children}</>;
 }

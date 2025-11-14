@@ -1,22 +1,20 @@
-import AdminAppConfiguration from '@/admin/config/AdminAppConfiguration';
-import AdminAppConfigurationSidebar from
-  '@/admin/config/AdminAppConfigurationSidebar';
 import AdminInfoPage from '@/admin/AdminInfoPage';
-import { APP_CONFIGURATION } from '@/app/config';
+import AdminAppConfiguration from '@/admin/config/AdminAppConfiguration';
+import { getAppText } from '@/i18n/state/server';
 import { Suspense } from 'react';
 
-export default function AdminAppConfigurationPage() {
-  const { areInternalToolsEnabled } = APP_CONFIGURATION;
+export default async function AdminConfigurationPage() {
+  const appText = await getAppText();
+
   return (
     <AdminInfoPage
-      // Necessary because of useSearchParams usage in sidebar anchors
-      contentSide={<Suspense>
-        <AdminAppConfigurationSidebar
-          {...{ areInternalToolsEnabled }}
-        />
-      </Suspense>}
+      title={appText.admin.appConfig}
     >
-      <AdminAppConfiguration />
+      <Suspense fallback={null}>
+        {/* eslint-disable-next-line max-len */}
+        {appText.onboarding.setupConfig}
+      </Suspense>
+      {await AdminAppConfiguration({ simplifiedView: false })}
     </AdminInfoPage>
   );
 }

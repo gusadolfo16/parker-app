@@ -4,7 +4,7 @@ import Modal from '@/components/Modal';
 import { useAppState } from '@/app/AppState';
 import PhotoRecipeOverlay from './PhotoRecipeOverlay';
 
-export default function ShareModals() {
+export default function RecipeModal() {
   const {
     recipeModalProps,
     setRecipeModalProps,
@@ -22,4 +22,5 @@ export default function ShareModals() {
       }}/>
     </Modal>;
   }
+  return null;
 }

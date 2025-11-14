@@ -1,6 +1,6 @@
 import { clsx } from 'clsx/lite';
 import { SHOULD_PREFETCH_ALL_LINKS } from '@/app/config';
-import { ComponentProps, ReactNode, RefObject } from 'react';
+import { ComponentProps, ReactNode, Ref } from 'react';
 import Spinner from '../Spinner';
 import LinkWithIconLoader from '../LinkWithIconLoader';
 import Tooltip from '../Tooltip';
@@ -25,7 +25,7 @@ export default function SwitcherItem({
   icon: ReactNode
   title?: string
   href?: string
-  hrefRef?: RefObject<HTMLAnchorElement | null>
+  hrefRef?: Ref<HTMLAnchorElement>
   className?: string
   onClick?: () => void
   active?: boolean

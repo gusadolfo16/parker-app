@@ -20,7 +20,7 @@ export default function useNavigateOrRunActionWithToast({
 
   const toastMessage = _toastMessage ?? appText.misc.loading;
 
-  const toastId = useRef<string | number>(undefined);
+  const toastId = useRef<string | number | null>(null);
   
   const [isPending, startTransition] = useTransition();
 
@@ -31,7 +31,9 @@ export default function useNavigateOrRunActionWithToast({
         icon: <FiCheckSquare size={16} />,
       });
       return setTimeout(() => {
-        toast.dismiss(toastId.current);
+        if (toastId.current) {
+          toast.dismiss(toastId.current);
+        }
       }, dismissDelay);
     }
   }, [dismissDelay, toastMessage]);

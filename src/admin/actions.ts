@@ -1,123 +1,93 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { runAuthenticatedAdminServerAction } from '@/auth/server';
-import { testRedisConnection } from '@/platforms/redis';
-import { testOpenAiConnection } from '@/platforms/openai';
-import { testDatabaseConnection } from '@/platforms/postgres';
-import { testStorageConnection } from '@/platforms/storage';
-import { APP_CONFIGURATION } from '@/app/config';
-import { getStorageUploadUrlsNoStore } from '@/platforms/storage/cache';
 import {
+  getPhotos,
+  getPhotosInNeedOfUpdate,
   getPhotosMeta,
-  getUniqueTags,
-  getUniqueRecipes,
-  getPhotosInNeedOfUpdateCount,
+  getUniqueCameras,
+  getUniqueLenses,
+  unlockAllPhotos,
+  getPhoto,
 } from '@/photo/db/query';
+import { UPDATED_BEFORE_01 } from '@/photo/update';
+import { revalidateAdminPaths, revalidateAllKeysAndPaths } from '@/photo/cache';
 import {
-  getGitHubMetaForCurrentApp,
-  indicatorStatusForSignificantInsights,
-} from './insights';
+  getStoragePhotoUrls,
+  getStorageUploadUrls,
+  testStorageConnection,
+  deleteFile,
+} from '@/platforms/storage';
+
+export const getAdminDataAction = async () => {
+  const [
+    photos,
+    photosTop,
+    photosUpdated,
+    cameras,
+    lenses,
+    { count, dateRange },
+  ] = await Promise.all([
+    getPhotos({ hidden: 'include' }),
+    getPhotos({ sortWithPriority: true }),
+    getPhotosInNeedOfUpdate(UPDATED_BEFORE_01.toISOString()),
+    getUniqueCameras(),
+    getUniqueLenses(),
+    getPhotosMeta(),
+  ]);
+
+  return {
+    photos,
+    photosTop,
+    photosUpdated,
+    childPhotos: [],
+    cameras,
+    lenses,
+    count,
+    dateRange,
+  };
+};
 
 export type AdminData = Awaited<ReturnType<typeof getAdminDataAction>>;
 
-export const getAdminDataAction = async () =>
-  runAuthenticatedAdminServerAction(async () => {
-    const [
-      photosCount,
-      photosCountHidden,
-      photosCountNeedSync,
-      codeMeta,
-      uploadsCount,
-      tagsCount,
-      recipesCount,
-    ] = await Promise.all([
-      getPhotosMeta()
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getPhotosMeta({ hidden: 'only' })
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getPhotosInNeedOfUpdateCount(new Date().toISOString()),
-      getGitHubMetaForCurrentApp(),
-      getStorageUploadUrlsNoStore()
-        .then(urls => urls.length)
-        .catch(e => {
-          console.error(`Error getting blob upload urls: ${e}`);
-          return 0;
-        }),
-      getUniqueTags()
-        .then(tags => tags.length)
-        .catch(() => 0),
-      getUniqueRecipes()
-        .then(recipes => recipes.length)
-        .catch(() => 0),
-    ]);
-
-    const insightsIndicatorStatus = indicatorStatusForSignificantInsights({
-      codeMeta,
-      photosCountNeedSync,
-    });
-
-    const photosCountTotal = (
-      photosCount !== undefined &&
-      photosCountHidden !== undefined
-    )
-      ? photosCount + photosCountHidden
-      : undefined;
-
-    return {
-      photosCount,
-      photosCountHidden,
-      photosCountNeedSync,
-      photosCountTotal,
-      uploadsCount,
-      tagsCount,
-      recipesCount,
-      insightsIndicatorStatus,
-    } as const;
-  });
-
-const scanForError = (
-  shouldCheck: boolean,
-  promise: () => Promise<any>,
-): Promise<string> =>
-  shouldCheck
-    ? promise()
-      .then(() => '')
-      .catch(error => error.message)
-    : Promise.resolve('');
-
-export const testConnectionsAction = async () =>
-  runAuthenticatedAdminServerAction(async () => {
-    const {
-      hasDatabase,
-      hasStorageProvider,
-      hasRedisStorage,
-      isAiTextGenerationEnabled,
-    } = APP_CONFIGURATION;
-
-    const [
-      databaseError,
-      storageError,
-      redisError,
-      aiError,
-    ] = await Promise.all([
-      scanForError(hasDatabase, testDatabaseConnection),
-      scanForError(hasStorageProvider, testStorageConnection),
-      scanForError(hasRedisStorage, testRedisConnection),
-      scanForError(isAiTextGenerationEnabled, testOpenAiConnection),
-    ]);
-
-    return {
-      databaseError,
-      storageError,
-      redisError,
-      aiError,
-    };
-  });
+export const clearAllSelectionsAction = async () => {
+  await unlockAllPhotos();
+  revalidateAdminPaths();
+};
 
 export const revalidateAdminPathAction = async () => {
-  'use server';
-  revalidatePath('/admin', 'layout');
+  revalidateAdminPaths();
+};
+
+export const testConnectionsAction = async () => {
+  const storageError = await testStorageConnection();
+  return {
+    storageError,
+  };
+};
+
+export const getSignedStorageUrlsAction = async (
+  photoIds: string[],
+  photoIdsToResign: string[],
+) => {
+  const [
+    urlsUpload,
+    urlsResign,
+  ] = await Promise.all([
+    getStorageUploadUrls(),
+    getStoragePhotoUrls(),
+  ]);
+  return {
+    urlsUpload,
+    urlsResign,
+  };
+};
+
+export const deleteStoragePhotosAction = async (photoIds: string[]) => {
+  for (const photoId of photoIds) {
+    const photo = await getPhoto(photoId);
+    if (photo) {
+      await deleteFile(photo.url);
+    }
+  }
+  revalidateAllKeysAndPaths();
 };

@@ -28,7 +28,7 @@ const formatPhotoForFeedJson = (photo: Photo): FeedPhotoJson => ({
   ...photo.make && { make: photo.make },
   ...photo.model && { model: photo.model },
   ...photo.tags.length > 0 && { tags: photo.tags },
-  takenAtNaive: formatDateFromPostgresString(photo.takenAtNaive),
+  takenAtNaive: formatDateFromPostgresString(photo.takenAtNaive ?? ''),
   src: {
     small: generateFeedMedia(photo, FEED_PHOTO_WIDTH_SMALL),
     medium: generateFeedMedia(photo, FEED_PHOTO_WIDTH_MEDIUM),

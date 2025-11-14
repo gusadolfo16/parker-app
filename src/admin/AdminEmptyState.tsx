@@ -1,27 +1,22 @@
-import clsx from 'clsx/lite';
 import { ReactNode } from 'react';
-import { IoInformationCircleOutline } from 'react-icons/io5';
+import { clsx } from 'clsx/lite';
+import IoInformationCircleOutlineIcon from '@/components/icons/IoInformationCircleOutlineIcon';
 
 export default function AdminEmptyState({
-  icon,
   children,
-  includeContainer = true,
+  icon,
 }: {
-  icon?: ReactNode
-  children: ReactNode
-  includeContainer?: boolean
+  children: ReactNode,
+  icon?: ReactNode,
 }) {
   return (
-    <div className={clsx(
-      'flex flex-col gap-4 justify-center items-center p-8',
-      includeContainer &&'component-surface shadow-xs',
-    )}>
+    <div className="flex flex-col items-center gap-4 py-16 text-textLight">
       <div className={clsx(
-        'size-14 flex justify-center items-center',
-        'text-[1.75rem] text-medium',
+        'w-16 h-16 flex items-center justify-center',
+        'text-main',
         'border border-main rounded-xl shadow-xs',
       )}>
-        {icon ?? <IoInformationCircleOutline />}
+        {icon ?? <IoInformationCircleOutlineIcon />}
       </div>
       {children}
     </div>

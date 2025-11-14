@@ -1,4 +1,4 @@
-import { MdOutlineFileDownload } from 'react-icons/md';
+import MdOutlineFileDownloadIcon from './icons/MdOutlineFileDownloadIcon';
 import { clsx } from 'clsx/lite';
 import { downloadFileNameForPhoto, Photo } from '@/photo';
 import LoaderButton from './primitives/LoaderButton';
@@ -24,7 +24,7 @@ export default function DownloadButton({
         className,
         'text-medium',
       )}
-      icon={<MdOutlineFileDownload size={18} />}
+      icon={<MdOutlineFileDownloadIcon size={18} />}
       spinnerColor='dim'
       styleAs='link'
       isLoading={isLoading}

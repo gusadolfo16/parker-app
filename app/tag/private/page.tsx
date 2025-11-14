@@ -55,15 +55,14 @@ export default async function PrivateTagPage() {
     getPhotosHiddenMetaCached(),
   ]);
 
+  const privateHeader = await PrivateHeader({ photos, count });
+
   return (
     <AppGrid
       contentMain={<div className="space-y-4 mt-4">
         <AnimateItems
           type="bottom"
-          items={[<PrivateHeader
-            key="PrivateHeader"
-            {...{ photos, count, dateRange }}
-          />]}
+          items={[privateHeader]}
           animateOnFirstLoadOnly
         />
         <div className="space-y-6">

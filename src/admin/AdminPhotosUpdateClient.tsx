@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { syncPhotosAction } from '@/photo/actions';
 import { useRouter } from 'next/navigation';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
-import { LiaBroomSolid } from 'react-icons/lia';
+import LiaBroomSolidIcon from '@/components/icons/LiaBroomSolidIcon';
 import ProgressButton from '@/components/primitives/ProgressButton';
 import ErrorNote from '@/components/ErrorNote';
 import {
@@ -29,7 +29,7 @@ export default function AdminPhotosUpdateClient({
 }) {
   // Use refs for non-reactive while loop state
   const photoIdsToSync = useRef(photos.map(photo => photo.id));
-  const errorRef = useRef<Error>(undefined);
+  const errorRef = useRef<Error | null>(null);
 
   // Use state for updating progress button and error UI
   const [photoIdsSyncing, setPhotoIdsSyncing] = useState<string[]>([]);
@@ -72,7 +72,7 @@ export default function AdminPhotosUpdateClient({
             'Browser must remain open while syncing.',
             'This action cannot be undone.',
           ].join(' '))) {
-            errorRef.current = undefined;
+            errorRef.current = null;
             setError(undefined);
             while (photoIdsToSync.current.length > 0) {
               const photoIds = photoIdsToSync.current
@@ -83,7 +83,7 @@ export default function AdminPhotosUpdateClient({
                 onlySyncColorData: isPhotoOnlyMissingColorData(
                   photos.find(photo => photo.id === id),
                 ),
-              })))
+              }))) 
                 .then(() => {
                   photoIdsToSync.current = photoIdsToSync.current.filter(
                     id => !photoIds.includes(id),
@@ -123,7 +123,7 @@ export default function AdminPhotosUpdateClient({
         </ErrorNote>}
         <Note
           color="blue"
-          icon={<LiaBroomSolid size={18}/>}
+          icon={<LiaBroomSolidIcon />}
         >
           <div className="space-y-1.5">
             <div className="font-bold">

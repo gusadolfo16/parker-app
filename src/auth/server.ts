@@ -1,22 +1,23 @@
-import { isPathProtected } from '@/app/path';
-import NextAuth, { User } from 'next-auth';
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
+import NextAuth, { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 
-export const {
-  handlers: { GET, POST },
-  signIn,
-  signOut,
-  auth,
-} = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
-      async authorize({ email, password }) {
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials) { return null; }
+        const { email, password } = credentials;
         if (
           process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
           process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD === password
         ) {
-          const user: User = { id: email, email, name: 'Admin User' };
+          const user = { id: email, email, name: 'Admin User' };
           return user;
         } else {
           return null;
@@ -24,48 +25,46 @@ export const {
       },
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
   ],
+  pages: {
+    signIn: '/sign-in',
+  },
   callbacks: {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.email = user.email ?? undefined;
+        token.name = user.name ?? undefined;
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
+        (session.user as any).email = token.email;
+        (session.user as any).name = token.name;
       }
       return session;
     },
-    authorized({ auth, request }) {
-      const { pathname } = request.nextUrl;
-
-      const isUrlProtected = isPathProtected(pathname);
-      const isUserLoggedIn = !!auth?.user;
-      const isAdminUser = auth?.user?.email === process.env.ADMIN_EMAIL;
-
-      const isRequestAuthorized =
-        !isUrlProtected || (isUserLoggedIn && isAdminUser);
-
-      return isRequestAuthorized;
-    },
   },
-  pages: {
-    signIn: '/sign-in',
-  },
-});
+};
+
+export async function getServerSession() {
+  return getNextAuthServerSession(authOptions);
+}
 
 export const runAuthenticatedAdminServerAction = async <T>(
-  callback: () => T,
+  action: () => Promise<T>
 ): Promise<T> => {
-  const session = await auth();
-  if (session?.user) {
-    return callback();
-  } else {
-    throw new Error('Unauthorized server action request');
+  const session = await getServerSession();
+  if (!session || !session.user) {
+    throw new Error("Unauthorized");
   }
+  return action();
 };

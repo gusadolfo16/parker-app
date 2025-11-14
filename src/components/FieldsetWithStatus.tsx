@@ -69,7 +69,7 @@ export default function FieldsetWithStatus({
   spellCheck?: boolean
   capitalize?: boolean
   type?: FieldSetType
-  inputRef?: RefObject<HTMLInputElement | null>
+  inputRef?: RefObject<HTMLInputElement>
   accessory?: React.ReactNode
   hideLabel?: boolean
   tabIndex?: number

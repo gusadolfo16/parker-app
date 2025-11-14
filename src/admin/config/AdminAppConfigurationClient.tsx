@@ -3,7 +3,6 @@
 import {
   ComponentProps,
   Fragment,
-  JSX,
   ReactNode,
   useEffect,
   useState,
@@ -130,7 +129,7 @@ export default function AdminAppConfigurationClient({
     simplifiedView?: boolean
   }) {
   const [hasScrolled, setHasScrolled] = useState(false);
-  const [connectionErrors, setConnectionErrors] = useState<Partial<Awaited<ReturnType<typeof testConnectionsAction>>>>({});
+  const [connectionErrors, setConnectionErrors] = useState<any>({});
   const [isAnalyzingConfiguration, setIsAnalyzingConfiguration] = useState(true);
 
   useEffect(() => {
@@ -215,7 +214,7 @@ export default function AdminAppConfigurationClient({
       includeTooltip={includeTooltip}
     />;
 
-  const renderGroupContent = (key: ConfigSectionKey): JSX.Element => {
+  const renderGroupContent = (key: ConfigSectionKey): JSX.Element | null => {
     switch (key) {
       case 'Storage':
         return <>
@@ -904,6 +903,7 @@ export default function AdminAppConfigurationClient({
             {renderEnvVars(['ADMIN_SQL_DEBUG'])}
           </ChecklistRow>
         </>;
+      default: return null;
     }
   };
 
@@ -914,7 +914,6 @@ export default function AdminAppConfigurationClient({
           <ChecklistGroup
             key={section.title}
             title={section.title}
-            titleShort={(section as AdminConfigSection).titleShort}
             icon={section.icon}
             optional={!section.required}
             updateHashOnVisible={hasScrolled && !simplifiedView}

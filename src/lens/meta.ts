@@ -22,7 +22,7 @@ export const titleForLens = (
   explicitCount?: number,
 ) => [
   `${appText.category.lens}:`,
-  formatLensText(photos.length > 0 ? lensFromPhoto(photos[0], lens) : lens),
+  formatLensText((photos && photos.length > 0) ? lensFromPhoto(photos[0], lens) : lens),
   photoQuantityText(explicitCount ?? photos.length, appText),
 ].join(' ');
 
@@ -33,7 +33,7 @@ export const shareTextForLens = (
 ) =>
   [
     `${appText.category.lens}:`,
-    formatLensText(photos.length > 0 ? lensFromPhoto(photos[0], lens) : lens),
+    formatLensText((photos && photos.length > 0) ? lensFromPhoto(photos[0], lens) : lens),
   ].join(' ');
 
 export const descriptionForLensPhotos = (

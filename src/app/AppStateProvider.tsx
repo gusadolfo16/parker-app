@@ -6,6 +6,7 @@ import {
   ReactNode,
   useCallback,
   useRef,
+  useMemo,
 } from 'react';
 import { AppStateContext } from '../app/AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
@@ -39,6 +40,7 @@ import {
   SWR_KEYS,
   SWRKey,
 } from '@/swr';
+import { getPhotosMetaAction } from '@/photo/actions';
 
 export default function AppStateProvider({
   children,
@@ -150,7 +152,7 @@ export default function AppStateProvider({
     data: auth,
     error: authError,
     isLoading: isCheckingAuth,
-  } = useSWR(SWR_KEYS.GET_AUTH, getAuthSessionAction);
+  } = useSWR(SWR_KEYS.GET_AUTH, getAuthSessionAction, { revalidateOnFocus: true });
   useEffect(() => {
     if (auth === null || authError) {
       setUserEmail(undefined);
@@ -197,12 +199,9 @@ export default function AppStateProvider({
     setUserEmail(undefined);
     setUserEmailEager(undefined);
     clearAuthEmailCookie();
-    if (isPathProtected(pathname)) {
-      router.push(PATH_ROOT);
-    } else {
-      toastSuccess('Signed out');
-    }
-  }, [router, pathname]);
+    router.push(PATH_ROOT);
+    toastSuccess('Signed out');
+  }, [router]);
 
   // Returns false when upload is cancelled
   const startUpload = useCallback(() => new Promise<boolean>(resolve => {
@@ -222,6 +221,18 @@ export default function AppStateProvider({
   const resetUploadState = useCallback(() => {
     _setUploadState(INITIAL_UPLOAD_STATE);
   }, []);
+
+  const { data: photosMetaVisible } = useSWR(
+    SWR_KEYS.GET_PHOTOS_META,
+    getPhotosMetaAction,
+  );
+
+  const photosCountHidden = useMemo(() => {
+    if (adminData?.count && photosMetaVisible?.count) {
+      return adminData.count - photosMetaVisible.count;
+    }
+    return 0;
+  }, [adminData?.count, photosMetaVisible?.count]);
 
   return (
     <AppStateContext.Provider
@@ -266,6 +277,7 @@ export default function AppStateProvider({
         setSelectedPhotoIds,
         isPerformingSelectEdit,
         setIsPerformingSelectEdit,
+        photosCountHidden,
         // UPLOAD
         uploadInputRef,
         startUpload,

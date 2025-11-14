@@ -97,6 +97,8 @@ export const TEXT = {
     email: 'Admin Email',
     password: 'Admin Password',
     invalidEmailPassword: 'Invalid email/password',
+    or: 'Or',
+    signInWithGoogle: 'Sign in with Google',
   },
   admin: {
     uploadPhotos: 'Upload Photos',
@@ -124,6 +126,14 @@ export const TEXT = {
     sync: 'Sync',
     delete: 'Delete',
     deleteConfirm: 'Are you sure you want to delete "{{photoTitle}}?"',
+    cancel: 'Cancel',
+    clearCache: 'Clear Cache',
+    getExif: 'Get EXIF',
+    selectionsReport: 'Selections Report',
+    report: {
+      title: 'Admin Report',
+      description: 'A summary of the library and its contents.',
+    },
   },
   onboarding: {
     setupComplete: 'Setup Complete!',

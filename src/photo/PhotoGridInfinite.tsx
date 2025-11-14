@@ -5,6 +5,7 @@ import InfinitePhotoScroll from './InfinitePhotoScroll';
 import PhotoGrid from './PhotoGrid';
 import { ComponentProps } from 'react';
 import { SortBy } from './sort';
+import { useSelection } from '@/selection/SelectionContext';
 
 export default function PhotoGridInfinite({
   cacheKey,
@@ -21,7 +22,15 @@ export default function PhotoGridInfinite({
   sortBy?: SortBy
   sortWithPriority?: boolean
   excludeFromFeeds?: boolean
-} & Omit<ComponentProps<typeof PhotoGrid>, 'photos'>) {
+  canStart?: boolean
+  animateOnFirstLoadOnly?: boolean
+} & Omit<ComponentProps<typeof PhotoGrid>, 'photos' | 'selectionMode' | 'selectedPhotos' | 'togglePhotoSelection'>) {
+  const {
+    selectionMode,
+    selectedPhotos,
+    togglePhotoSelection,
+  } = useSelection();
+
   return (
     <InfinitePhotoScroll
       cacheKey={cacheKey}
@@ -39,6 +48,9 @@ export default function PhotoGridInfinite({
           canStart,
           onLastPhotoVisible,
           animateOnFirstLoadOnly,
+          selectionMode,
+          selectedPhotos,
+          togglePhotoSelection,
         }} />}
     </InfinitePhotoScroll>
   );

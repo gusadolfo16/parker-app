@@ -6,7 +6,7 @@ import AppGrid from '@/components/AppGrid';
 import PhotoUploadWithStatus from '@/photo/PhotoUploadWithStatus';
 import { useAppState } from '@/app/AppState';
 import clsx from 'clsx/lite';
-import { IoCloseSharp } from 'react-icons/io5';
+import IoCloseSharpIcon from '@/components/icons/IoCloseSharpIcon';
 
 export default function AdminUploadPanel({
   shouldResize,
@@ -46,10 +46,7 @@ export default function AdminUploadPanel({
               showButton={false}
             />
             <LoaderButton 
-              icon={<IoCloseSharp
-                size={18}
-                className="translate-y-[0.5px]"
-              />}
+              icon={<IoCloseSharpIcon />}
               onClick={resetUploadState}
             />
           </div>

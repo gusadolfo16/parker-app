@@ -32,7 +32,6 @@ export default function PhotoLightbox({
       <PhotoGrid
         {...categories}
         photos={photos.slice(0, photoCountToShow)}
-        animate={false}
         additionalTile={showOverageTile
           ? <Link
             href={moreLink}

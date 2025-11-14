@@ -22,7 +22,7 @@ export const titleForCamera = (
   explicitCount?: number,
 ) => [
   appText.category.cameraTitle(
-    formatCameraText(photos.length > 0 ? cameraFromPhoto(photos[0], camera) : camera),
+    formatCameraText((photos && photos.length > 0) ? cameraFromPhoto(photos[0], camera) : camera),
   ),
   photoQuantityText(explicitCount ?? photos.length, appText),
 ].join(' ');
@@ -32,7 +32,7 @@ export const shareTextForCamera = (
   photos: Photo[],
   appText: AppTextState,
 ) =>
-  photos.length > 0
+  (photos && photos.length > 0)
     ? appText.category.cameraShare(
         formatCameraText(cameraFromPhoto(photos[0], camera)),
       )

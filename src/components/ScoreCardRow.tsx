@@ -1,3 +1,5 @@
+'use client';
+
 import { clsx } from 'clsx/lite';
 import { ReactNode, useState } from 'react';
 import {

@@ -6,12 +6,26 @@ import {
   ButtonHTMLAttributes,
   ComponentProps,
   ReactNode,
-  RefObject,
+  forwardRef,
 } from 'react';
 import Tooltip from '../Tooltip';
 
-export default function LoaderButton({
-  ref,
+const LoaderButton = forwardRef<HTMLButtonElement, {
+  classNameIcon?: string
+  isLoading?: boolean
+  icon?: ReactNode
+  spinnerColor?: SpinnerColor
+  spinnerClassName?: string
+  styleAs?: 'button' | 'link' | 'link-without-hover'
+  hideText?: 'always' | 'on-mobile' | 'never'
+  confirmText?: string
+  shouldPreventDefault?: boolean
+  primary?: boolean
+  hideFocusOutline?: boolean
+  tooltip?: string
+  tooltipColor?: ComponentProps<typeof Tooltip>['color']
+  tooltipSide?: ComponentProps<typeof Tooltip>['side']
+} & ButtonHTMLAttributes<HTMLButtonElement>>(function LoaderButton({
   children,
   classNameIcon,
   isLoading,
@@ -29,26 +43,10 @@ export default function LoaderButton({
   disabled,
   className,
   tooltip,
-  tooltipColor,
   tooltipSide,
+  tooltipColor,
   ...rest
-}: {
-  ref?: RefObject<HTMLButtonElement | null>
-  classNameIcon?: string
-  isLoading?: boolean
-  icon?: ReactNode
-  spinnerColor?: SpinnerColor
-  spinnerClassName?: string
-  styleAs?: 'button' | 'link' | 'link-without-hover'
-  hideText?: 'always' | 'on-mobile' | 'never'
-  confirmText?: string
-  shouldPreventDefault?: boolean
-  primary?: boolean
-  hideFocusOutline?: boolean
-  tooltip?: string
-  tooltipColor?: ComponentProps<typeof Tooltip>['color']
-  tooltipSide?: ComponentProps<typeof Tooltip>['side']
-} & ButtonHTMLAttributes<HTMLButtonElement>) {
+}, ref) {
   const button =
     <button
       {...rest}
@@ -116,4 +114,6 @@ export default function LoaderButton({
       </Tooltip>
       : button
   );
-}
+});
+
+export default LoaderButton;

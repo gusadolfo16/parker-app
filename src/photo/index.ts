@@ -145,7 +145,7 @@ export const parsePhotoFromDb = (photoDbRaw: PhotoDb): Photo => {
     exposureCompensationFormatted:
       formatExposureCompensation(photoDb.exposureCompensation),
     takenAtNaiveFormatted:
-      formatDateFromPostgresString(photoDb.takenAtNaive),
+      formatDateFromPostgresString(photoDb.takenAtNaive ?? ''),
     recipeData: photoDb.recipeData
       // Legacy check on escaped, string-based JSON
       ? typeof photoDb.recipeData === 'string'
@@ -312,23 +312,37 @@ export const dateRangeForPhotos = (
   let description = '';
   let descriptionWithSpaces = '';
 
-  if (explicitDateRange || photos.length > 0) {
+  if (explicitDateRange || (photos && photos.length > 0)) {
     const photosSorted = sortPhotosByDateNonDestructively(photos);
     const startNaive = explicitDateRange?.start ?? photosSorted[photos.length - 1]?.takenAtNaive ?? '';
     const endNaive = explicitDateRange?.end ?? photosSorted[0]?.takenAtNaive ?? '';
 
     if (startNaive !== null && startNaive !== undefined) {
-      start = formatDateFromPostgresString(
-        startNaive,
-        'short',
-      );
+      if (typeof startNaive === 'string') {
+        start = formatDateFromPostgresString(
+          startNaive,
+          'short',
+        );
+      } else { // It's a Date object
+        start = formatDate({
+          date: startNaive,
+          length: 'short',
+        });
+      }
     }
 
     if (endNaive !== null && endNaive !== undefined) {
-      end = formatDateFromPostgresString(
-        endNaive,
-        'short',
-      );
+      if (typeof endNaive === 'string') {
+        end = formatDateFromPostgresString(
+          endNaive,
+          'short',
+        );
+      } else { // It's a Date object
+        end = formatDate({
+          date: endNaive,
+          length: 'short',
+        });
+      }
     }
 
     if (start && end) {

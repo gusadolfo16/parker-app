@@ -5,7 +5,7 @@ import { generateMetaForTag } from '@/tag';
 import TagOverview from '@/tag/TagOverview';
 import { getPhotosTagDataCached } from '@/tag/data';
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { staticallyGenerateCategoryIfConfigured } from '@/app/static';
 import { getAppText } from '@/i18n/state/server';
@@ -13,12 +13,12 @@ import { getAppText } from '@/i18n/state/server';
 const getPhotosTagDataCachedCached = cache((tag: string) =>
   getPhotosTagDataCached({ tag, limit: INFINITE_SCROLL_GRID_INITIAL}));
 
-// export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
-//   'tags',
-//   'page',
-//   getUniqueTags,
-//   tags => tags.map(({ tag }) => ({ tag })),
-// );
+export const generateStaticParams = staticallyGenerateCategoryIfConfigured(
+  'tags',
+  'page',
+  getUniqueTags,
+  tags => tags.map(({ tag }) => ({ tag })),
+);
 
 interface TagProps {
   params: Promise<{ tag: string }>
@@ -76,7 +76,7 @@ export default async function TagPage({
     { count, dateRange },
   ] = await getPhotosTagDataCachedCached(tag);
 
-  if (photos.length === 0) { redirect(PATH_ROOT); }
+  if (photos.length === 0) { notFound(); }
 
   return (
     <TagOverview {...{ tag, photos, count, dateRange }} />

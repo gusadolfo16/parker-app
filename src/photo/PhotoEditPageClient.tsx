@@ -64,8 +64,9 @@ export default function PhotoEditPageClient({
               shouldConfirm: shouldConfirmAiTextGeneration,
             }} />}
           <ExifCaptureButton
+            photoId={photo.id}
             photoUrl={photo.url}
-            onSync={setUpdatedExifData}
+            onExifDataCapture={setUpdatedExifData}
           />
         </div>}
       isLoading={pending}

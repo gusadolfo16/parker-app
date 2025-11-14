@@ -3,7 +3,7 @@
 import { clsx } from 'clsx/lite';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import AppGrid from '../components/AppGrid';
+import AppGrid from '@/components/AppGrid';
 import AppViewSwitcher, { SwitcherSelection } from '@/app/AppViewSwitcher';
 import {
   PATH_ROOT,
@@ -25,6 +25,8 @@ import Switcher from '@/components/switcher/Switcher';
 import SwitcherItem from '@/components/switcher/SwitcherItem';
 import { useSelection } from '@/selection/SelectionContext';
 import { useSession } from 'next-auth/react';
+import AdminAppMenu from '@/admin/AdminAppMenu';
+
 
 const NAV_HEIGHT_CLASS = NAV_CAPTION
   ? 'min-h-[4rem] sm:min-h-[5rem]'
@@ -98,18 +100,23 @@ export default function NavClient({
           distanceOffset={10}
           items={showNav
             ? [<nav
-              key="nav"
-              ref={ref}
-              className={clsx(
-                'w-full flex items-center bg-main',
-                NAV_HEIGHT_CLASS,
-                classNameStickyNav,
-              )}>
+                key="nav"
+                ref={ref}
+                className={clsx(
+                  'w-full flex items-center bg-main z-10',
+                  NAV_HEIGHT_CLASS,
+                  classNameStickyNav,
+                )}>
               <AppViewSwitcher
                 currentSelection={switcherSelectionForPath()}
                 className="translate-x-[-1px]"
                 animate={hasLoadedWithAnimations && isNavVisible}
               />
+              {isUserAdmin &&
+                <div className="relative ml-2">
+                  <AdminAppMenu />
+                </div>
+              }
               {/* Selection Buttons */}
               {status !== 'loading' && selectionMode && status === 'authenticated' ? (
                 <div className="flex items-center">

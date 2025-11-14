@@ -1,17 +1,15 @@
-import { ReactNode, RefObject } from 'react';
+import { ReactNode, RefObject, forwardRef } from 'react';
 import clsx from 'clsx/lite';
 
-export default function MenuSurface({
-  ref,
-  children,
-  className,
-  color,
-}: {
-  ref?: RefObject<HTMLDivElement | null>
+const MenuSurface = forwardRef<HTMLDivElement, {
   children: ReactNode
   className?: string
   color?: 'light' | 'dark' | 'frosted'
-}) {
+}>(function MenuSurface({
+  children,
+  className,
+  color,
+}, ref) {
   return (
     <div
       ref={ref}
@@ -29,4 +27,6 @@ export default function MenuSurface({
       {children}
     </div>
   );
-}
+});
+
+export default MenuSurface;

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { FiArrowLeft } from 'react-icons/fi';
+import FiArrowLeftIcon from './icons/FiArrowLeftIcon';
 import AppGrid from './AppGrid';
 import { clsx } from 'clsx/lite';
 import Badge from './Badge';
@@ -43,7 +43,7 @@ function AdminChildPage({
                     href={backPath}
                     className="flex gap-1.5 items-center"
                   >
-                    <FiArrowLeft size={16} />
+                    <FiArrowLeftIcon />
                     <span className="hidden xs:inline-block">
                       {backLabel || 'Back'}
                     </span>

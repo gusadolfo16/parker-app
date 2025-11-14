@@ -1,22 +1,23 @@
-'use client';
-
 import LoaderButton from '@/components/primitives/LoaderButton';
-import { RecipeProps } from '@/recipe';
-import { useAppState } from '@/app/AppState';
+import { useAppText } from '@/i18n/state/client';
 import { TbChecklist } from 'react-icons/tb';
+import TbChecklistIcon from '@/components/icons/TbChecklistIcon';
 
-export default function AdminShowRecipeButton(props: RecipeProps) {
-  const { setRecipeModalProps } = useAppState();
-
+export default function AdminShowRecipeButton({
+  onClick,
+}: {
+  onClick: () => void,
+}) {
+  const appText = useAppText();
   return (
     <LoaderButton
-      icon={<TbChecklist
+      icon={<TbChecklistIcon
         size={17}
         className="translate-y-[1px]"
       />}
-      onClick={() => setRecipeModalProps?.(props)}
+      onClick={onClick}
     >
-      Preview
+      {appText.category.recipe}
     </LoaderButton>
   );
 }

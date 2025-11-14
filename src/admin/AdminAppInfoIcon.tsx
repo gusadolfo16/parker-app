@@ -1,33 +1,25 @@
-import { useAppState } from '@/app/AppState';
-import clsx from 'clsx/lite';
+import { clsx } from 'clsx/lite';
 import { LuCog } from 'react-icons/lu';
-import InsightsIndicatorDot from './insights/InsightsIndicatorDot';
+import LuCogIcon from '@/components/icons/LuCogIcon';
 
 export default function AdminAppInfoIcon({
-  size = 'large',
+  size = 'small',
   className,
 }: {
-  size?: 'small' | 'large'
-  className?: string
+  size?: 'small' | 'large',
+  className?: string,
 }) {
-  const { insightsIndicatorStatus } = useAppState();
-
   return (
-    <span className={clsx(
-      'inline-flex relative',
+    <div className={clsx(
+      'inline-flex items-center justify-center',
+      size === 'large' ? 'w-8 h-8' : 'w-5 h-5',
       className,
     )}>
-      <LuCog
+      <LuCogIcon
         size={size === 'large' ? 20 : 17}
         className="inline-flex translate-y-[1px]"
         aria-label="App Info"
       />
-      {insightsIndicatorStatus &&
-        <InsightsIndicatorDot
-          size={size}
-          top={size === 'large' ? 1.5 : 1.5}
-          right={size === 'large' ? 0.5 : 1}
-        />}
-    </span>
+    </div>
   );
 }

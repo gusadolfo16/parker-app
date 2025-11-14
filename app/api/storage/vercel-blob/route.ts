@@ -1,4 +1,4 @@
-import { auth } from '@/auth/server';
+import { getServerSession } from '@/auth/server';
 import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
 import {
   ACCEPTED_PHOTO_FILE_TYPES,
@@ -16,7 +16,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       body,
       request,
       onBeforeGenerateToken: async (pathname) => {
-        const session = await auth();
+        const session = await getServerSession();
         if (session?.user) {
           if (isUploadPathnameValid(pathname)) {
             return {

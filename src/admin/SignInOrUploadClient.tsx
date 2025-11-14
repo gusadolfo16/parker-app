@@ -31,11 +31,7 @@ export default function SignInOrUploadClient({
       </div>
       {!isCheckingAuth && isUserSignedIn === false &&
         <div className="flex justify-center my-2 sm:my-4">
-          <SignInForm
-            className="max-w-[90%] sm:max-w-none"
-            includeTitle={false}
-            shouldRedirect={false}
-          />
+          <SignInForm />
         </div>}
       {isUserSignedIn === true &&
         <PhotoUploadWithStatus

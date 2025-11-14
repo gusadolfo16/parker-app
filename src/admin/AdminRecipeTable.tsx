@@ -19,10 +19,10 @@ export default async function AdminRecipeTable({
   const appText = await getAppText();
   return (
     <AdminTable>
-      {sortRecipes(recipes).map(({ recipe, count }) =>
+      {await Promise.all(sortRecipes(recipes).map(async ({ recipe, count }) =>
         <Fragment key={recipe}>
           <div className="pr-2 col-span-2">
-            <AdminRecipeBadge {...{ recipe, count }} />
+            {await AdminRecipeBadge({ recipe, count })}
           </div>
           <div className={clsx(
             'flex flex-nowrap',
@@ -39,7 +39,7 @@ export default async function AdminRecipeTable({
               <DeleteFormButton clearLocalState />
             </FormWithConfirm>
           </div>
-        </Fragment>)}
+        </Fragment>))}
     </AdminTable>
   );
 }

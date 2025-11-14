@@ -1,4 +1,4 @@
-import { BiCopy } from 'react-icons/bi';
+import BiCopyIcon from './icons/BiCopyIcon';
 import LoaderButton from './primitives/LoaderButton';
 import clsx from 'clsx/lite';
 import { toastSuccess } from '@/toast';
@@ -23,7 +23,7 @@ export default function CopyButton({
   return (
     <LoaderButton
       {...props}
-      icon={<BiCopy size={iconSize} />}
+      icon={<BiCopyIcon size={iconSize} />}
       className={clsx(
         subtle && 'text-gray-300 dark:text-gray-700',
         className,

@@ -27,6 +27,7 @@ import { redirect } from 'next/navigation';
 import { deleteFile } from '@/platforms/storage';
 import {
   getPhotosCached,
+  getPhotosMetaCached,
   revalidateAdminPaths,
   revalidateAllKeysAndPaths,
   revalidatePhoto,
@@ -62,7 +63,6 @@ import { createStreamableValue } from 'ai/rsc';
 import { convertUploadToPhoto } from './storage';
 import { UrlAddStatus } from '@/admin/AdminUploadsClient';
 import { convertStringToArray } from '@/utility/string';
-import { after } from 'next/server';
 import {
   getColorFieldsForImageUrl,
   getColorFieldsForPhotoDbInsert,
@@ -187,7 +187,7 @@ const addUpload = async ({
       photo.url = updatedUrl;
       await insertPhoto(photo);
       if (shouldRevalidateAllKeysAndPaths) {
-        after(revalidateAllKeysAndPaths);
+        revalidateAllKeysAndPaths();
       }
       onFinish?.(url);
       // Re-submit with updated url
@@ -268,7 +268,7 @@ export const addUploadsAction = async ({
     })();
 
     if (shouldRevalidateAllKeysAndPaths) {
-      after(revalidateAllKeysAndPaths);
+      revalidateAllKeysAndPaths();
     }
 
     return stream.value;
@@ -585,7 +585,7 @@ export const syncPhotosAction = async (photosToSync: {
   });
 
 export const clearCacheAction = async () =>
-  runAuthenticatedAdminServerAction(revalidateAllKeysAndPaths);
+  runAuthenticatedAdminServerAction(async () => revalidateAllKeysAndPaths());
 
 export const streamAiImageQueryAction = async (
   imageBase64: string,
@@ -639,3 +639,6 @@ export const searchPhotosAction = async (query: string) =>
       console.error('Could not query photos', e);
       return [] as Photo[];
     });
+
+export const getPhotosMetaAction = async () =>
+  getPhotosMetaCached();

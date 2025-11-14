@@ -7,6 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
+  MutableRefObject,
 } from 'react';
 import { SharedHoverContext, SharedHoverProps } from './state';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -30,16 +31,20 @@ export default function SharedHoverProvider({
   const [hoverContent, setHoverContent] = useState<ReactNode>();
   const [hoverStyle, setHoverStyle] = useState<CSSProperties>();
 
-  const currentTriggerRef = useRef<HTMLElement>(null);
+  const currentTriggerRef: MutableRefObject<HTMLElement | null> = useRef<HTMLElement>(null);
 
-  const timeoutInitialHoverRef = useRef<NodeJS.Timeout>(undefined);
-  const timeoutDismissRef = useRef<NodeJS.Timeout>(undefined);
+  const timeoutInitialHoverRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutDismissRef = useRef<NodeJS.Timeout | null>(null);
 
   const clearTimeouts = useCallback(() => {
-    clearTimeout(timeoutInitialHoverRef.current);
-    timeoutInitialHoverRef.current = undefined;
-    clearTimeout(timeoutDismissRef.current);
-    timeoutDismissRef.current = undefined;
+    if (timeoutInitialHoverRef.current) {
+      clearTimeout(timeoutInitialHoverRef.current);
+    }
+    timeoutInitialHoverRef.current = null;
+    if (timeoutDismissRef.current) {
+      clearTimeout(timeoutDismissRef.current);
+    }
+    timeoutDismissRef.current = null;
   }, []);
 
   const clearState = useCallback((delay = 0) => {
@@ -142,10 +147,12 @@ export default function SharedHoverProvider({
                     'relative rounded-[0.25rem] overflow-clip',
                     hoverProps.color !== 'frosted' && 'bg-extra-dim',
                   )}
-                  style={{
-                    width: hoverProps.width,
-                    height: hoverProps.height,
-                  }}
+                  style={
+                    {
+                      width: hoverProps.width,
+                      height: hoverProps.height,
+                    }
+                  }
                 >
                   {/* Content */}
                   {hoverContent}
@@ -166,3 +173,4 @@ export default function SharedHoverProvider({
     </SharedHoverContext.Provider>
   );
 }
+

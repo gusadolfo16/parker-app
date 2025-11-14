@@ -7,6 +7,7 @@ import {
   useState,
   useCallback,
   ReactNode,
+  useEffect,
 } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -25,6 +26,33 @@ interface SelectionContextType {
 const SelectionContext = createContext<SelectionContextType | undefined>(
   undefined,
 );
+
+export const clearAndUnlockSelection = async (userId: string, photoIds: string[]): Promise<boolean> => {
+  if (photoIds.length === 0) {
+    toast.error('No photos to unlock.');
+    return false;
+  }
+
+  try {
+    const response = await fetch('/api/selection', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ photoIds, userId }),
+    });
+
+    if (response.ok) {
+      toast.success('Selection cleared and photos unlocked!');
+      return true;
+    } else {
+      toast.error('Failed to unlock photos.');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error unlocking selection:', error);
+    toast.error('An error occurred while unlocking photos.');
+    return false;
+  }
+};
 
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
@@ -109,35 +137,6 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [selectedPhotos, setSelectedPhotos, setSelectionMode]);
 
-  const clearAndUnlockSelection = useCallback(async (userId: string): Promise<boolean> => {
-    const photoIds = selectedPhotos.map(photo => photo.id);
-    if (photoIds.length === 0) {
-      toast.error('No photos to unlock.');
-      return false;
-    }
-
-    try {
-      const response = await fetch('/api/selection', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ photoIds, userId }),
-      });
-
-      if (response.ok) {
-        toast.success('Selection cleared and photos unlocked!');
-        setSelectedPhotos([]);
-        return true;
-      } else {
-        toast.error('Failed to unlock photos.');
-        return false;
-      }
-    } catch (error) {
-      console.error('Error unlocking selection:', error);
-      toast.error('An error occurred while unlocking photos.');
-      return false;
-    }
-  }, [selectedPhotos, setSelectedPhotos]);
-
   return (
     <SelectionContext.Provider
       value={{
@@ -147,7 +146,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
         togglePhotoSelection,
         clearSelection,
         confirmSelection,
-        clearAndUnlockSelection,
+        clearAndUnlockSelection: (userId: string) => clearAndUnlockSelection(userId, selectedPhotos.map(p => p.id)),
       }}
     >
       {children}

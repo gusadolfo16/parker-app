@@ -10,7 +10,7 @@ import {
   SHOW_KEYBOARD_SHORTCUT_TOOLTIPS,
   NAV_SORT_CONTROL,
 } from './config';
-import AdminAppMenu from '@/admin/AdminAppMenu';
+
 import clsx from 'clsx/lite';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import useKeydownHandler from '@/utility/useKeydownHandler';
@@ -84,16 +84,14 @@ export default function AppViewSwitcher({
         case KEY_COMMANDS.grid:
           if (pathname !== PATH_GRID_INFERRED) { refHrefGrid.current?.click(); }
           break;
-        case KEY_COMMANDS.admin:
-          if (isUserSignedIn) { setIsAdminMenuOpen(true); }
-          break;
+        
       }
     }
   }, [pathname, isUserSignedIn]);
   useKeydownHandler({ onKeyDown });
 
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
-  const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
+  
 
   
 
@@ -122,23 +120,7 @@ export default function AppViewSwitcher({
         {renderItemGrid}
         {/* Show spinner if admin is suspected to be logged in */}
         
-        {isUserAdmin &&
-          <SwitcherItem
-            icon={<AdminAppMenu
-              isOpen={isAdminMenuOpen}
-              setIsOpen={isOpen => {
-                setIsAdminMenuOpen(isOpen);
-                if (isOpen) { setIsSortMenuOpen(false); }
-              }}
-            />}
-            tooltip={{
-              ...!isAdminMenuOpen && SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
-                content: appText.nav.admin,
-                keyCommand: KEY_COMMANDS.admin,
-              },
-            }}
-            noPadding
-          />}
+        
       </Switcher>
       {showSortControl &&
         <motion.div
@@ -161,7 +143,6 @@ export default function AppViewSwitcher({
                   isOpen={isSortMenuOpen}
                   setIsOpen={isOpen => {
                     setIsSortMenuOpen(isOpen);
-                    if (isOpen) { setIsAdminMenuOpen(false); }
                   }}
                 />}
                 tooltip={{

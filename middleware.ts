@@ -1,6 +1,5 @@
-import { auth } from './src/auth/server';
+import { withAuth } from 'next-auth/middleware';
 import { NextRequest, NextResponse } from 'next/server';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import {
   PATH_ADMIN,
   PATH_ADMIN_PHOTOS,
@@ -10,7 +9,7 @@ import {
   PREFIX_TAG,
 } from './src/app/path';
 
-export default function middleware(req: NextRequest, res:NextResponse) {
+const middleware = (req: NextRequest) => {
   const pathname = req.nextUrl.pathname;
 
   if (pathname === PATH_ADMIN) {
@@ -33,11 +32,14 @@ export default function middleware(req: NextRequest, res:NextResponse) {
     ));
   }
 
-  return auth(
-    req as unknown as NextApiRequest,
-    res as unknown as NextApiResponse,
-  );
-}
+  return NextResponse.next();
+};
+
+export default withAuth(middleware, {
+  callbacks: {
+    authorized: ({ token }) => !!token,
+  },
+});
 
 export const config = {
   // Excludes:
@@ -53,5 +55,5 @@ export const config = {
   // - /template-image-tight
   // - /template-url
   // eslint-disable-next-line max-len
-  matcher: ['/((?!api$|api/auth|_next/static|_next/image|favicon.ico$|favicons/|grid$|full$|home-image$|template-image$|template-image-tight$|template-url$|$).*)'],
+  matcher: ['/((?!api|api/auth|_next/static|_next/image|favicon.ico|favicons|sign-in|grid|full|home-image|template-image|template-image-tight|template-url).+)'],
 };

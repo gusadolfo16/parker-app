@@ -3,11 +3,13 @@
 import ScoreCard from '@/components/ScoreCard';
 import ScoreCardRow from '@/components/ScoreCardRow';
 import { dateRangeForPhotos } from '@/photo';
-import { FaCircleInfo, FaRegCalendar } from 'react-icons/fa6';
-import { MdAspectRatio } from 'react-icons/md';
-import { PiWarningBold } from 'react-icons/pi';
-import { TbSparkles } from 'react-icons/tb';
-import { BiGitBranch, BiGitCommit, BiLogoGithub } from 'react-icons/bi';
+import FaCircleInfoIcon from '@/components/icons/FaCircleInfoIcon';
+import MdAspectRatioIcon from '@/components/icons/MdAspectRatioIcon';
+import PiWarningBoldIcon from '@/components/icons/PiWarningBoldIcon';
+import TbSparklesIcon from '@/components/icons/TbSparklesIcon';
+import BiGitCommitIcon from '@/components/icons/BiGitCommitIcon';
+import BiLogoGithubIcon from '@/components/icons/BiLogoGithubIcon';
+import BiGitBranchIcon from '@/components/icons/BiGitBranchIcon';
 import {
   TEMPLATE_REPO_BRANCH,
   TEMPLATE_REPO_OWNER,
@@ -25,12 +27,12 @@ import {
   PhotoStats,
 } from '.';
 import EnvVar from '@/components/EnvVar';
-import { IoSyncCircle } from 'react-icons/io5';
+import IoSyncCircleIcon from '@/components/icons/IoSyncCircleIcon';
 import clsx from 'clsx/lite';
 import { PATH_ADMIN_PHOTOS_UPDATES } from '@/app/path';
-import { LiaBroomSolid } from 'react-icons/lia';
-import { IoMdGrid } from 'react-icons/io';
-import { RiSpeedMiniLine } from 'react-icons/ri';
+import LiaBroomSolidIcon from '@/components/icons/LiaBroomSolidIcon';
+import IoMdGridIcon from '@/components/icons/IoMdGridIcon';
+import RiSpeedMiniLineIcon from '@/components/icons/RiSpeedMiniLineIcon';
 import AdminLink from '../AdminLink';
 import AdminEmptyState from '../AdminEmptyState';
 import { pluralize } from '@/utility/string';
@@ -44,7 +46,8 @@ import IconFilm from '@/components/icons/IconFilm';
 import IconFocalLength from '@/components/icons/IconFocalLength';
 import IconTag from '@/components/icons/IconTag';
 import IconPhoto from '@/components/icons/IconPhoto';
-import { HiOutlineDocumentText } from 'react-icons/hi';
+import HiOutlineDocumentTextIcon from '@/components/icons/HiOutlineDocumentTextIcon';
+import FaRegCalendarIcon from '@/components/icons/FaRegCalendarIcon';
 import { ReactNode } from 'react';
 
 const DEBUG_COMMIT_SHA = '4cd29ed';
@@ -143,7 +146,7 @@ export default function AdminAppInsightsClient({
         <ScoreCard title="Source code">
           {(codeMeta?.didError || debug) &&
             <ScoreCardRow
-              icon={<IoSyncCircle
+              icon={<IoSyncCircleIcon
                 size={18}
                 className={TEXT_COLOR_WARNING}
               />}
@@ -156,7 +159,7 @@ export default function AdminAppInsightsClient({
             />}
           {((!codeMeta?.didError && noFork) || debug) &&
             <ScoreCardRow
-              icon={<FaCircleInfo 
+              icon={<FaCircleInfoIcon 
                 size={15}
                 className="text-blue-500 translate-y-[1px]"
               />}
@@ -174,7 +177,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
           {((!codeMeta?.didError && forkBehind) || debug) && <ScoreCardRow
-            icon={<IoSyncCircle
+            icon={<IoSyncCircleIcon
               size={18}
               className="text-blue-500"
             />}
@@ -197,7 +200,7 @@ export default function AdminAppInsightsClient({
             </>}
           />}
           <ScoreCardRow
-            icon={<BiLogoGithub size={17} />}
+            icon={<BiLogoGithubIcon size={17} />}
             content={<div
               className="flex flex-wrap gap-x-4 gap-y-1 overflow-auto"
             >
@@ -217,18 +220,18 @@ export default function AdminAppInsightsClient({
                 </a>
               </div>
               <div className="hidden sm:flex items-center gap-1 min-w-0">
-                <BiGitBranch size={17} />
+                <BiGitBranchIcon size={17} />
                 {branchLink}
               </div>
             </div>}
           />
           <ScoreCardRow
             className="sm:hidden"
-            icon={<BiGitBranch size={17} />}
+            icon={<BiGitBranchIcon size={17} />}
             content={branchLink}
           />
           <ScoreCardRow
-            icon={<BiGitCommit
+            icon={<BiGitCommitIcon
               size={18}
               className="translate-y-[-0.5px]"
             />}
@@ -251,7 +254,7 @@ export default function AdminAppInsightsClient({
         {(hasTemplateRecommendations(insights) || debug)
           ? <>
             {(noAiRateLimiting || debug) && <ScoreCardRow
-              icon={<PiWarningBold
+              icon={<PiWarningBoldIcon
                 size={17}
                 className={clsx(
                   'translate-x-[0.5px]',
@@ -270,7 +273,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
             {(noConfiguredDomain || debug) && <ScoreCardRow
-              icon={<PiWarningBold
+              icon={<PiWarningBoldIcon
                 size={17}
                 className={clsx(
                   'translate-x-[0.5px]',
@@ -293,7 +296,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
             {(noConfiguredMeta || debug) && <ScoreCardRow
-              icon={<HiOutlineDocumentText
+              icon={<HiOutlineDocumentTextIcon
                 size={18}
                 className="translate-x-[1px] translate-y-[-1px]"
               />}
@@ -315,7 +318,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
             {(noStaticOptimization || debug) && <ScoreCardRow
-              icon={<RiSpeedMiniLine
+              icon={<RiSpeedMiniLineIcon
                 size={19}
                 className="translate-x-[1px] translate-y-[-1.5px]"
               />}
@@ -350,7 +353,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
             {(noAi || debug) && <ScoreCardRow
-              icon={<TbSparkles size={17} />}
+              icon={<TbSparklesIcon />}
               content="Improve SEO + accessibility with AI"
               expandContent={<>
                 Enable automatic AI text generation
@@ -366,10 +369,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
             {(photoMatting || debug) && <ScoreCardRow
-              icon={<MdAspectRatio
-                size={17}
-                className="rotate-90 translate-x-[-1px]"
-              />}
+              icon={<MdAspectRatioIcon />}
               content="Vertical photos may benefit from matting"
               expandContent={<>
                 Enable photo matting to make
@@ -384,7 +384,7 @@ export default function AdminAppInsightsClient({
               </>}
             />}
             {(gridFirst || debug) && <ScoreCardRow
-              icon={<IoMdGrid size={18} className="translate-y-[-1px]" />}
+              icon={<IoMdGridIcon />}
               content="Grid homepage"
               expandContent={<>
                 Now that you have enough photos, consider switching your
@@ -399,19 +399,13 @@ export default function AdminAppInsightsClient({
               </>}
             />}
           </>
-          : <AdminEmptyState includeContainer={false}>
+          : <AdminEmptyState>
             Nothing to report!
           </AdminEmptyState>}
       </ScoreCard>
       <ScoreCard title="Library Stats">
         {(photosNeedSync || debug) && <ScoreCardRow
-          icon={<LiaBroomSolid
-            size={19}
-            className={clsx(
-              'translate-y-[-2px]',
-              TEXT_COLOR_BLUE,
-            )}
-          />}
+          icon={<LiaBroomSolidIcon />}
           content={<>
             {renderHighlightText(
               pluralize(
@@ -495,10 +489,7 @@ export default function AdminAppInsightsClient({
           }
         })}
         {descriptionWithSpaces && <ScoreCardRow
-          icon={<FaRegCalendar
-            size={13}
-            className="translate-y-[1.5px]"
-          />}
+          icon={<FaRegCalendarIcon />}
           content={descriptionWithSpaces}
         />}
       </ScoreCard>

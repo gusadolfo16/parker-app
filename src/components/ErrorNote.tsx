@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { BiErrorAlt } from 'react-icons/bi';
+import BiErrorAltIcon from './icons/BiErrorAltIcon';
 import Note from './Note';
 
 export default function ErrorNote({
@@ -14,7 +14,7 @@ export default function ErrorNote({
       color="red"
       padding="tight"
       className={className}
-      icon={<BiErrorAlt size={18} className="translate-x-[0.5px]" />}
+      icon={<BiErrorAltIcon size={18} className="translate-x-[0.5px]" />}
     >
       {children}
     </Note>

@@ -1,7 +1,7 @@
 'use client';
 
 import { blobToImage } from '@/utility/blob';
-import { useRef, RefObject } from 'react';
+import { useRef, RefObject, forwardRef } from 'react';
 import { CopyExif, getOrientation } from '@/utility/exif';
 import { clsx } from 'clsx/lite';
 import { ACCEPTED_PHOTO_FILE_TYPES } from '@/photo';
@@ -11,19 +11,7 @@ import ProgressButton from './primitives/ProgressButton';
 import { useAppState } from '@/app/AppState';
 import { useAppText } from '@/i18n/state/client';
 
-export default function ImageInput({
-  ref: inputRefExternal,
-  id = 'file',
-  onStart,
-  onBlobReady,
-  shouldResize,
-  maxSize = MAX_IMAGE_SIZE,
-  quality = 0.8,
-  showButton,
-  disabled: disabledProp,
-  debug,
-}: {
-  ref?: RefObject<HTMLInputElement | null>
+interface ImageInputProps {
   id?: string
   onStart?: () => void
   onBlobReady?: (args: {
@@ -38,11 +26,26 @@ export default function ImageInput({
   showButton?: boolean
   disabled?: boolean
   debug?: boolean
-}) {
+}
+
+const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
+  {
+    id = 'file',
+    onStart,
+    onBlobReady,
+    shouldResize,
+    maxSize = MAX_IMAGE_SIZE,
+    quality = 0.8,
+    showButton,
+    disabled: disabledProp,
+    debug,
+  },
+  ref
+) => {
   const inputRefInternal = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const inputRef = inputRefExternal ?? inputRefInternal;
+  const inputRef = (ref as RefObject<HTMLInputElement>) ?? inputRefInternal;
 
   const {
     uploadState: {
@@ -256,4 +259,6 @@ export default function ImageInput({
       />
     </div>
   );
-}
+});
+
+export default ImageInput;

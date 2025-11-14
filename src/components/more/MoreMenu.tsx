@@ -87,7 +87,7 @@ export default function MoreMenu({
           align={align}
           sideOffset={sideOffset}
           className={clsx(
-            'z-10',
+            'z-60',
             'min-w-[8rem]',
             'component-surface',
             'py-1',

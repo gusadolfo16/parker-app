@@ -1,4 +1,4 @@
-import { auth } from '@/auth/server';
+import { getServerSession } from '@/auth/server';
 import {
   awsS3Client,
   awsS3PutObjectCommandForKey,
@@ -16,7 +16,7 @@ export async function GET(
 ) {
   const { key } = await params;
 
-  const session = await auth();
+  const session = await getServerSession();
   if (session?.user && key) {
     const url = await getSignedUrl(
       CURRENT_STORAGE === 'cloudflare-r2'

@@ -49,7 +49,7 @@ Se ha deshabilitado la función de clic derecho (`onContextMenu`) en las imágen
 
 **Paso 3.2: Eliminar botones de Zoom y Compartir**
 
-Se han eliminado los bloques de código correspondientes a `LoaderButton` (para el zoom) y `ShareButton` (para compartir).
+Se han eliminados los bloques de código correspondientes a `LoaderButton` (para el zoom) y `ShareButton` (para compartir).
 
 **Detalles de la acción:**
 - Se modificó el componente `src/photo/PhotoLarge.tsx`.
@@ -124,8 +124,7 @@ Se ha creado una nueva página en `/selected` que muestra todas las fotos que el
 
 **Detalles de la acción:**
 - Se creó un nuevo componente de página en `app/selected/page.tsx`.
-- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
-- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
+- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
 ### 6. Ajustes de Interfaz de Usuario
 
@@ -297,8 +296,7 @@ Se ha creado una nueva página en `/selected` que muestra todas las fotos que el
 
 **Detalles de la acción:**
 - Se creó un nuevo componente de página en `app/selected/page.tsx`.
-- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
-- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
+- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
 ### 15. Correcciones y Mejoras (Iteración 3)
 
@@ -314,7 +312,7 @@ Se ha corregido un error de compilación (`Module not found: Can't resolve '@/se
 
 **Paso 16.1: Ocultar Botón de Menú de Administrador para Usuarios No Administradores**
 
-Se ha corregido un problema por el cual el botón del menú de administrador (el icono de tres puntos) era visible para los usuarios que iniciaban sesión con Google, incluso si no tenían privilegios de administrador. Esto se debía a que el componente `AppViewSwitcher` mostraba el botón basándose en si el usuario había iniciado sesión, en lugar de verificar específicamente el rol de administrador.
+Se ha corregido un problema por el cual el botón del menú de administrador (el icono de tres puntos) era visible para los usuarios que iniciaban sesión con Google, incluso si no tenían privilegios de administrador. Esto se debía a que el componente `AppViewSwitcher`, que mostraba el botón basándose en si el usuario había iniciado sesión, en lugar de verificar específicamente el rol de administrador.
 
 **Detalles de la acción:**
 - Se modificó `src/app/AppViewSwitcher.tsx`.
@@ -424,7 +422,7 @@ Se ha aumentado el ancho de los botones de selección en la barra de navegación
 
 **Paso 21.2: Eliminar Logs de Depuración Temporales**
 
-Se han eliminado los `console.log` temporales que se habían añadido para depurar la visibilidad del botón de administrador y el estado de autenticación.
+Se han eliminados los `console.log` temporales que se habían añadido para depurar la visibilidad del botón de administrador y el estado de autenticación.
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/auth/actions.ts`.
@@ -651,7 +649,7 @@ Se ha corregido un error de tipo que ocurría en la función `convertFormDataToP
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/form/index.ts`.
-- Se añadió una comprobación para convertir `photoForm.lockedAt` a un objeto `Date` si es una cadena de texto, o a `undefined` si es `null` o `undefined` antes de asignarlo a la propiedad `lockedAt`.
+- Se añadió una comprobación para convertir `photoForm.lockedAt` a un objeto `Date` si es una cadena de texto, o a `undefined` if es `null` o `undefined` antes de asignarlo a la propiedad `lockedAt`.
 
 ### 35. Correcciones y Mejoras (Iteración 23)
 
@@ -728,13 +726,13 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 
 **Paso 42.1: Corregir error de pre-renderizado en páginas de cámaras sin fotos (generateMetadata y CameraPage)**
 
-Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). El error se debía a que, a pesar de las comprobaciones existentes, algún componente o función seguía intentando acceder a propiedades de un array de fotos vacío o `undefined` durante la generación de metadatos o el renderizado de la página.
+Se ha corregido un error de compilación persistente que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas (por ejemplo, `/shot-on/canon/650d`). A pesar de las correcciones anteriores, el error seguía manifestándose, lo que sugiere un problema más profundo en la forma en que Next.js maneja los componentes del servidor y la generación de metadatos cuando los datos son escasos o inexistentes.
 
 **Detalles de la acción:**
 - Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
-- En la función `generateMetadata`, se añadió una comprobación explícita para que `generateMetaForCamera` solo se llame si `photos.length > 0`. Si no hay fotos, se devuelve un objeto de metadatos vacío.
-- En el componente `CameraPage` (exportación por defecto), se añadió una comprobación explícita para que `CameraOverview` solo se renderice si `photos.length > 0`. Si no hay fotos, se renderiza `null` (o un componente que indique la ausencia de fotos).
-- Estas medidas defensivas adicionales aseguran que no se pasen arrays vacíos o `undefined` a componentes o funciones que puedan no manejarlos correctamente durante el proceso de prerenderizado, incluso si las comprobaciones anteriores no capturaron todos los casos.
+- En la función `generateMetadata`, se eliminó la lógica condicional dentro de la asignación de `url`, `title`, `description`, `images` y se confió en la comprobación `if (photos.length === 0) { return {}; }` al inicio de la función. Esto simplifica la lógica y asegura que `generateMetaForCamera` solo se llame con un array `photos` no vacío.
+- En el componente `CameraPage` (exportación por defecto), se eliminó la lógica condicional dentro del `return` y se añadió una comprobación `if (photos.length === 0) { return null; }` al inicio de la función. Esto garantiza que `CameraOverview` solo se renderice si hay fotos, y que la página no intente renderizar nada si no las hay.
+- Estas modificaciones son un refuerzo de las medidas defensivas, simplificando la lógica y asegurando que los componentes y funciones solo operen con datos válidos, lo que debería resolver el error de prerenderizado.
 
 ### 43. Correcciones y Mejoras (Iteración 31)
 
@@ -752,7 +750,7 @@ Se ha corregido un error de compilación persistente que ocurría al pre-renderi
 
 **Paso 44.1: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de cámaras**
 
-Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/shot-on/[make]/[model/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de cámaras sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
+Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/shot-on/[make]/[model]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de cámaras sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
 
 **Detalles de la acción:**
 - Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
@@ -816,7 +814,7 @@ Se ha corregido un error que permitía a los usuarios no autenticados acceder al
 - Si el `status` es `unauthenticated`, se registra un error en la consola y se muestra un mensaje de error al usuario utilizando `toast.error`.
 - Si el `status` es `authenticated`, se procede con la confirmación de la selección.
 
-**Paso 46.6: Corregir la dependencia de `useCallback` en `confirmSelection`**
+**Paso 46.6: Corrección de la dependencia de `useCallback` en `confirmSelection`**
 
 El error persistía debido a que la función `confirmSelection` no se estaba actualizando cuando cambiaba el estado de la sesión. Esto se debía a que la dependencia del `useCallback` era incorrecta.
 
@@ -909,157 +907,6 @@ Se ha corregido el error `dateString.match is not a function` que ocurría en la
 - Se modificó el archivo `src/photo/index.ts`.
 - Se añadió el operador de coalescencia nula (`?? ''`) al acceder a `photosSorted[photos.length - 1]?.takenAtNaive` y `photosSorted[0]?.takenAtNaive` para asegurar que siempre se pase una cadena vacía si el valor es `null` o `undefined`.
 
-### 47. Correcciones y Mejoras (Iteración 35)
-
-**Paso 47.1: Envolver `SelectionProvider` con `SessionProvider` en `app/layout.tsx`**
-
-Se ha corregido el error de compilación `[next-auth]: useSession must be wrapped in a <SessionProvider />` que ocurría al intentar utilizar el hook `useSession` dentro de `SelectionProvider` sin que este último estuviera anidado correctamente dentro de un `SessionProvider` de NextAuth.js.
-
-**Detalles de la acción:**
-- Se modificó el archivo `app/layout.tsx`.
-- Se importó `SessionProvider` desde `next-auth/react`.
-- Se envolvió el componente `AppStateProvider` (que a su vez contiene `SelectionProvider`) con `SessionProvider` para asegurar que el contexto de sesión esté disponible para todos los componentes que lo requieran.
-
-### 48. Correcciones y Mejoras (Iteración 36)
-
-**Paso 48.1: Ocultar el botón de selección para usuarios no autenticados**
-
-Se ha corregido un error que permitía a los usuarios no autenticados acceder al modo de selección de fotos, lo que provocaba un error de "Usuario no autenticado" al intentar confirmar la selección. Ahora, el botón "Seleccionar" solo es visible para los usuarios que han iniciado sesión.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se añadió una condición `isUserSignedIn` para renderizar el botón "Seleccionar", asegurando que solo los usuarios autenticados puedan iniciar el modo de selección.
-
-**Paso 48.2: Ocultar el botón de confirmación para usuarios no autenticados**
-
-Se ha corregido un error que permitía a los usuarios no autenticados ver el botón de "Confirmar" si estaban en modo de selección y luego cerraban la sesión. Ahora, el botón "Confirmar" solo es visible para los usuarios que han iniciado sesión y están en modo de selección.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se añadió una condición `isUserSignedIn` para renderizar el botón "Confirmar", asegurando que solo los usuarios autenticados puedan confirmar una selección.
-
-**Paso 48.3: Prevenir la renderización de los botones de selección durante la comprobación de la autenticación**
-
-Se ha corregido una condición de carrera en la que los botones de selección podían renderizarse antes de que se completara la comprobación de autenticación, lo que provocaba errores. Ahora, los botones de selección solo se renderizan después de que se haya verificado el estado de autenticación del usuario.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se añadió una condición `!isCheckingAuth` para renderizar los botones "Seleccionar" y "Confirmar", asegurando que no se muestren mientras la autenticación está en curso.
-
-**Paso 48.4: Usar el estado de la sesión directamente en NavClient.tsx**
-
-Para solucionar de forma definitiva el error de "Usuario no autenticado", se ha modificado `NavClient.tsx` para que utilice el hook `useSession` de `next-auth/react` directamente. Esto asegura que el estado de autenticación sea siempre el más actual y evita las condiciones de carrera que se producían al depender del estado propagado a través de `AppStateProvider`.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se importó y utilizó el hook `useSession` para obtener el estado de la sesión (`status`).
-- Se actualizó la lógica de renderizado de los botones de selección para que dependa directamente del `status` de la sesión, utilizando `status !== 'loading'` y `status === 'authenticated'` para controlar su visibilidad.
-
-**Paso 48.5: Hacer la función `confirmSelection` más robusta**
-
-Se ha corregido un error que permitía a los usuarios no autenticados acceder al modo de selección de fotos, lo que provocaba un error de "Usuario no autenticado" al intentar confirmar la selección. Para solucionarlo de forma definitiva, se ha modificado la función `confirmSelection` en `src/selection/SelectionContext.tsx` para que sea más robusta. Ahora, la función comprueba el estado de la sesión directamente y muestra un mensaje de error al usuario si no está autenticado, en lugar de fallar silenciosamente.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/selection/SelectionContext.tsx`.
-- Se importó la función `toast` de `sonner`.
-- Se actualizó la función `confirmSelection` para que compruebe el `status` de la sesión.
-- Si el `status` es `loading`, se registra un error en la consola.
-- Si el `status` es `unauthenticated`, se registra un error en la consola y se muestra un mensaje de error al usuario utilizando `toast.error`.
-- Si el `status` es `authenticated`, se procede con la confirmación de la selección.
-
-**Paso 48.6: Corregir la dependencia de `useCallback` en `confirmSelection`**
-
-El error persistía debido a que la función `confirmSelection` no se estaba actualizando cuando cambiaba el estado de la sesión. Esto se debía a que la dependencia del `useCallback` era incorrecta.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/selection/SelectionContext.tsx`.
-- Se actualizó el array de dependencias del `useCallback` de `confirmSelection` de `[selectedPhotos, router, session]` a `[selectedPhotos, router, sessionData]`. Esto asegura que la función se vuelva a crear cada vez que cambie el objeto `sessionData`, lo que garantiza que siempre tenga el estado de sesión más reciente.
-
-**Paso 48.7: Refactorizar `SelectionContext.tsx` para ser independiente de la sesión**
-
-Para eliminar la dependencia circular y asegurar la robustez del manejo de la sesión, se ha refactorizado `SelectionContext.tsx` para que no dependa directamente del hook `useSession`. En su lugar, las funciones `confirmSelection` y `clearSelection` ahora reciben el `userId` como parámetro.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/selection/SelectionContext.tsx`.
-- Se eliminó la importación de `useSession` y cualquier referencia a `sessionData` o `session` dentro del componente.
-- Se actualizaron las firmas de `confirmSelection` y `clearSelection` en `SelectionContextType` y en sus implementaciones para aceptar `userId` como parámetro.
-- Se eliminaron las comprobaciones de autenticación dentro de `confirmSelection`, ya que ahora se espera que el `userId` se proporcione desde el componente que llama.
-- Se actualizaron los arrays de dependencia de `useCallback` para `confirmSelection` y `clearSelection` para reflejar los cambios.
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se actualizó la llamada a `confirmSelection` y `clearSelection` para pasar `session.user.id` como argumento.
-
-**Paso 48.8: Añadir migración para las columnas `locked_by` y `locked_at`**
-
-Se ha corregido el error de la base de datos "column 'locked_by' of relation 'photos' does not exist" añadiendo una nueva migración que crea las columnas `locked_by` y `locked_at` en la tabla `photos`.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/photo/db/migration.ts`.
-- Se añadió una nueva entrada al array `MIGRATIONS` con la etiqueta "08: Photo Locking" y las sentencias SQL para añadir las columnas `locked_by` (VARCHAR) y `locked_at` (TIMESTAMP WITH TIME ZONE) a la tabla `photos` si no existen.
-
-**Paso 48.9: Corregir error de tipo 'session.user' posiblemente 'undefined' en NavClient.tsx**
-
-Se ha corregido el error de tipo que ocurría en `src/app/NavClient.tsx` al intentar acceder a `session.user.id` sin una comprobación de nulidad.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/app/NavClient.tsx`.
-- Se añadió una comprobación `session?.user?.id` antes de llamar a `confirmSelection` y `clearSelection` para asegurar que `session.user.id` esté definido.
-
-**Paso 48.10: Manejar correctamente la ausencia de fotos en las páginas de lentes**
-
-Se ha corregido un error de prerenderizado que ocurría en las páginas de lentes cuando no se encontraban fotos asociadas. El error se debía a que se intentaba acceder a `photos[0]` cuando el array `photos` estaba vacío.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/lens/data.ts`.
-- Se añadió una comprobación `photos[0] || undefined` al llamar a `lensFromPhoto` para asegurar que se pase `undefined` si no hay fotos, evitando así el error.
-
-**Paso 48.11: Manejar correctamente la ausencia de fotos en los metadatos de lentes**
-
-Se ha corregido un error de prerenderizado que ocurría en las páginas de lentes cuando no se encontraban fotos asociadas, específicamente en la generación de metadatos. El error se debía a que la función `shareTextForLens` no manejaba correctamente el caso en que el array `photos` estaba vacío.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/lens/meta.ts`.
-- Se añadió una comprobación `photos.length > 0` antes de llamar a `lensFromPhoto` en `shareTextForLens` para asegurar que se pase un objeto `Lens` válido, incluso si no hay fotos.
-
-**Paso 48.12: Aislar la causa del error de prerenderizado en `generateMetadata` de las páginas de lentes**
-
-Se ha comentado temporalmente la generación de la descripción y las imágenes en la función `generateMetadata` de las páginas de lentes para aislar la causa del error de prerenderizado.
-
-**Detalles de la acción:**
-- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
-- Se comentaron las líneas que asignan `description` e `images` en el objeto `Metadata` devuelto por `generateMetadata`.
-
-**Paso 48.13: Manejar la ausencia de fotos en `generateMetaForLens`**
-
-Se ha añadido una comprobación en la función `generateMetaForLens` para devolver un objeto de metadatos mínimo si no se encuentran fotos para la lente. Esto evita errores al intentar generar metadatos con datos incompletos.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/lens/meta.ts`.
-- Se añadió una condición `if (photos.length === 0)` al inicio de la función `generateMetaForLens` para devolver un objeto con `url` y `title` solamente.
-
-**Paso 48.14: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de lentes**
-
-Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/lens/[make]/[model]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de lentes sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
-
-**Detalles de la acción:**
-- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
-- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
-
-**Paso 48.15: Deshabilitar temporalmente la generación de parámetros estáticos para páginas de etiquetas**
-
-Se ha deshabilitado temporalmente la exportación `generateStaticParams` en `app/tag/[tag]/page.tsx`. Esto se hace como una medida de depuración agresiva para aislar la causa del error de prerenderizado persistente en las páginas de etiquetas sin fotos. Si el build se completa con éxito después de este cambio, indicará que el problema reside específicamente en el proceso de generación de rutas estáticas o en la forma en que Next.js maneja los datos durante esa fase para rutas que eventualmente no tienen fotos asociadas.
-
-**Detalles de la acción:**
-- Se modificó el archivo `app/tag/[tag]/page.tsx`.
-- Se comentó la exportación `generateStaticParams` para evitar que Next.js intente prerenderizar estas rutas durante el proceso de build.
-
-**Paso 48.16: Corregir `dateString.match is not a function` en `dateRangeForPhotos`**
-
-Se ha corregido el error `dateString.match is not a function` que ocurría en la función `dateRangeForPhotos` al intentar acceder a la propiedad `takenAtNaive` de un objeto `Photo` que podría ser `undefined` o `null`.
-
-**Detalles de la acción:**
-- Se modificó el archivo `src/photo/index.ts`.
-- Se añadió el operador de coalescencia nula (`?? ''`) al acceder a `photosSorted[photos.length - 1]?.takenAtNaive` y `photosSorted[0]?.takenAtNaive` para asegurar que siempre se pase una cadena vacía si el valor es `null` o `undefined`.
-
 ### 49. Corrección del Flujo de Selección de Fotos (Iteración 34)
 
 Tras una larga investigación sobre por qué los botones de selección de fotos no funcionaban, se identificaron y corrigieron varios problemas subyacentes.
@@ -1138,3 +985,757 @@ Se identificó un error de sintaxis en la definición de la interfaz `SelectionC
 **Detalles de la acción:**
 - Se modificó el archivo `src/selection/SelectionContext.tsx`.
 - Se corrigió la definición de la interfaz `SelectionContextType` para asegurar que todos los miembros terminaran con un punto y coma y que la estructura general fuera válida.
+
+### 51. Correcciones y Mejoras (Iteración 37)
+
+**Paso 51.1: Manejo Robusto de `ReactNode` en `Icon.tsx`**
+
+Se ha modificado el componente `Icon` para manejar de forma más robusta los `children` de tipo `ReactNode`, asegurando que solo se rendericen elementos JSX válidos.
+
+**Detalles de la acción:**
+- Se modificó `src/components/primitives/Icon.tsx`.
+- Se importó `isValidElement` de `react`.
+- Se actualizó la lógica de renderizado de `children` para usar `isValidElement(children) ? children : null`.
+
+**Paso 51.2: Restauración de `FaCamera` en `app/admin/baseline/page.tsx`**
+
+Se ha revertido un cambio temporal en `app/admin/baseline/page.tsx` para restaurar el uso original del icono `FaCamera`.
+
+**Detalles de la acción:**
+- Se modificó `app/admin/baseline/page.tsx`.
+- Se restauró `icon={<FaCamera size={12} />}`.
+
+**Paso 51.3: Creación de Componentes Envoltorio para Iconos de `react-icons`**
+
+Se crearon componentes envoltorio para varios iconos de `react-icons` para asegurar que siempre devuelvan elementos JSX válidos, resolviendo errores de tipo.
+
+**Detalles de la acción:**
+- Se crearon los archivos:
+    - `src/components/icons/FaCameraIcon.tsx`
+    - `src/components/icons/IoImageSharpIcon.tsx`
+    - `src/components/icons/FaUserAltSlashIcon.tsx`
+    - `src/components/icons/FaHandSparklesIcon.tsx`
+    - `src/components/icons/IoMdCameraIcon.tsx`
+    - `src/components/icons/TbRefreshIcon.tsx`
+    - `src/components/icons/HiOutlinePhotographIcon.tsx`
+- Se actualizaron los siguientes archivos para usar los nuevos componentes de iconos:
+    - `app/admin/baseline/page.tsx` para usar `FaCameraIcon`, `IoImageSharpIcon`, `FaUserAltSlashIcon`, `FaHandSparklesIcon`, `IoMdCameraIcon`.
+    - `app/global-error.tsx` para usar `TbRefreshIcon`.
+    - `app/selected/SelectedPageClient.tsx` para usar `HiOutlinePhotographIcon`.
+
+**Paso 51.4: Manejo de Componentes Asíncronos en Componentes de Servidor**
+
+Se corrigieron errores de tipo relacionados con el uso de componentes asíncronos en componentes de servidor, asegurando que los componentes asíncronos sean `await`ed correctamente.
+
+**Detalles de la acción:**
+- Se modificó `app/admin/insights/page.tsx` para `await AdminAppInsights`.
+- Se modificó `app/admin/layout.tsx` para `await AdminNav`.
+- Se modificó `app/admin/recipes/[recipe]/edit/page.tsx` para `await AdminRecipeBadge`.
+- Se modificó `app/admin/recipes/page.tsx` para `await AdminRecipeTable`.
+- Se modificó `app/admin/tags/[tag]/edit/page.tsx` para `await AdminTagBadge`.
+- Se modificó `app/admin/tags/page.tsx` para `await AdminTagTable`.
+- Se modificó `app/layout.tsx` para `await AppTextProvider`, `Nav`, `AdminBatchEditPanel` y `CommandK`.
+
+**Paso 51.5: Manejo de Componentes Cliente que Devuelven `undefined`**
+
+Se corrigieron errores donde componentes cliente podían devolver `undefined`, lo que causaba fallos en la compilación.
+
+**Detalles de la acción:**
+- Se creó `app/ShareModalsClient.tsx` y se movió `ShareModals` a este archivo, actualizando `app/layout.tsx` para usar `ShareModalsClient`.
+- Se añadió `return null;` al final de las funciones `ShareModals` (en `src/share/ShareModals.tsx`) y `RecipeModal` (en `src/recipe/RecipeModal.tsx`).
+
+**Paso 51.6: Configuración de Alias de Webpack**
+
+Se actualizó la configuración de Webpack para resolver correctamente los alias de importación que usan `@`.
+
+**Detalles de la acción:**
+- Se modificó `next.config.js` para incluir `path.resolve(__dirname, 'app')` en el alias `@`.
+
+**Paso 51.7: Definición de Tipo de Sesión de NextAuth**
+
+Se extendió la interfaz `Session` de NextAuth para incluir la propiedad `id` en el objeto `user`, resolviendo errores de tipo al acceder a `session.user.id`.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/types/next-auth.d.ts` con la definición de tipo extendida.
+
+**Paso 51.8: Exportación de `clearAndUnlockSelection`**
+
+Se modificó `src/selection/SelectionContext.tsx` para exportar la función `clearAndUnlockSelection` como una función independiente y se actualizó su importación en `app/selected/SelectedPageClient.tsx`.
+
+**Detalles de la acción:**
+- Se modificó `src/selection/SelectionContext.tsx` para exportar `clearAndUnlockSelection` y se ajustó su implementación para recibir `photoIds` como parámetro.
+- Se actualizó `app/selected/SelectedPageClient.tsx` para importar `clearAndUnlockSelection` directamente y pasar los `photoIds` necesarios.
+
+### 52. Correcciones y Mejoras (Iteración 38)
+
+**Paso 52.1: Corrección de Argumentos en `clearAndUnlockSelection`**
+
+Se corrigió la llamada a la función `clearAndUnlockSelection` en `app/selected/SelectedPageClient.tsx` para pasar los `photoIds` como segundo argumento, resolviendo un error de tipo.
+
+**Detalles de la acción:**
+- Se modificó `app/selected/SelectedPageClient.tsx`.
+- Se actualizó la llamada a `clearAndUnlockSelection(session.user.id, selectedPhotos.map(photo => photo.id))`.
+**Paso 52.2: Creación y Actualización de Componentes de Iconos Adicionales**
+
+Se crearon componentes envoltorio para varios iconos de `react-icons` que estaban causando errores de tipo al ser usados directamente como componentes JSX.
+
+**Detalles de la acción:**
+- Se crearon los archivos:
+    - `src/components/icons/IoArrowBackIcon.tsx`
+    - `src/components/icons/LuCogIcon.tsx`
+    - `src/components/icons/FiXSquareIcon.tsx`
+- Se actualizaron los siguientes archivos para usar los nuevos componentes de iconos:
+    - `app/sign-in/page.tsx` para usar `IoArrowBackIcon`.
+    - `src/admin/AdminAppInfoIcon.tsx` para usar `LuCogIcon`.
+    - `src/admin/AdminAppMenu.tsx` para usar `FiXSquareIcon`.
+
+**Paso 52.3: Migración de `getAppText` a `useAppText`**
+
+Se actualizó el componente `AdminAppMenu.tsx` para utilizar el hook `useAppText` en lugar de la función `getAppText`, siguiendo las convenciones de React Hooks.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/AdminAppMenu.tsx`.
+- Se cambió la importación de `getAppText` a `useAppText` y se actualizó su uso dentro del componente.
+
+**Paso 52.4: Eliminación de Propiedad `isMobile` de `useAppState`**
+
+Se corrigió un error de tipo al desestructurar la propiedad `isMobile` del hook `useAppState`, ya que esta propiedad no existe en `AppStateContextType`.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/AdminAppMenu.tsx`.
+- Se eliminó `isMobile` de la desestructuración de `useAppState()`.
+
+**Paso 52.5: Corrección de Propiedades de `appText.admin`**
+
+Se corrigieron errores de tipo relacionados con el acceso a propiedades inexistentes en el objeto `appText.admin`.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/AdminAppMenu.tsx`.
+- Se cambió `appText.admin.uploads` a `appText.admin.uploadPlural`.
+- Se cambió `appText.admin.insights` a `appText.admin.appInsights`.
+- Se cambió `appText.admin.exitBatchEdit` a `appText.admin.batchExitEdit`.
+
+**Paso 52.6: Manejo de Prop `onBatchActionComplete` en `AdminBatchEditPanel`**
+
+Se aseguró que la prop `onBatchActionComplete` siempre sea una función al ser pasada al componente `AdminBatchEditPanelClient`, evitando errores de tipo cuando es `undefined`.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/AdminBatchEditPanel.tsx`.
+- Se añadió un valor por defecto `(() => {})` a `onBatchActionComplete` si es `undefined`.
+
+**Paso 52.7: Importación de `ResponsiveText`**
+
+Se corrigió un error de "Module not found" al importar `ResponsiveText`.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/AdminBatchEditPanelClient.tsx`.
+- Se añadió la importación de `ResponsiveText` desde `@/components/ResponsiveText`.
+
+**Paso 52.8: Actualización de `middleware.ts` para `next-auth`**
+
+Se actualizó la implementación del middleware de autenticación para usar `withAuth` de `next-auth/middleware` como una función de orden superior, resolviendo errores de tipo.
+
+**Detalles de la acción:**
+- Se modificó `middleware.ts`.
+- Se cambió la importación de `auth` a `withAuth` y se ajustó la lógica del middleware para usar `withAuth` con un callback `authorized`.
+
+**Paso 52.9: Instalación de `zod`**
+
+Se instaló la librería `zod` para resolver errores de "Module not found".
+
+**Detalles de la acción:**
+- Se ejecutó `npm install zod --legacy-peer-deps`.
+
+### 53. Correcciones y Mejoras (Iteración 39)
+
+**Paso 53.1: Corregir error de renderizado en `app/shot-on/[make]/[model]/page.tsx`**
+
+Se ha corregido un error de renderizado que ocurría en las páginas de cámaras. El error se debía a que se estaba intentando `await` un componente de React directamente en la sentencia `return`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
+- Se eliminó el `await` de la llamada al componente `CameraOverview`, y en su lugar se `await` a una variable que luego se retorna.
+
+**Paso 53.2: Creación de Componentes Envoltorio para Iconos de `react-icons`**
+
+Se crearon componentes envoltorio para varios iconos de `react-icons` para asegurar que siempre devuelvan elementos JSX válidos, resolviendo errores de tipo.
+
+**Detalles de la acción:**
+- Se crearon los archivos:
+    - `src/components/icons/AiFillAppleIcon.tsx`
+    - `src/components/icons/IoInvertModeSharpIcon.tsx`
+    - `src/components/icons/BiDesktopIcon.tsx`
+    - `src/components/icons/BiSunIcon.tsx`
+    - `src/components/icons/BiMoonIcon.tsx`
+    - `src/components/icons/RiToolsFillIcon.tsx`
+    - `src/components/icons/CgCloseIcon.tsx`
+    - `src/components/icons/CgFileDocumentIcon.tsx`
+    - `src/components/icons/FaRegUserCircleIcon.tsx`
+    - `src/components/icons/BiLockAltIcon.tsx`
+    - `src/components/icons/IoCloseIcon.tsx`
+- Se actualizaron los siguientes archivos para usar los nuevos componentes de iconos:
+    - `src/camera/PhotoCamera.tsx` para usar `AiFillAppleIcon`.
+    - `src/cmdk/CommandKClient.tsx` para usar `IoInvertModeSharpIcon`, `BiDesktopIcon`, `BiSunIcon`, `BiMoonIcon`, `RiToolsFillIcon`, `CgCloseIcon`, `CgFileDocumentIcon`, `FaRegUserCircleIcon`, `BiLockAltIcon`, y `IoCloseIcon`.
+
+**Paso 53.3: Corregir error de `label` faltante en `src/cmdk/CommandKClient.tsx`**
+
+Se ha corregido un error de TypeScript que ocurría al intentar añadir un objeto sin la propiedad `label` a un array de `CommandKItem`.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/cmdk/CommandKClient.tsx`.
+- Se añadió la propiedad `label` que faltaba al objeto que se estaba añadiendo al array `adminSection.items`.
+
+
+### 54. Correcciones y Mejoras (Iteración 39)
+
+**Paso 54.1: Creación de `ScoreCardRowText.tsx`**
+
+Se ha creado un nuevo componente `src/components/ScoreCardRowText.tsx` para encapsular la lógica de `ScoreCardRow` cuando se necesitan mostrar un `label` y un `value`. Esto mejora la reusabilidad y la claridad del código.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/components/ScoreCardRowText.tsx`.
+- El componente acepta `label` y `value` como props y renderiza un `ScoreCardRow` con un icono genérico (`HiOutlineDocumentText`).
+
+**Paso 54.2: Actualización de `app/admin/report/page.tsx`**
+
+Se ha modificado `app/admin/report/page.tsx` para utilizar el nuevo componente `ScoreCardRowText` en lugar de `ScoreCardRow` con props incorrectas.
+
+**Detalles de la acción:**
+- Se modificó `app/admin/report/page.tsx`.
+- Se actualizó la importación de `ScoreCardRow` a `ScoreCardRowText`.
+- Se reemplazaron las instancias de `ScoreCardRow` por `ScoreCardRowText`.
+
+**Paso 54.3: Corrección de `getPhotosMeta` en `src/admin/report/actions.ts`**
+
+Se ha corregido el tipo de la opción `hidden` en la llamada a `getPhotosMeta` en `src/admin/report/actions.ts`.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/report/actions.ts`.
+- Se cambió `hidden: true` a `hidden: 'only'` en la llamada a `getPhotosMeta`.
+
+**Paso 54.4: Creación de `FiArrowLeftIcon.tsx`**
+
+Se ha creado un componente envoltorio para el icono `FiArrowLeft` para resolver errores de compilación.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/components/icons/FiArrowLeftIcon.tsx`.
+
+**Paso 54.5: Actualización de `src/components/AdminChildPage.tsx`**
+
+Se ha modificado `src/components/AdminChildPage.tsx` para utilizar el nuevo componente `FiArrowLeftIcon`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/AdminChildPage.tsx`.
+- Se actualizó la importación de `FiArrowLeft` a `FiArrowLeftIcon`.
+- Se reemplazó la instancia de `FiArrowLeft` por `FiArrowLeftIcon`.
+
+**Paso 54.6: Corrección de `useRef` en `src/components/AnimateItems.tsx`**
+
+Se ha corregido la inicialización de `useRef` en `src/components/AnimateItems.tsx` para permitir valores `undefined`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/AnimateItems.tsx`.
+- Se cambió `useRef<string>(undefined)` a `useRef<string | undefined>(undefined)`.
+
+**Paso 54.7: Corrección del tipo `containerRef` en `src/components/AppGrid.tsx`**
+
+Se ha corregido el tipo de la prop `containerRef` en `src/components/AppGrid.tsx` para que sea compatible con el `ref` de un elemento `div`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/AppGrid.tsx`.
+- Se cambió `RefObject<HTMLDivElement | null>` a `RefObject<HTMLDivElement>`.
+
+**Paso 54.8: Creación de `ImCheckmarkIcon.tsx`**
+
+Se ha creado un componente envoltorio para el icono `ImCheckmark` para resolver errores de compilación y se le han añadido las props `size` y `className`.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/components/icons/ImCheckmarkIcon.tsx`.
+
+**Paso 54.9: Actualización de `src/components/Checkbox.tsx`**
+
+Se ha modificado `src/components/Checkbox.tsx` para utilizar el nuevo componente `ImCheckmarkIcon` y se ha corregido el tipo de la prop `ref`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/Checkbox.tsx`.
+- Se actualizó la importación de `ImCheckmark` a `ImCheckmarkIcon`.
+- Se reemplazó la instancia de `ImCheckmark` por `ImCheckmarkIcon`.
+- Se cambió el tipo de `ref` de `RefObject<HTMLInputElement | null>` a `RefObject<HTMLInputElement>`.
+
+**Paso 54.10: Corrección del tipo `ref` en `src/components/Container.tsx`**
+
+Se ha corregido el tipo de la prop `ref` en `src/components/Container.tsx` y se ha convertido el componente a `forwardRef`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/Container.tsx`.
+- Se cambió el tipo de `ref` de `RefObject<HTMLDivElement | null>` a `RefObject<HTMLDivElement>`.
+- Se envolvió el componente con `forwardRef`.
+
+**Paso 54.11: Creación de `BiCopyIcon.tsx`**
+
+Se ha creado un componente envoltorio para el icono `BiCopy` para resolver errores de compilación y se le ha añadido la prop `size`.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/components/icons/BiCopyIcon.tsx`.
+
+**Paso 54.12: Actualización de `src/components/CopyButton.tsx`**
+
+Se ha modificado `src/components/CopyButton.tsx` para utilizar el nuevo componente `BiCopyIcon`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/CopyButton.tsx`.
+- Se actualizó la importación de `BiCopy` a `BiCopyIcon`.
+- Se reemplazó la instancia de `BiCopy` por `BiCopyIcon`.
+
+**Paso 54.13: Creación de `MdOutlineFileDownloadIcon.tsx`**
+
+Se ha creado un componente envoltorio para el icono `MdOutlineFileDownload` para resolver errores de compilación y se le han añadido las props `size` y `className`.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/components/icons/MdOutlineFileDownloadIcon.tsx`.
+
+**Paso 54.14: Actualización de `src/components/DownloadButton.tsx`**
+
+Se ha modificado `src/components/DownloadButton.tsx` para utilizar el nuevo componente `MdOutlineFileDownloadIcon`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/DownloadButton.tsx`.
+- Se actualizó la importación de `MdOutlineFileDownload` a `MdOutlineFileDownloadIcon`.
+- Se reemplazó la instancia de `MdOutlineFileDownload` por `MdOutlineFileDownloadIcon`.
+
+**Paso 54.15: Creación de `BiErrorAltIcon.tsx`**
+
+Se ha creado un componente envoltorio para el icono `BiErrorAlt` para resolver errores de compilación y se le han añadido las props `size` y `className`.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/components/icons/BiErrorAltIcon.tsx`.
+
+**Paso 54.16: Actualización de `src/components/ErrorNote.tsx`**
+
+Se ha modificado `src/components/ErrorNote.tsx` para utilizar el nuevo componente `BiErrorAltIcon`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/ErrorNote.tsx`.
+- Se actualizó la importación de `BiErrorAlt` a `BiErrorAltIcon`.
+- Se reemplazó la instancia de `BiErrorAlt` por `BiErrorAltIcon`.
+
+**Paso 54.17: Eliminación de `experimental.serverActions` en `next.config.js`**
+
+Se ha eliminado la bandera `experimental.serverActions` de `next.config.js` ya que las Server Actions están habilitadas por defecto en Next.js 14.
+
+**Detalles de la acción:**
+- Se modificó `next.config.js`.
+- Se eliminó la sección `experimental.serverActions`.
+
+**Paso 54.18: Actualización de `@types/react` y `@types/react-dom`**
+
+Se han actualizado las dependencias de `@types/react` a `18.2.58` y `@types/react-dom` a `18.2.25` para resolver problemas de compatibilidad.
+
+**Detalles de la acción:**
+- Se ejecutó `npm install @types/react@18.2.58 @types/react-dom@18.2.25 --legacy-peer-deps`.
+
+**Paso 54.19: Corrección del tipo `inputRef` en `src/components/FieldsetWithStatus.tsx`**
+
+Se ha corregido el tipo de la prop `inputRef` en `src/components/FieldsetWithStatus.tsx` para que sea compatible con el `ref` de un elemento `input`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/FieldsetWithStatus.tsx`.
+- Se cambió `RefObject<HTMLInputElement | null>` a `RefObject<HTMLInputElement>`.
+
+**Paso 54.20: Corrección del tipo `ref` en `src/components/ImageInput.tsx`**
+
+Se ha corregido el tipo de la prop `ref` en `src/components/ImageInput.tsx` para que sea compatible con el `ref` de un elemento `input`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/ImageInput.tsx`.
+- Se cambió `RefObject<HTMLInputElement | null>` a `RefObject<HTMLInputElement>`.
+
+**Paso 54.21: Corrección del tipo `ref` en `src/components/MaskedScroll.tsx`**
+
+Se ha corregido el tipo de la prop `ref` en `src/components/MaskedScroll.tsx` para que sea compatible con el `ref` de un elemento `div`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/MaskedScroll.tsx`.
+- Se cambió `RefObject<HTMLDivElement | null>` a `RefObject<HTMLDivElement>`.
+
+**Paso 54.22: Corrección del tipo `ref` en `src/components/entity/EntityLink.tsx`**
+
+Se ha corregido el tipo de la prop `ref` en `src/components/entity/EntityLink.tsx` para que sea compatible con el `ref` de un elemento `span`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/entity/EntityLink.tsx`.
+- Se cambió `RefObject<HTMLSpanElement | null>` a `RefObject<HTMLSpanElement>`.
+
+**Paso 54.23: Corrección de `AiFillAppleIcon.tsx`**
+
+Se ha modificado el componente `AiFillAppleIcon.tsx` para que acepte las props `size`, `className` y `title`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/icons/AiFillAppleIcon.tsx`.
+- Se añadió la definición de las props `size`, `className` y `title`.
+
+**Paso 54.24: Corrección de `BiCheckCircleIcon.tsx`**
+
+Se ha modificado el componente `BiCheckCircleIcon.tsx` para que pase el icono `BiCheckCircle` como hijo del componente `Icon`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/icons/BiCheckCircleIcon.tsx`.
+- Se cambió `<Icon {...props} icon={BiCheckCircle} />` a `<Icon {...props}><BiCheckCircle /></Icon>`.
+
+**Paso 54.25: Corrección de `BiDataIcon.tsx`**
+
+Se ha modificado el componente `BiDataIcon.tsx` para que pase el icono `BiData` como hijo del componente `Icon`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/icons/BiDataIcon.tsx`.
+- Se cambió `<Icon {...props} icon={BiData} />` a `<Icon {...props}><BiData /></Icon>`.
+
+**Paso 54.26: Corrección de `BiDesktopIcon.tsx`**
+
+Se ha modificado el componente `BiDesktopIcon.tsx` para que acepte las props `size`, `className` y `title`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/icons/BiDesktopIcon.tsx`.
+- Se añadió la definición de las props `size`, `className` y `title`.
+
+**Paso 54.27: Corrección de `BiLockAltIcon.tsx`**
+
+Se ha modificado el componente `BiLockAltIcon.tsx` para que acepte las props `size`, `className` y `title`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/icons/BiLockAltIcon.tsx`.
+- Se añadió la definición de las props `size`, `className` y `title`.
+
+**Paso 54.28: Corrección de `BiMoonIcon.tsx`**
+
+Se ha modificado el componente `BiMoonIcon.tsx` para que acepte las props `size`, `className` y `title`.
+
+**Detalles de la acción:**
+- Se modificó `src/components/icons/BiMoonIcon.tsx`.
+- Se añadió la definición de las props `size`, `className` y `title`.
+
+### 55. Correcciones y Mejoras (Iteración 35)
+
+**Paso 55.1: Reactivar `generateStaticParams` y corregir errores de pre-renderizado en páginas de cámaras**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de cámaras que no tenían fotos asociadas. El error se debía a que la función `redirect` se invocaba durante el proceso de compilación, lo que provocaba un fallo.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/shot-on/[make]/[model]/page.tsx`.
+- Se reemplazó `redirect(PATH_ROOT)` por `notFound()` para manejar correctamente las páginas de cámaras sin fotos durante la generación estática, evitando errores de compilación.
+
+**Paso 55.2: Reactivar `generateStaticParams` y corregir errores de pre-renderizado en páginas de lentes**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de lentes que no tenían fotos asociadas. El error se debía a que el componente `LensPage` no manejaba correctamente el caso en que no se encontraban fotos para una lente específica.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/lens/[make]/[model]/page.tsx`.
+- Se descomentó la exportación `generateStaticParams`.
+- Se añadió una comprobación `if (photos.length === 0) { notFound(); }` en el componente `LensPage` para manejar la ausencia de fotos.
+- Se añadió la importación de `notFound` desde `next/navigation`.
+
+**Paso 55.3: Reactivar `generateStaticParams` y corregir errores de pre-renderizado en páginas de etiquetas**
+
+Se ha corregido un error de compilación que ocurría al pre-renderizar las páginas de etiquetas que no tenían fotos asociadas. El error se debía a que la función `redirect` se invocaba durante el proceso de compilación, lo que provocaba un fallo.
+
+**Detalles de la acción:**
+- Se modificó el archivo `app/tag/[tag]/page.tsx`.
+- Se descomentó la exportación `generateStaticParams`.
+- Se reemplazó `redirect(PATH_ROOT)` por `notFound()` en el componente `TagPage` para manejar la ausencia de fotos.
+- Se eliminó la importación de `PATH_ROOT` y se añadió la importación de `notFound` desde `next/navigation`.
+
+**Paso 55.4: Corrección de errores de tipo en archivos de traducción**
+
+Se corrigieron errores de tipo en varios archivos de traducción (`bd-bn.ts`, `en-gb.ts`, `id-id.ts`, `pt-pt.ts`, y `zh-cn.ts`) que impedían la compilación del proyecto. Los errores se debían a la falta de claves (`or`, `signInWithGoogle`) en el objeto `auth` y a una estructura incorrecta del objeto `admin.report` en comparación con el archivo `en-us.ts`.
+
+**Detalles de la acción:**
+- Se modificaron los archivos `src/i18n/locales/bd-bn.ts`, `src/i18n/locales/en-gb.ts`, `src/i18n/locales/id-id.ts`, `src/i18n/locales/pt-pt.ts`, y `src/i18n/locales/zh-cn.ts`.
+- Se añadieron las claves `or` y `signInWithGoogle` al objeto `auth` con sus respectivas traducciones.
+- Se ajustó la estructura del objeto `admin.report` para que solo contuviera las claves `title` y `description`, eliminando las claves adicionales que causaban el error de tipo.
+
+**Paso 55.5: Eliminación de idiomas adicionales**
+
+Se eliminaron todos los archivos de idioma adicionales, dejando solo el inglés (`en-us.ts`), según la solicitud del usuario.
+
+**Detalles de la acción:**
+- Se eliminaron los archivos `src/i18n/locales/bd-bn.ts`, `src/i18n/locales/en-gb.ts`, `src/i18n/locales/id-id.ts`, `src/i18n/locales/pt-br.ts`, `src/i18n/locales/pt-pt.ts`, `src/i18n/locales/tr-tr.ts`, y `src/i18n/locales/zh-cn.ts`.
+- Se modificó `src/i18n/index.ts` para eliminar las importaciones de los idiomas eliminados y simplificar la función `getTextForLocale` para que solo use `en-us.ts`.
+
+**Paso 55.6: Corrección de errores de tipo relacionados con `ref`**
+
+Se corrigieron varios errores de tipo relacionados con la propiedad `ref` en diferentes componentes, donde se esperaba un `RefObject` que contuviera un elemento HTML no nulo, pero se estaba proporcionando uno que podía ser `null`.
+
+**Detalles de la acción:**
+- Se modificó `src/photo/PhotoLink.tsx`: Se cambió el tipo de `ref` de `RefObject<HTMLAnchorElement | null>` a `RefObject<HTMLAnchorElement>`.
+- Se modificó `src/photo/PhotoUploadWithStatus.tsx`: Se cambió el tipo de `inputRef` de `RefObject<HTMLInputElement | null>` a `RefObject<HTMLInputElement>`.
+- Se modificó `src/app/AppState.ts`: Se cambió el tipo de `uploadInputRef` de `RefObject<HTMLInputElement | null>` a `RefObject<HTMLInputElement>`.
+- Se modificó `src/recipe/PhotoRecipeOverlay.tsx`: Se cambió el tipo de `ref` de `RefObject<HTMLDivElement | null>` a `RefObject<HTMLDivElement>`.
+
+**Paso 55.7: Corrección de errores de tipo en `src/photo/PhotoEditPageClient.tsx`**
+
+Se corrigió un error de tipo en el componente `ExifCaptureButton` en `src/photo/PhotoEditPageClient.tsx`, donde se estaba pasando una prop incorrecta.
+
+**Detalles de la acción:**
+- Se modificó `src/photo/PhotoEditPageClient.tsx`.
+- Se cambió la prop `onSync` a `onExifDataCapture` y se añadió la prop `photoId` al componente `ExifCaptureButton`.
+
+**Paso 55.8: Corrección de errores de tipo y refactorización de NextAuth**
+
+Se corrigieron errores de tipo relacionados con la importación y el uso de `after` de `next/server`, y se refactorizó la inicialización de NextAuth para resolver problemas de compilación.
+
+**Detalles de la acción:**
+- Se modificó `src/photo/actions.ts`: Se eliminó la importación de `after` de `next/server` y todas las llamadas a `after(revalidateAllKeysAndPaths)`.
+- Se modificó `app/api/selection/route.ts`: Se añadió una función `GET` vacía para evitar `TypeError: Cannot read properties of undefined (reading 'GET')` durante la compilación.
+- Se modificó `src/auth/server.ts`: Se refactorizó para exportar una función `getAuthOptions` que devuelve la configuración de NextAuth. Luego, se inicializó `NextAuth` una sola vez con `getAuthOptions()` y se exportaron `GET`, `POST`, `signIn`, `signOut` y `auth` desde esa única instancia.
+- Se modificó `app/api/auth/[...nextauth]/route.ts`: Se actualizó para re-exportar `GET` y `POST` desde `@/auth/server`, alineándose con la refactorización en `src/auth/server.ts`.
+- Se modificó `src/auth/server.ts`: Se tiparon explícitamente los parámetros `token` y `session` en los callbacks `jwt` y `session` para resolver errores de tipo.
+### 56. Correcciones y Mejoras (Iteración 36)
+
+**Paso 56.1: Refactorización de la configuración de NextAuth para Next.js App Router (v4)**
+
+Se corrigieron múltiples errores de compilación y de tiempo de ejecución relacionados con la configuración de NextAuth.js en el proyecto, adaptándola a las convenciones de NextAuth v4 para el App Router de Next.js. Esto incluyó la exportación correcta de funciones de autenticación y la resolución de problemas de tipado.
+
+**Detalles de la acción:**
+- Se modificó `src/auth/server.ts` para:
+  - Exportar `authOptions` como una constante `NextAuthOptions`.
+  - Inicializar `NextAuth` una única vez y exportar `auth`, `signIn`, `signOut` directamente desde esta instancia.
+  - Definir y exportar una función `getServerSession` con sobrecargas para manejar diferentes firmas de llamada, asegurando la compatibilidad con `getNextAuthServerSession`.
+- Se modificó `app/api/auth/[...nextauth]/route.ts` para re-exportar `GET` y `POST` desde `src/auth/server.ts`, alineándose con la refactorización.
+- Se modificó `src/auth/actions.ts` para:
+  - Importar `signIn`, `signOut` y `getServerSession` desde `src/auth/server.ts`.
+  - Reemplazar las llamadas a `auth()` con `getServerSession()` en las funciones `getAuthAction` y `getAuthSessionAction`.
+
+**Paso 56.2: Exclusión de la página de inicio de sesión del Middleware**
+
+Se corrigió un bucle de redirección infinito que ocurría al intentar iniciar sesión, causado por la protección del middleware en la página `/sign-in`.
+
+**Detalles de la acción:**
+- Se modificó `middleware.ts` para actualizar el `matcher` y excluir explícitamente la ruta `/sign-in` del control del middleware.
+
+**Paso 56.3: Movimiento de `SessionProvider` a un componente cliente**
+
+Se resolvió el error `React Context is unavailable in Server Components` moviendo el `SessionProvider` de NextAuth.js de un componente de servidor (`app/layout.tsx`) a un nuevo componente de cliente.
+
+**Detalles de la acción:**
+- Se creó el archivo `src/app/SessionProviderClient.tsx` como un componente de cliente (`'use client'`) que envuelve el `SessionProvider`.
+- Se modificó `app/layout.tsx` para importar y utilizar `SessionProviderClient` en lugar de `SessionProvider` directamente.
+### 57. Correcciones y Mejoras (Iteración 37)
+
+**Paso 57.1: Corrección del error `TypeError: (0 , _auth_server__WEBPACK_IMPORTED_MODULE_2__.signOut) is not a function`**
+
+Se ha corregido el error que impedía el correcto funcionamiento del cierre de sesión. El problema se debía a que la función `signOut` no podía ser invocada directamente desde una acción de servidor en la versión de NextAuth utilizada.
+
+**Detalles de la acción:**
+- Se modificó `src/auth/actions.ts`.
+- Se cambió la implementación de `signOutAction` para que realice una redirección a la ruta `/api/auth/signout`, que es la forma correcta de manejar el cierre de sesión desde el lado del servidor en NextAuth v4.
+
+**Paso 57.2: Corrección del problema de redirección en el inicio de sesión**
+
+Se ha corregido el problema por el cual el inicio de sesión no redirigía correctamente al usuario.
+
+**Detalles de la acción:**
+- Se refactorizó `src/auth/SignInForm.tsx`.
+- Se eliminó la dependencia de `signInAction` y se implementó la llamada directa a `signIn` de `next-auth/react` en el lado del cliente.
+- Se añadió lógica para manejar la redirección a `PATH_ROOT` (`/`) en caso de éxito o mostrar un error si la autenticación falla.
+
+**Paso 57.3: Corrección de la visibilidad del panel de edición por lotes**
+
+Se ha corregido el problema por el cual el panel de edición por lotes (`AdminBatchEditPanelClient`) estaba siempre visible.
+
+**Detalles de la acción:**
+- Se modificó `src/admin/AdminBatchEditPanelClient.tsx`.
+- Se ajustaron las clases de Tailwind CSS para que el panel se oculte (`translate-y-full`) cuando `selectionMode` es `false` y se muestre (`translate-y-0`) cuando `selectionMode` es `true`.
+
+**Paso 57.4: Corrección del error `the name 'redirect' is defined multiple times`**
+
+Se ha corregido un error de compilación causado por una importación duplicada de `redirect`.
+
+**Detalles de la acción:**
+- Se modificó `src/auth/actions.ts`.
+- Se eliminó la línea de importación duplicada de `redirect` de `next/navigation`.
+
+**Paso 57.5: Corrección del acceso no autenticado a la página de inicio**
+
+Se ha corregido el problema por el cual la aplicación siempre obligaba a iniciar sesión, incluso para acceder a la página de inicio.
+
+**Detalles de la acción:**
+- Se modificó `middleware.ts`.
+- Se ajustó la expresión regular del `matcher` para excluir correctamente la ruta raíz (`/`) de la autenticación, permitiendo el acceso no autenticado.
+
+**Paso 57.6: Depuración de la visibilidad del menú de administrador y la selección de fotos**
+
+Se han añadido mensajes de depuración para diagnosticar problemas con la visibilidad del menú de administrador y la funcionalidad de selección de fotos.
+
+**Detalles de la acción:**
+- Se añadió `console.log` a `src/app/AppStateProvider.tsx` para mostrar el estado de autenticación y `isUserAdmin`.
+- Se añadió `console.log` a `src/app/AppViewSwitcher.tsx` para mostrar el valor de `isUserAdmin`.
+- Se añadió un borde rojo a `src/components/SelectTileOverlay.tsx` para verificar si el componente de superposición de selección se está renderizando correctamente.
+- Se re-añadió `console.log` a `src/auth/SignInForm.tsx` para obtener el resultado de la función `signIn`.
+
+### 58. Corrección del Flujo de Selección de Fotos y Mejoras de Autenticación (Iteración 34-35)
+
+Se han implementado correcciones críticas y mejoras en el flujo de selección de fotos y en la gestión de la autenticación, resolviendo problemas de persistencia de sesión y funcionalidad de los botones de selección.
+
+**Paso 58.1: Persistencia del ID de Usuario en la Sesión de NextAuth**
+
+Se corrigió un problema fundamental donde el `user.id` no se estaba persistiendo correctamente en el objeto de sesión de NextAuth, lo que impedía que las funcionalidades que dependían de este ID (como la selección de fotos) funcionaran.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/auth/server.ts`.
+- Se añadió el `id` del usuario al token JWT a través del callback `jwt`.
+- Se añadió el `id` del token JWT al objeto `session.user` a través del callback `session`, asegurando que el `user.id` esté disponible en toda la aplicación.
+- Se actualizó la creación del usuario en el `CredentialsProvider` para incluir el `id` como el `email`.
+
+**Paso 58.2: Refactorización y Robustez del Contexto de Selección de Fotos**
+
+Se realizaron mejoras significativas en el `SelectionContext` para hacerlo más robusto, desacoplar responsabilidades y proporcionar una mejor retroalimentación al usuario.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/selection/SelectionContext.tsx`.
+- La función `toggleSelectionMode` ahora limpia las fotos seleccionadas solo al salir del modo de selección.
+- La función `clearSelection` ahora envía una solicitud `DELETE` a la API de selección para desbloquear fotos si se proporciona un `userId` y hay fotos seleccionadas, y muestra mensajes `toast` para la retroalimentación.
+- La función `confirmSelection` ahora devuelve una `Promise<boolean>` para indicar el éxito o fracaso, muestra mensajes `toast` y ya no maneja la navegación. También establece `selectionMode` en `false` después de la confirmación.
+- Se añadió una nueva función `clearAndUnlockSelection` que realiza una solicitud `DELETE` a la API de selección para desbloquear fotos, limpia la selección local y proporciona retroalimentación con `toast`.
+
+**Paso 58.3: Integración de la Navegación con la Confirmación de Selección**
+
+La navegación a la página de fotos seleccionadas ahora se maneja en el componente `NavClient.tsx` después de una confirmación exitosa.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/NavClient.tsx`.
+- Se importó `useRouter` para manejar la navegación programática.
+- El botón "Confirm Selection" ahora llama a `confirmSelection` y, si es exitoso, redirige al usuario a `/selected`.
+- El botón "Cancel Selection" ahora llama a `clearSelection` con el `userId`.
+
+**Paso 58.4: Corrección de la Visibilidad de Datos de Administrador**
+
+Se ajustó la lógica para que los datos de administrador solo se carguen si el usuario es un administrador, no solo si ha iniciado sesión.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/app/AppStateProvider.tsx`.
+- El hook `useSWR` para `getAdminDataAction` ahora depende de `isUserAdmin` en lugar de `isUserSignedIn`.
+
+**Paso 58.5: Manejo de Fechas Nulas en `dateRangeForPhotos`**
+
+Se mejoró la robustez de la función `dateRangeForPhotos` para manejar casos donde las fechas de las fotos pueden ser nulas o indefinidas.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/photo/index.ts`.
+- Se añadió el operador de coalescencia nula (`?? ''`) al acceder a `takenAtNaive` para asegurar que siempre se utilice una cadena vacía si el valor es `null` o `undefined`, previniendo errores de tipo.
+
+### 59. Resumen de Cambios Recientes
+
+#### Flujo de Autenticación
+- **Corrección Crítica de Sesión:** Se solucionó un error fundamental que impedía que el `user.id` se incluyera en la sesión del usuario. Esto se logró configurando correctamente los callbacks `jwt` y `session` en NextAuth.js para persistir el ID del usuario, lo cual es esencial para funcionalidades como la selección de fotos.
+- **Refactorización de Autenticación:** Se refactorizó el flujo de inicio y cierre de sesión para alinearse con las convenciones de NextAuth.js v4 para el App Router, mejorando la robustez y predictibilidad del sistema.
+- **Mejoras en la Interfaz de Usuario:** Se ajustó la visibilidad de los elementos de la interfaz de usuario dependientes de la autenticación (como los botones "Seleccionar" y "Confirmar") para que solo se muestren a los usuarios autenticados y no durante la comprobación de la sesión.
+
+#### Funcionalidad de Selección de Fotos
+- **Contexto de Selección Robusto:** Se refactorizó el `SelectionContext` para proporcionar una mejor retroalimentación al usuario a través de mensajes `toast` y para desacoplar la lógica de confirmación de la navegación.
+- **Navegación Mejorada:** La responsabilidad de la navegación después de confirmar una selección se trasladó al componente `NavClient.tsx`, que ahora espera una promesa de la función `confirmSelection`.
+- **Corrección de Errores:** Se solucionó un error que causaba que la página de fotos seleccionadas (`/selected`) apareciera vacía al limpiar el estado de selección prematuramente.
+  El Problema Oculto: ¿Por qué cambiar algo que "funcionaba perfecto"?
+
+  A primera vista, la funcionalidad de selección parecía funcionar: podías hacer
+  clic en las fotos y veías el borde de selección aparecer y desaparecer. Sin
+  embargo, el problema no era visual, sino funcional y estaba oculto.
+
+   1. El `user.id` Faltante: El error más grave era que, al confirmar la selección, la
+      aplicación no sabía quién estaba seleccionando las fotos. El objeto de la sesión
+      del usuario no incluía su id. Como resultado, cuando se enviaba la información al
+      backend para "bloquear" las fotos para ese usuario, la operación fallaba
+      silenciosamente porque no había un ID de usuario al cual asignarlas. Parecía que
+      funcionaba, pero en realidad no se estaba guardando nada en la base de datos.
+   2. Condiciones de Carrera: La función que confirmaba la selección hacía demasias
+      cosas a la vez: llamaba a la API, navegaba a otra página y limpiaba el estado.
+      Esto creaba una "condición de carrera" (race condition): a veces la navegación
+      era tan rápida que la página /selected intentaba leer las fotos seleccionadas
+      después de que ya se habían borrado, resultando en una página vacía.
+
+  El objetivo no era solo que los botones se vieran bien, sino asegurar que el flujo
+  completo (seleccionar -> confirmar -> guardar en la base de datos -> ver la
+  selección) fuera robusto y libre de errores.
+
+  ¿Qué es "Decoupled Navigation" (Navegación Desacoplada)?
+
+  Este es el cambio más importante que realicé para solucionar los problemas de
+  raíz.
+
+  El Enfoque Anterior (Acoplado)
+
+  Antes, la función confirmSelection dentro del SelectionContext (el gestor de
+  estado de la selección) tenía múltiples responsabilidades:
+
+   1. Lógica de Datos: Preparar los IDs de las fotos.
+   2. Lógica de API: Enviar esos IDs al backend.
+   3. Lógica de Navegación: Redirigir al usuario a la página /selected.
+   4. Lógica de Estado: Limpiar la lista de fotos seleccionadas.
+
+  Esto se llama lógica acoplada: la gestión de datos y la gestión de la interfaz de
+  usuario (navegación) estaban mezcladas en un solo lugar.
+
+  Problemas del acoplamiento:
+   * Fragilidad: Como vimos, cambiar el orden o la velocidad de estas operaciones
+     causaba errores (la página /selected vacía).
+   * Poca Reutilización: Si en el futuro quisiéramos confirmar una selección desde
+     otro lugar de la app sin navegar, no podríamos usar esta función.
+   * Dificultad para Probar: Probar una función que hace tantas cosas diferentes es
+     más complejo.
+
+  El Nuevo Enfoque (Desacoplado)
+
+  Ahora, las responsabilidades están separadas, siguiendo un principio de diseño
+  llamado "Principio de Responsabilidad Única".
+
+   1. El `SelectionContext` se encarga SOLO de la lógica de datos y estado:
+       * La función confirmSelection ahora solo se comunica con el backend.
+       * Crucialmente, ahora devuelve una `Promesa` que se resuelve a `true` si la
+         confirmación fue exitosa, o `false` si falló.
+       * Ya no sabe nada sobre la navegación. Su única misión es gestionar el estado
+         de la selección y hablar con la API.
+
+   2. El componente de UI (`NavClient.tsx`) se encarga SOLO de la lógica de UI
+      (interacción y navegación):
+       * El botón "Confirmar Selección" en la barra de navegación ahora es quien
+         orquesta el proceso.
+       * Llama a confirmSelection y espera a que la promesa se resuelva.
+       * Solo si la promesa devuelve true (éxito), entonces y solo entonces, el
+         componente se encarga de redirigir al usuario a /selected.
+
+  En resumen, "desacoplar la navegación" significó sacar la responsabilidad de
+  navegar fuera del contexto de datos y dársela al componente de la interfaz que
+  inicia la acción.
+
+  ¿Qué significa "Better User Feedback" (Mejor Retroalimentación al Usuario)?
+
+  Antes, si algo fallaba (como la falta del user.id), la aplicación no decía nada.
+  El usuario hacía clic y simplemente no pasaba nada, lo cual es una experiencia
+  frustrante.
+
+  Ahora, aproveché la refactorización para añadir retroalimentación clara usando
+  notificaciones (toast):
+
+   * Si la confirmación es exitosa, aparece un mensaje: "Selection confirmed!".
+   * Si falla por un error de red o del servidor, aparece: "Failed to confirm
+     selection".
+   * Si el usuario intenta confirmar sin haber iniciado sesión, se le notifica: "You
+     must be signed in...".
+
+  Esto hace que la aplicación se sienta mucho más profesional, predecible y
+  amigable, ya que el usuario siempre sabe lo que está sucediendo.
+
+  Espero que esta explicación detallada aclare por qué los cambios eran necesarios y
+  qué implican. ¡Fue una serie de correcciones importantes para la estabilidad y la
+  correcta funcionalidad de la aplicación
+
+#### Errores de Compilación y Construcción
+- **Resolución de Errores en Cascada:** Se solucionó una serie de errores de TypeScript y Webpack que impedían la compilación exitosa de la aplicación. Esto incluyó:
+  - Corrección de tipos de props incorrectos en varios componentes.
+  - Ajuste de asignaciones de desestructuración del estado global de la aplicación.
+  - Adición de claves faltantes a la configuración de SWR.
+  - Creación de una `Server Action` (`getPhotosMetaAction`) para aislar el código del lado del servidor de los componentes del cliente, resolviendo errores de "Module not found".
+  - Corrección de un error de `signOut` no definido en `CommandKClient.tsx` mediante la importación desde `next-auth/react`.
+
+#### Calidad del Código y Refactorización
+- **Limpieza de Código:** Se eliminaron importaciones y variables no utilizadas en múltiples archivos para mejorar la legibilidad y el mantenimiento del código.
+- **Simplificación:** Se simplificaron y refactorizaron varias partes del código para una mayor claridad y eficiencia.

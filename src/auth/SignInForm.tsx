@@ -1,138 +1,93 @@
 'use client';
-
-import FieldsetWithStatus from '@/components/FieldsetWithStatus';
-import Container from '@/components/Container';
+import { useState } from 'react';
 import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import {
-  useActionState,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import { getAuthAction, signInAction } from './actions';
-import ErrorNote from '@/components/ErrorNote';
-import { signIn } from 'next-auth/react';
-import {
-  KEY_CALLBACK_URL,
-  KEY_CREDENTIALS_SIGN_IN_ERROR,
-  KEY_CREDENTIALS_SUCCESS,
-} from '.';
-import { useSearchParams } from 'next/navigation';
-import { useAppState } from '@/app/AppState';
+
+export type SignInResponse = 'success' | 'CredentialsSignin' | undefined;
 import { clsx } from 'clsx/lite';
-import { PATH_ADMIN_PHOTOS } from '@/app/path';
-import IconLock from '@/components/icons/IconLock';
+import FaGoogleIcon from '@/components/icons/FaGoogleIcon';
+import { signIn } from 'next-auth/react';
 import { useAppText } from '@/i18n/state/client';
+import { PATH_ROOT } from '@/app/path';
+import { useRouter } from 'next/navigation';
 
-export default function SignInForm({
-  includeTitle = true,
-  shouldRedirect = true,
-  className,
-}: {
-  includeTitle?: boolean
-  shouldRedirect?: boolean
-  className?: string
-}) {
-  const params = useSearchParams();
-
-  const { setUserEmail } = useAppState();
+export default function SignInForm() {
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
 
   const appText = useAppText();
+  const router = useRouter();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [response, action] = useActionState(signInAction, undefined);
-
-  const emailRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    const timeout = setTimeout(() => emailRef.current?.focus(), 100);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  useEffect(() => {
-    if (response === KEY_CREDENTIALS_SUCCESS) {
-      setUserEmail?.(email);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsLoading(true);
+    const formData = new FormData(event.currentTarget);
+    const result = await signIn('credentials', {
+      ...Object.fromEntries(formData),
+      redirect: false,
+    });
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      router.push(PATH_ROOT);
+      router.refresh();
     }
-  }, [setUserEmail, response, email]);
-
-  useEffect(() => {
-    return () => {
-      // Capture user email before unmounting
-      getAuthAction().then(auth =>
-        setUserEmail?.(auth?.user?.email ?? undefined));
-    };
-  }, [setUserEmail]);
-
-  const isFormValid =
-    email.length > 0 &&
-    password.length > 0;
+    setIsLoading(false);
+  };
 
   return (
-    <Container
-      className={clsx(
-        'w-[calc(100vw-1.5rem)] sm:w-[min(360px,90vw)]',
-        'px-6 py-5',
-        className,
-      )}
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-sm w-full space-y-4"
     >
-      {includeTitle &&
-        <h1 className={clsx(
-          'flex gap-3 items-center justify-center',
-          'self-start text-2xl',
-          'mb-6',
-        )}>
-          <IconLock className="text-main translate-y-[0.5px]" />
-          <span className="text-main">
-            {appText.auth.signIn}
-          </span>
-        </h1>}
-      <form action={action} className="w-full">
-        <div className="space-y-5 w-full -translate-y-0.5">
-          {response === KEY_CREDENTIALS_SIGN_IN_ERROR &&
-            <ErrorNote>
-              {appText.auth.invalidEmailPassword}
-            </ErrorNote>}
-          <div className="space-y-4 w-full">
-            <FieldsetWithStatus
-              id="email"
-              inputRef={emailRef}
-              label={appText.auth.email}
-              type="email"
-              value={email}
-              onChange={setEmail}
-            />
-            <FieldsetWithStatus
-              id="password"
-              label={appText.auth.password}
-              type="password"
-              value={password}
-              onChange={setPassword}
-            />
-            {shouldRedirect &&
-              <input
-                type="hidden"
-                name={KEY_CALLBACK_URL}
-                value={params.get(KEY_CALLBACK_URL) || PATH_ADMIN_PHOTOS}
-              />}
-          </div>
-          <SubmitButtonWithStatus disabled={!isFormValid}>
-            {appText.auth.signIn}
-          </SubmitButtonWithStatus>
+      <h1 className="text-2xl font-bold text-center">
+        {appText.auth.signIn}
+      </h1>
+      <input
+        type="email"
+        name="email"
+        placeholder={appText.auth.email}
+        required
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder={appText.auth.password}
+        required
+        className="w-full p-2 border border-gray-300 rounded"
+      />
+      {error && (
+        <p className="text-red-500 text-center">
+          {appText.auth.invalidEmailPassword}
+        </p>
+      )}
+      <SubmitButtonWithStatus
+        className="w-full bg-blue-500 text-white p-2 rounded"
+        isLoading={isLoading}
+      >
+        {appText.auth.signIn}
+      </SubmitButtonWithStatus>
+      <div className="relative flex items-center justify-center text-sm">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-gray-300" />
         </div>
-      </form>
-      <div className="mt-4 w-full">
-        <button
-          onClick={() => signIn('google')}
-          className={clsx(
-            'w-full py-2 px-4 border border-gray-300 rounded-md',
-            'shadow-sm text-sm font-medium text-gray-700 bg-white',
-            'hover:bg-gray-50 focus:outline-none focus:ring-2',
-            'focus:ring-offset-2 focus:ring-indigo-500',
-          )}
-        >
-          Sign in with Google
-        </button>
+        <div className="relative flex justify-center bg-white px-2">
+          <span className="text-gray-500">
+            {appText.auth.or}
+          </span>
+        </div>
       </div>
-    </Container>
+      <button
+        type="button"
+        onClick={() => signIn('google', { callbackUrl: PATH_ROOT })}
+        className={clsx(
+          'w-full flex items-center justify-center gap-2 p-2 rounded',
+          'bg-red-500 text-white',
+        )}
+      >
+        <FaGoogleIcon />
+        {appText.auth.signInWithGoogle}
+      </button>
+    </form>
   );
 }

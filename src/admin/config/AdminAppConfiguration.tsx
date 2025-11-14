@@ -1,20 +1,14 @@
 import { Suspense } from 'react';
-import { APP_CONFIGURATION } from '@/app/config';
-import AdminAppConfigurationClient from './AdminAppConfigurationClient';
 import AdminAppConfigurationServer from './AdminAppConfigurationServer';
 
-export default function AdminAppConfiguration({
+export default async function AdminAppConfiguration({
   simplifiedView,
 }: {
   simplifiedView?: boolean
 }) {
   return (
-    <Suspense fallback={<AdminAppConfigurationClient {...{
-      ...APP_CONFIGURATION,
-      isAnalyzingConfiguration: true,
-      simplifiedView,
-    }} /> }>
-      <AdminAppConfigurationServer {...{ simplifiedView }} />
+    <Suspense fallback={null}>
+      {await AdminAppConfigurationServer({ simplifiedView })}
     </Suspense>
   );
 }

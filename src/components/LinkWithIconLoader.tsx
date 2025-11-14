@@ -1,19 +1,20 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, ReactNode, forwardRef } from 'react';
 import LinkWithStatus from './LinkWithStatus';
 import clsx from 'clsx/lite';
 
-export default function LinkWithIconLoader({
+const LinkWithIconLoader = forwardRef<HTMLAnchorElement, Omit<ComponentProps<typeof LinkWithStatus>, 'children'> & {
+  icon: ReactNode
+  loader: ReactNode
+}>(function LinkWithIconLoader({
   className,
   icon,
   loader,
   ...props
-}: Omit<ComponentProps<typeof LinkWithStatus>, 'children'> & {
-  icon: ReactNode
-  loader: ReactNode
-}) {
+}, ref) {
   return (
     <LinkWithStatus
       {...props}
+      ref={ref}
       className={clsx('relative', className)}
     >
       {({ isLoading }) => <>
@@ -32,4 +33,6 @@ export default function LinkWithIconLoader({
       </>}
     </LinkWithStatus>
   );
-}
+});
+
+export default LinkWithIconLoader;

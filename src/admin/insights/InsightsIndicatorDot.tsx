@@ -1,6 +1,6 @@
 import { useAppState } from '@/app/AppState';
 import clsx from 'clsx/lite';
-import { FaCircle } from 'react-icons/fa6';
+import FaCircleIcon from '@/components/icons/FaCircleIcon';
 
 export default function InsightsIndicatorDot({
   className,
@@ -30,7 +30,7 @@ export default function InsightsIndicatorDot({
   };
 
   return (
-    <FaCircle
+    <FaCircleIcon
       size={getSize()}
       className={clsx(
         (

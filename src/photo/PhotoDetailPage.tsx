@@ -3,7 +3,7 @@ import { Photo, PhotoDateRange } from '.';
 import { PhotoSetCategory } from '../category';
 import PhotoLarge from './PhotoLarge';
 import AppGrid from '@/components/AppGrid';
-import PhotoGrid from './PhotoGrid';
+import PhotoGridPage from './PhotoGridPage';
 import TagHeader from '@/tag/TagHeader';
 import CameraHeader from '@/camera/CameraHeader';
 import FilmHeader from '@/film/FilmHeader';
@@ -160,7 +160,7 @@ export default function PhotoDetailPage({
         ]}
       />
       <AppGrid
-        contentMain={<PhotoGrid
+        contentMain={<PhotoGridPage
           photos={photosGrid ?? photos}
           selectedPhoto={photo}
           tag={tag}

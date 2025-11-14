@@ -69,6 +69,7 @@ export const PATH_ADMIN_TAGS            = `${PATH_ADMIN}/tags`;
 export const PATH_ADMIN_RECIPES         = `${PATH_ADMIN}/recipes`;
 export const PATH_ADMIN_CONFIGURATION   = `${PATH_ADMIN}/configuration`;
 export const PATH_ADMIN_INSIGHTS        = `${PATH_ADMIN}/insights`;
+export const PATH_ADMIN_REPORT          = `${PATH_ADMIN}/report`;
 export const PATH_ADMIN_BASELINE        = `${PATH_ADMIN}/baseline`;
 export const PATH_ADMIN_COMPONENTS      = `${PATH_ADMIN}/components`;
 
@@ -97,6 +98,7 @@ export const PATHS_ADMIN = [
   PATH_ADMIN_TAGS,
   PATH_ADMIN_RECIPES,
   PATH_ADMIN_INSIGHTS,
+  PATH_ADMIN_REPORT,
   PATH_ADMIN_CONFIGURATION,
   PATH_ADMIN_BASELINE,
   PATH_ADMIN_COMPONENTS,

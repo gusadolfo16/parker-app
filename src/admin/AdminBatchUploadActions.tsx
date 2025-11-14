@@ -14,7 +14,7 @@ import sleep from '@/utility/sleep';
 import { readStreamableValue } from 'ai/rsc';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { BiCheckCircle } from 'react-icons/bi';
+import BiCheckCircleIcon from '@/components/icons/BiCheckCircleIcon';
 import ProgressButton from '@/components/primitives/ProgressButton';
 import { UrlAddStatus } from './AdminUploadsClient';
 import PhotoTagFieldset from './PhotoTagFieldset';
@@ -49,7 +49,7 @@ export default function AdminBatchUploadActions({
   setIsDeleting: Dispatch<SetStateAction<boolean>>
   onBatchActionComplete?: () => Promise<void>
 }) {
-  const { updateAdminData } = useAppState();
+  const { updateAdminData, setUploadState } = useAppState();
 
   const [showBulkSettings, setShowBulkSettings] = useState(false);
   const [tagErrorMessage, setTagErrorMessage] = useState('');
@@ -180,7 +180,7 @@ export default function AdminBatchUploadActions({
                 isDeleting
               }
               icon={isAddingComplete
-                ? <BiCheckCircle size={18} className="translate-x-[1px]" />
+                ? <BiCheckCircleIcon size={18} className="translate-x-[1px]" />
                 : <IconAddUpload />
               }
               onClick={async () => {
@@ -229,7 +229,7 @@ export default function AdminBatchUploadActions({
               onDeleteStart={() => setIsDeleting(true)}
               onDelete={async didFail => {
                 if (!didFail) {
-                  updateAdminData?.({ uploadsCount: 0 });
+                  setUploadState?.({ uploadsCount: 0 });
                   await onBatchActionComplete?.();
                   router.push(PATH_ADMIN_PHOTOS);
                 } else {

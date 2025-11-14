@@ -22,6 +22,7 @@ import {
   PATH_ADMIN_UPLOADS,
   PATH_FULL_INFERRED,
   PATH_GRID_INFERRED,
+  PATH_ROOT,
   PATH_SIGN_IN,
   pathForCamera,
   pathForFilm,
@@ -39,12 +40,16 @@ import { useDebounce } from 'use-debounce';
 import Spinner from '../components/Spinner';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { BiDesktop, BiLockAlt, BiMoon, BiSun } from 'react-icons/bi';
-import { IoClose, IoInvertModeSharp } from 'react-icons/io5';
+import { signOut } from 'next-auth/react';
+import BiDesktopIcon from '@/components/icons/BiDesktopIcon';
+import BiSunIcon from '@/components/icons/BiSunIcon';
+import BiMoonIcon from '@/components/icons/BiMoonIcon';
+import BiLockAltIcon from '@/components/icons/BiLockAltIcon';
+import IoCloseIcon from '@/components/icons/IoCloseIcon';
+import IoInvertModeSharpIcon from '@/components/icons/IoInvertModeSharpIcon';
 import { useAppState } from '@/app/AppState';
 import { searchPhotosAction } from '@/photo/actions';
-import { RiToolsFill } from 'react-icons/ri';
-import { signOutAction } from '@/auth/actions';
+import RiToolsFillIcon from '@/components/icons/RiToolsFillIcon';
 import { getKeywordsForPhoto, titleForPhoto } from '@/photo';
 import PhotoDate from '@/photo/PhotoDate';
 import PhotoSmall from '@/photo/PhotoSmall';
@@ -87,8 +92,9 @@ import IconFavs from '@/components/icons/IconFavs';
 import { useAppText } from '@/i18n/state/client';
 import LoaderButton from '@/components/primitives/LoaderButton';
 import IconRecents from '@/components/icons/IconRecents';
-import { CgClose, CgFileDocument } from 'react-icons/cg';
-import { FaRegUserCircle } from 'react-icons/fa';
+import CgFileDocumentIcon from '@/components/icons/CgFileDocumentIcon';
+import CgCloseIcon from '@/components/icons/CgCloseIcon';
+import FaRegUserCircleIcon from '@/components/icons/FaRegUserCircleIcon';
 import { formatDistanceToNow } from 'date-fns';
 import IconCheck from '@/components/icons/IconCheck';
 import { getSortStateFromPath } from '@/photo/sort/path';
@@ -156,11 +162,10 @@ export default function CommandKClient({
     clearAuthStateAndRedirectIfNecessary,
     isCommandKOpen: isOpen,
     startUpload,
-    photosCountTotal,
+    count: photosCountTotal,
     photosCountHidden = 0,
-    uploadsCount,
-    tagsCount,
-    recipesCount,
+    uploadState,
+    categoriesWithCounts,
     selectedPhotoIds,
     setSelectedPhotoIds,
     insightsIndicatorStatus,
@@ -181,6 +186,14 @@ export default function CommandKClient({
     setShouldDebugInsights,
     setShouldDebugRecipeOverlays,
   } = useAppState();
+
+  const uploadsCount = uploadState.uploadsCount;
+  const tagsCount = categoriesWithCounts?.tags
+    ? Object.keys(categoriesWithCounts.tags).length
+    : 0;
+  const recipesCount = categoriesWithCounts?.recipes
+    ? Object.keys(categoriesWithCounts.recipes).length
+    : 0;
 
   const {
     doesPathOfferSort,
@@ -469,21 +482,21 @@ export default function CommandKClient({
 
   const clientSections: CommandKSection[] = [{
     heading: appText.theme.theme,
-    accessory: <IoInvertModeSharp
+    accessory: <IoInvertModeSharpIcon
       size={14}
       className="translate-y-[0.5px] translate-x-[-1px]"
     />,
     items: [{
       label: appText.theme.system,
-      annotation: <BiDesktop />,
+      annotation: <BiDesktopIcon />,
       action: () => setTheme('system'),
     }, {
       label: appText.theme.light,
-      annotation: <BiSun size={16} className="translate-x-[1.25px]" />,
+      annotation: <BiSunIcon size={16} className="translate-x-[1.25px]" />,
       action: () => setTheme('light'),
     }, {
       label: appText.theme.dark,
-      annotation: <BiMoon className="translate-x-[1px]" />,
+      annotation: <BiMoonIcon className="translate-x-[1px]" />,
       action: () => setTheme('dark'),
     }],
   }];
@@ -491,7 +504,7 @@ export default function CommandKClient({
   if (isUserSignedIn && areAdminDebugToolsEnabled) {
     clientSections.push({
       heading: 'Debug Tools',
-      accessory: <RiToolsFill size={16} className="translate-x-[-1px]" />,
+      accessory: <RiToolsFillIcon size={16} className="translate-x-[-1px]" />,
       items: [
         renderToggle(
           'Zoom Controls',
@@ -562,7 +575,7 @@ export default function CommandKClient({
     sortItems.push({
       label: appText.sort.clearSort,
       path: pathClearSort,
-      annotation: <CgClose />,
+      annotation: <CgCloseIcon />,
     });
   }
 
@@ -594,13 +607,13 @@ export default function CommandKClient({
 
   const sectionPages: CommandKSection = {
     heading: appText.cmdk.pages,
-    accessory: <CgFileDocument size={14} className="translate-x-[-0.5px]" />,
+    accessory: <CgFileDocumentIcon size={14} className="translate-x-[-0.5px]" />,
     items: pageItems,
   };
 
   const adminSection: CommandKSection = {
     heading: appText.nav.admin,
-    accessory: <FaRegUserCircle
+    accessory: <FaRegUserCircleIcon
       size={13}
       className="translate-x-[-0.5px] translate-y-[0.5px]"
     />,
@@ -666,20 +679,23 @@ export default function CommandKClient({
     });
     if (areAdminDebugToolsEnabled) {
       adminSection.items.push({
-        label: 'Baseline Overview',
-        annotation: <BiLockAlt />,
-        path: PATH_ADMIN_BASELINE,
+                label: 'Baseline Overview',
+        annotation: <BiLockAltIcon />,        path: PATH_ADMIN_BASELINE,
       }, {
         label: 'Components Overview',
-        annotation: <BiLockAlt />,
+        annotation: <BiLockAltIcon />,
         path: PATH_ADMIN_COMPONENTS,
       });
     }
     adminSection.items.push({
       label: appText.auth.signOut,
-      action: () => signOutAction()
-        .then(clearAuthStateAndRedirectIfNecessary)
-        .then(() => setIsOpen?.(false)),
+      action: async () => {
+        if (window.confirm('Are you sure you want to sign out?')) {
+          const result = await signOut({ callbackUrl: PATH_ROOT });
+          console.log('Sign out result:', result);
+          setIsOpen?.(false);
+        }
+      },
     });
   } else {
     adminSection.items.push({
@@ -761,7 +777,7 @@ export default function CommandKClient({
                 }}
               >
                 {queryLiveRaw
-                  ? <IoClose size={17} className="text-dim" />
+                  ? <IoCloseIcon size={17} className="text-dim" />
                   : 'ESC'}
               </LoaderButton>
             </span>}

@@ -8,6 +8,7 @@ import {
 import {
   PATH_ADMIN_PHOTOS,
   PATH_ADMIN_RECIPES,
+  PATH_ADMIN_REPORT,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_UPLOADS,
 } from '@/app/path';
@@ -63,12 +64,14 @@ export default async function AdminNav() {
     count: countTags,
   }); }
 
-  // Recipes
-  if (countRecipes > 0) { items.push({
-    label: appText.category.recipePlural,
-    href: PATH_ADMIN_RECIPES,
-    count: countRecipes,
-  }); }
+  
+
+  // Report
+  items.push({
+    label: appText.admin.selectionsReport,
+    href: PATH_ADMIN_REPORT,
+    count: 0, // Added count property
+  });
 
   return (
     <AdminNavClient {...{

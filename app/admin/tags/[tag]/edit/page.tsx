@@ -9,14 +9,12 @@ import AdminTagBadge from '@/admin/AdminTagBadge';
 const MAX_PHOTO_TO_SHOW = 6;
 
 interface Props {
-  params: Promise<{ tag: string }>
+  params: { tag: string }
 }
 
 export default async function PhotoPageEdit({
-  params,
+  params: { tag: tagFromParams },
 }: Props) {
-  const { tag: tagFromParams } = await params;
-
   const tag = decodeURIComponent(tagFromParams);
   
   const [
@@ -29,11 +27,13 @@ export default async function PhotoPageEdit({
 
   if (count === 0) { redirect(PATH_ADMIN); }
 
+  const breadcrumb = await AdminTagBadge({ tag, count, hideBadge: true });
+
   return (
     <AdminChildPage
       backPath={PATH_ADMIN_TAGS}
       backLabel="Tags"
-      breadcrumb={<AdminTagBadge {...{ tag, count, hideBadge: true }} />}
+      breadcrumb={breadcrumb}
     >
       <AdminTagForm {...{ tag, photos }}>
         <PhotoLightbox

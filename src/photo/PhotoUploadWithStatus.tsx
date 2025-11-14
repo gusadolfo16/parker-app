@@ -21,7 +21,7 @@ export default function PhotoUploadWithStatus({
   className,
   debug,
 }: {
-  inputRef?: RefObject<HTMLInputElement | null>
+  inputRef?: RefObject<HTMLInputElement>
   inputId: string
   shouldResize: boolean
   onLastUpload?: () => Promise<void>

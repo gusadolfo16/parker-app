@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth/server';
+import { getServerSession } from '@/auth/server';
 import { lockPhotos, unlockPhotos } from '@/photo/db/query';
 
+export async function GET() {
+  return NextResponse.json({ message: 'Method Not Allowed' }, { status: 405 });
+}
+
 export async function POST(req: NextRequest) {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session || !session.user) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -21,7 +25,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session || !session.user) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

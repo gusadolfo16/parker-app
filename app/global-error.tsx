@@ -1,11 +1,11 @@
 'use client';
 
 import HttpStatusPage from '@/components/HttpStatusPage';
-import { TbRefresh } from 'react-icons/tb';
+import TbRefreshIcon from '@/components/icons/TbRefreshIcon';
 
 export default function GlobalError() {
   return (
-    <HttpStatusPage status={<TbRefresh />}>
+    <HttpStatusPage status={<TbRefreshIcon />}>
       Something went wrong
     </HttpStatusPage>
   );

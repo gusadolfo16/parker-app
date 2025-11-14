@@ -20,10 +20,10 @@ export default async function AdminTagTable({
 
   return (
     <AdminTable>
-      {sortTags(tags).map(({ tag, count }) =>
+      {await Promise.all(sortTags(tags).map(async ({ tag, count }) =>
         <Fragment key={tag}>
           <div className="pr-2 col-span-2">
-            <AdminTagBadge {...{ tag, count }} />
+            {await AdminTagBadge({ tag, count })}
           </div>
           <div className={clsx(
             'flex flex-nowrap',
@@ -40,7 +40,7 @@ export default async function AdminTagTable({
               <DeleteFormButton clearLocalState />
             </FormWithConfirm>
           </div>
-        </Fragment>)}
+        </Fragment>))}
     </AdminTable>
   );
 }

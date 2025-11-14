@@ -7,6 +7,7 @@ export interface UploadState {
   fileUploadName: string
   fileUploadIndex: number
   filesLength: number
+  uploadsCount?: number
 }
 
 export const INITIAL_UPLOAD_STATE: UploadState = {

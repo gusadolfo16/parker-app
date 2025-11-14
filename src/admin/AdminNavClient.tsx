@@ -17,7 +17,7 @@ import { clsx } from 'clsx/lite';
 import { differenceInMinutes } from 'date-fns';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { FaRegClock } from 'react-icons/fa';
+import FaRegClockIcon from '@/components/icons/FaRegClockIcon';
 import AdminAppInfoIcon from './AdminAppInfoIcon';
 import AdminInfoNav from './AdminInfoNav';
 import LinkWithLoaderBackground from '@/components/LinkWithLoaderBackground';
@@ -69,7 +69,7 @@ export default function AdminNavClient({
   return (
     <AppGrid
       contentMain={
-        <div className="space-y-4">
+        <div className="space-y-4 z-50 relative">
           <div className={clsx(
             'flex gap-2 pb-3',
             'border-b border-gray-200 dark:border-gray-800',
@@ -109,7 +109,7 @@ export default function AdminNavClient({
             />
           </div>
           {shouldShowBanner &&
-            <Note icon={<FaRegClock className="shrink-0" />}>
+            <Note icon={<FaRegClockIcon className="shrink-0" />}>
               Photo updates detected—they may take several minutes to show up
               for visitors
             </Note>}

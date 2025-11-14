@@ -11,14 +11,12 @@ import AdminShowRecipeButton from '@/admin/AdminShowRecipeButton';
 const MAX_PHOTO_TO_SHOW = 6;
 
 interface Props {
-  params: Promise<{ recipe: string }>
+  params: { recipe: string }
 }
 
 export default async function RecipePageEdit({
-  params,
+  params: { recipe: recipeFromParams },
 }: Props) {
-  const { recipe: recipeFromParams } = await params;
-
   const recipe = decodeURIComponent(recipeFromParams);
   
   const [
@@ -33,16 +31,16 @@ export default async function RecipePageEdit({
 
   if (count === 0) { redirect(PATH_ADMIN); }
 
+  const breadcrumb = await AdminRecipeBadge({ recipe, count, hideBadge: true });
+
   return (
     <AdminChildPage
       backPath={PATH_ADMIN_RECIPES}
       backLabel="Recipes"
-      breadcrumb={<AdminRecipeBadge {...{ recipe, count, hideBadge: true }} />}
+      breadcrumb={breadcrumb}
       accessory={data && film &&
         <AdminShowRecipeButton
-          title={recipe}
-          data={data}
-          film={film}
+          onClick={() => {}}
         />
       }
     >

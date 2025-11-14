@@ -1,42 +1,42 @@
 'use client';
 
 import LoaderButton from '@/components/primitives/LoaderButton';
-import SubmitButtonWithStatus from '@/components/SubmitButtonWithStatus';
-import Tooltip from '@/components/Tooltip';
 import { getExifDataAction } from '@/photo/actions';
 import { PhotoFormData } from '@/photo/form';
-import { clsx } from 'clsx/lite';
-import { ComponentProps, useState } from 'react';
-import { LuDatabaseBackup } from 'react-icons/lu';
+import { useState } from 'react';
+import { useAppText } from '@/i18n/state/client';
+import LuDatabaseBackupIcon from '@/components/icons/LuDatabaseBackupIcon';
 
 export default function ExifCaptureButton({
+  photoId,
   photoUrl,
-  onSync,
+  onExifDataCapture,
 }: {
-  photoUrl: string
-  onSync?: (data: Partial<PhotoFormData>) => void
-} & ComponentProps<typeof SubmitButtonWithStatus>) {
+  photoId: string,
+  photoUrl: string,
+  onExifDataCapture: (formData: Partial<PhotoFormData>) => void,
+}) {
   const [isLoading, setIsLoading] = useState(false);
 
+  const appText = useAppText();
+
   return (
-    <Tooltip content="Refresh form with EXIF data from original file">
-      <LoaderButton
-        isLoading={isLoading}
-        onClick={() => {
-          setIsLoading(true);
-          getExifDataAction(photoUrl)
-            .then(onSync)
-            .finally(() => setIsLoading(false));
-        }}
-        icon={<LuDatabaseBackup
-          size={16}
-          className={clsx(
-            'translate-y-[0.5px] translate-x-[0.5px]',
-            'sm:translate-x-[-0.5px]',
-          )} />}
-      >
-        EXIF
-      </LoaderButton>
-    </Tooltip>
+    <LoaderButton
+      isLoading={isLoading}
+      onClick={() => {
+        setIsLoading(true);
+        getExifDataAction(photoUrl)
+          .then(onExifDataCapture)
+          .finally(() => setIsLoading(false));
+      }}
+      icon={<LuDatabaseBackupIcon
+        size={16}
+        className={
+          'translate-y-[0.5px] translate-x-[0.5px]'
+        }
+      />}
+    >
+      {appText.admin.getExif}
+    </LoaderButton>
   );
 }

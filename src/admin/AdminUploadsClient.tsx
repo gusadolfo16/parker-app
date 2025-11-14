@@ -7,7 +7,7 @@ import { Tags } from '@/tag';
 import AdminUploadsTable from './AdminUploadsTable';
 
 export type UrlAddStatus = StorageListItem & {
-  status?: 'waiting' | 'adding' | 'added'
+  status?: 'waiting' | 'adding' | 'added' | 'failed'
   statusMessage?: string
   draftTitle?: string
   progress?: number
