@@ -720,12 +720,11 @@ export const getLockedPhotos = async () =>
     const { rows } = await query(`
       SELECT
         p.*,
-        COALESCE(u.name, u2.name) as user_name,
-        COALESCE(u.email, u2.email) as user_email
+        u.name as user_name,
+        u.email as user_email
       FROM photos p
-      LEFT JOIN users u ON p.locked_by = u.email
       LEFT JOIN accounts a ON p.locked_by = a."providerAccountId"
-      LEFT JOIN users u2 ON a."userId" = u2.id
+      LEFT JOIN users u ON a."userId" = u.id
       WHERE p.locked_by IS NOT NULL
     `);
     return rows.map(row => {

@@ -161,7 +161,7 @@ export default function PhotoGridSidebar({
             type="text-only"
             countOnHover={count}
             prefetch={false}
-            contrast="low"
+            contrast="medium"
             badged
           />)}
     />
@@ -181,7 +181,7 @@ export default function PhotoGridSidebar({
             type="text-only"
             countOnHover={count}
             prefetch={false}
-            contrast="low"
+            contrast="medium"
             badged
           />)}
     />
@@ -205,7 +205,7 @@ export default function PhotoGridSidebar({
                 countOnHover={count}
                 type="icon-last"
                 prefetch={false}
-                contrast="low"
+                contrast="medium"
                 badged
               />;
             case TAG_PRIVATE:
@@ -214,7 +214,7 @@ export default function PhotoGridSidebar({
                 countOnHover={count}
                 type="icon-last"
                 prefetch={false}
-                contrast="low"
+                contrast="medium"
                 badged
               />;
             default:
@@ -224,7 +224,7 @@ export default function PhotoGridSidebar({
                 type="text-only"
                 countOnHover={count}
                 prefetch={false}
-                contrast="low"
+                contrast="medium"
                 badged
               />;
           }

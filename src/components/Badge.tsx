@@ -34,7 +34,9 @@ export default function Badge({
             ? 'text-invert bg-invert'
             : contrast === 'frosted'
               ? 'text-black bg-neutral-100/30 border border-neutral-200/40'
-              : 'text-medium bg-gray-300/30 dark:bg-gray-700/50',
+              : contrast === 'medium'
+                ? 'text-medium bg-gray-100 dark:bg-gray-800'
+                : 'text-medium bg-gray-300/30 dark:bg-gray-700/50',
           interactive && (contrast === 'high'
             ? 'hover:opacity-70'
             : contrast === 'frosted'
@@ -52,6 +54,7 @@ export default function Badge({
     <span className={clsx(
       'max-w-full',
       'inline-flex items-center',
+      'translate-y-[-0.5px]',
       stylesForType(),
       uppercase && 'uppercase tracking-wider',
       className,

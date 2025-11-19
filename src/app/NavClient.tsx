@@ -109,7 +109,6 @@ export default function NavClient({
                 )}>
               <AppViewSwitcher
                 currentSelection={switcherSelectionForPath()}
-                className="translate-x-[-1px]"
                 animate={hasLoadedWithAnimations && isNavVisible}
               />
               {isUserAdmin &&

@@ -2,6 +2,7 @@ import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next
 import NextAuth, { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import { query } from '@/platforms/postgres';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,8 +18,9 @@ export const authOptions: NextAuthOptions = {
           process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
           process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD === password
         ) {
-          const user = { id: email, email, name: 'Admin User' };
-          return user;
+          const { rows } = await query('SELECT * FROM users WHERE email = $1', [email]);
+          const user = rows[0];
+          return user ? { id: user.id, email: user.email, name: user.name } : null;
         } else {
           return null;
         }

@@ -37,7 +37,7 @@ export default function EntityLink({
   iconWide,
   type,
   badged,
-  contrast = 'medium',
+  contrast,
   path = '', // Make link optional for debugging purposes
   showHover = SHOW_CATEGORY_IMAGE_HOVERS,
   countOnHover,
@@ -128,13 +128,13 @@ export default function EntityLink({
         {badged && !useForHover
           ? <Badge
             type="small"
-            contrast={contrast}
+            contrast="medium"
             className={clsx(
               'translate-y-[-0.5px]',
               hasBadgeIcon && '*:flex *:items-center *:gap-1',
             )}
-            uppercase
-            interactive
+            uppercase={uppercase}
+            interactive={true}
           >
             {iconBadgeStart}
             {renderLabel}

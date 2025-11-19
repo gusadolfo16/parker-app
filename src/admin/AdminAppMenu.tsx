@@ -1,22 +1,27 @@
-import { Fragment } from 'react';
+'use client';
+
 import { usePathname } from 'next/navigation';
-import { Menu } from '@headlessui/react';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import {
   PATH_ADMIN_CONFIGURATION,
   PATH_ADMIN_INSIGHTS,
   PATH_ADMIN_PHOTOS,
-  PATH_ADMIN_RECIPES,
+  PATH_ADMIN_REPORT,
   PATH_ADMIN_TAGS,
   PATH_ADMIN_UPLOADS,
 } from '@/app/path';
 import { useAppState } from '@/app/AppState';
 import { useSelection } from '@/selection/SelectionContext';
 import { useAppText } from '@/i18n/state/client';
+import AdminMenuIcon from './AdminMenuIcon';
+import { useState } from 'react';
+import { FiImage, FiUploadCloud, FiTag, FiSettings, FiBarChart2 } from 'react-icons/fi';
 
 export default function AdminAppMenu() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const {
     isUserAdmin,
@@ -34,101 +39,113 @@ export default function AdminAppMenu() {
       label: appText.admin.managePhotos,
       href: PATH_ADMIN_PHOTOS,
       active: pathname.startsWith(PATH_ADMIN_PHOTOS),
+      icon: <FiImage size={16} className="translate-y-[-1px]" />,
     },
     {
       label: appText.admin.uploadPlural,
       href: PATH_ADMIN_UPLOADS,
       active: pathname.startsWith(PATH_ADMIN_UPLOADS),
+      icon: <FiUploadCloud size={16} className="translate-y-[-1px]" />,
     },
     {
       label: appText.admin.manageTags,
       href: PATH_ADMIN_TAGS,
       active: pathname.startsWith(PATH_ADMIN_TAGS),
+      icon: <FiTag size={16} className="translate-y-[-1px]" />,
     },
-    
     {
       label: appText.admin.appConfig,
       href: PATH_ADMIN_CONFIGURATION,
       active: pathname.startsWith(PATH_ADMIN_CONFIGURATION),
+      icon: <FiSettings size={16} className="translate-y-[-1px]" />,
     },
     {
       label: appText.admin.appInsights,
       href: PATH_ADMIN_INSIGHTS,
       active: pathname.startsWith(PATH_ADMIN_INSIGHTS),
+      icon: <FiBarChart2 size={16} className="translate-y-[-1px]" />,
+    },
+    {
+      label: 'Report',
+      href: PATH_ADMIN_REPORT,
+      active: pathname.startsWith(PATH_ADMIN_REPORT),
+      icon: <FiBarChart2 size={16} className="translate-y-[-1px]" />,
     },
   ];
 
+  if (!isUserAdmin) {
+    return null;
+  }
+
   return (
-    <Menu as={Fragment}>
-      <Menu.Button
-        className={clsx(
-          'active:opacity-75',
-          'rounded-full',
-          'hover:bg-gray-100 dark:hover:bg-gray-800',
-          'transition-all ease-in-out',
-          'w-8 h-8',
-          'flex items-center justify-center',
-          'text-gray-500 dark:text-gray-400',
-        )}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="w-4 h-4"
+    <DropdownMenu.Root onOpenChange={setIsOpen}>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          className={clsx(
+            'flex items-center justify-center w-[42px] h-[28px] cursor-pointer',
+            'hover:bg-gray-100/60 active:bg-gray-100',
+            'dark:hover:bg-gray-900/75 dark:active:bg-gray-900',
+            'text-gray-400 dark:text-gray-600',
+            'hover:text-gray-700 dark:hover:text-gray-400',
+            isOpen && 'bg-dim text-main! [&>*>*]:translate-y-[6px] [&>*>*]:duration-300',
+          )}
+          aria-label="Admin Menu"
         >
-          <path
-            fillRule="evenodd"
-            d="M2 8a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 8ZM2 3.25A.75.75 0 0 1 2.75 2h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 3.25ZM2.75 14h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 14a.75.75 0 0 1 .75-.75Z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </Menu.Button>
-      <Menu.Items
-              className={clsx(
-                        'absolute top-full right-0 z-[9999]',
-                        'mt-2 origin-top-right',                'rounded-md shadow-lg',
-                'bg-white dark:bg-gray-900',
-                'ring-1 ring-black ring-opacity-5',
-                'focus:outline-none',
-                'py-1',
-                'w-48',
-              )}
-            >
-                {menuItems.map(item => (
-                  <Menu.Item key={item.href}>
-                    {({ active }) => (
-                      <Link
-                        href={item.href}
-                        className={clsx(
-                          'block px-4 py-2 text-sm',
-                          active
-                            ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'
-                            : 'text-gray-700 dark:text-gray-300',
-                        )}
-                      >
-                        {item.label}
-                      </Link>
+          <AdminMenuIcon isOpen={isOpen} />
+        </button>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Portal>
+        <DropdownMenu.Content
+          align="start"
+          className={clsx(
+            'z-50 min-w-[8rem] component-surface py-1 not-dark:shadow-lg',
+            'not-dark:shadow-gray-900/10',
+            'data-[side=top]:dark:shadow-[0_0px_40px_rgba(0,0,0,0.6)]',
+            'data-[side=bottom]:dark:shadow-[0_10px_40px_rgba(0,0,0,0.6)]',
+            'data-[side=top]:animate-fade-in-from-bottom',
+            'data-[side=bottom]:animate-fade-in-from-top',
+            'outline-medium',
+          )}
+        >
+          <div className="divide-y divide-medium">
+            <div className="px-1 py-1">
+              {menuItems.map(item => (
+                <DropdownMenu.Item key={item.href} asChild>
+                  <Link
+                    href={item.href}
+                    className={clsx(
+                      'flex items-center gap-2 block px-2 py-2 text-sm rounded-md',
+                      'hover:outline-hidden hover:bg-gray-100/90 active:bg-gray-200/75',
+                      'dark:hover:bg-gray-800/60 dark:active:bg-gray-900/80',
+                      item.active && 'bg-gray-100/90 dark:bg-gray-800/60',
                     )}
-                  </Menu.Item>
-                ))}
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={toggleSelectionMode}
-                      className={clsx(
-                        'block px-4 py-2 text-sm w-full text-left',
-                        active
-                          ? 'bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-100'
-                          : 'text-gray-700 dark:text-gray-300',
-                      )}
-                    >
-                      {isSelecting
-                        ? appText.admin.batchExitEdit
-                        : appText.admin.batchEdit}
-                    </button>
+                  >
+                    {item.icon}
+                    {item.label}
+                  </Link>
+                </DropdownMenu.Item>
+              ))}
+            </div>
+            <div className="px-1 py-1">
+              <DropdownMenu.Item asChild>
+                <button
+                  onClick={toggleSelectionMode}
+                  className={clsx(
+                    'block px-2 py-2 text-sm w-full text-left rounded-md',
+                    'hover:outline-hidden hover:bg-gray-100/90 active:bg-gray-200/75',
+                    'dark:hover:bg-gray-800/60 dark:active:bg-gray-900/80',
                   )}
-                </Menu.Item>
-              </Menu.Items>    </Menu>
+                >
+                  {isSelecting
+                    ? appText.admin.batchExitEdit
+                    : appText.admin.batchEdit}
+                </button>
+              </DropdownMenu.Item>
+            </div>
+          </div>
+        </DropdownMenu.Content>
+      </DropdownMenu.Portal>
+    </DropdownMenu.Root>
   );
 }
