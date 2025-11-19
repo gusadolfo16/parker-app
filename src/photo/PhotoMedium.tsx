@@ -15,6 +15,8 @@ import useVisible from '@/utility/useVisible';
 import LinkWithStatus from '@/components/LinkWithStatus';
 import Spinner from '@/components/Spinner';
 import PhotoColors from './color/PhotoColors';
+import PhotoTags from '@/tag/PhotoTags';
+import { sortTagsArray } from '@/tag';
 
 export default function PhotoMedium({
   photo,
@@ -38,6 +40,8 @@ export default function PhotoMedium({
 
   useVisible({ ref, onVisible });
 
+  const tags = sortTagsArray(photo.tags);
+
   return (
     <LinkWithStatus
       ref={ref}
@@ -51,7 +55,7 @@ export default function PhotoMedium({
       prefetch={prefetch}
     >
       {({ isLoading }) =>
-        <div className="w-full h-full">
+        <span className="w-full h-full relative block">
           {isLoading &&
             <div className={clsx(
               'absolute inset-0 flex items-center justify-center',
@@ -71,6 +75,19 @@ export default function PhotoMedium({
                 colorData={photo.colorData}
               />
             </div>}
+          {tags.length > 0 &&
+            <div className={clsx(
+              'absolute inset-x-0 bottom-0 z-10',
+              'pb-2 pt-8 px-2',
+              'bg-gradient-to-t from-black/50 to-transparent',
+              'opacity-0 group-hover:opacity-100 transition-opacity',
+            )}>
+              <PhotoTags
+                tags={tags}
+                contrast="high"
+                badged
+              />
+            </div>}
           <ImageMedium
             src={photo.url}
             aspectRatio={photo.aspectRatio}
@@ -81,7 +98,7 @@ export default function PhotoMedium({
             alt={altTextForPhoto(photo)}
             priority={priority}
           />
-        </div>}
+        </span>}
     </LinkWithStatus>
   );
 };

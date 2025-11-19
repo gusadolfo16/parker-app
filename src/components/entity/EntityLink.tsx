@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, ReactNode, RefObject, useState } from 'react';
+import { ComponentProps, ReactNode, RefObject, useState, Ref } from 'react';
 import LabeledIcon, { LabeledIconType } from '../primitives/LabeledIcon';
 import Badge from '../Badge';
 import { clsx } from 'clsx/lite';
@@ -14,7 +14,7 @@ import { PhotoQueryOptions } from '@/photo/db';
 import { MAX_PHOTOS_TO_SHOW_PER_CATEGORY } from '@/image-response';
 
 export interface EntityLinkExternalProps {
-  ref?: RefObject<HTMLSpanElement>
+  ref?: Ref<HTMLSpanElement>
   type?: LabeledIconType
   badged?: boolean
   contrast?: ComponentProps<typeof Badge>['contrast']
@@ -37,7 +37,7 @@ export default function EntityLink({
   iconWide,
   type,
   badged,
-  contrast,
+  contrast = 'medium',
   path = '', // Make link optional for debugging purposes
   showHover = SHOW_CATEGORY_IMAGE_HOVERS,
   countOnHover,
@@ -128,13 +128,13 @@ export default function EntityLink({
         {badged && !useForHover
           ? <Badge
             type="small"
-            contrast="medium"
+            contrast={contrast}
             className={clsx(
               'translate-y-[-0.5px]',
               hasBadgeIcon && '*:flex *:items-center *:gap-1',
             )}
-            uppercase={uppercase}
-            interactive={true}
+            uppercase
+            interactive
           >
             {iconBadgeStart}
             {renderLabel}
