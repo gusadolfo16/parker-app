@@ -43,62 +43,69 @@ export default function PhotoMedium({
   const tags = sortTagsArray(photo.tags);
 
   return (
-    <LinkWithStatus
-      href={pathForPhoto({ photo, ...categories })}
-      className={clsx(
-        'group',
-        'active:brightness-75',
-        selected && 'brightness-50',
-        className,
-        'block' // Add block here
-      )}
-      prefetch={prefetch}
-    >
-      {({ isLoading }) =>
-        <span className="w-full h-full relative block">
-          {isLoading &&
-            <div className={clsx(
-              'absolute inset-0 flex items-center justify-center',
-              'text-white bg-black/25 backdrop-blur-xs',
-              'animate-fade-in',
-              'z-10',
-            )}>
-              <Spinner size={20} color="text" />
-            </div>}
-          {debugColor && photo.colorData &&
-            <div className={clsx(
-              'absolute inset-2 z-10',
-              'opacity-0 group-hover:opacity-100 transition-opacity',
-            )}>
-              <PhotoColors
-                className="justify-end"
-                colorData={photo.colorData}
-              />
-            </div>}
-          {tags.length > 0 &&
-            <div className={clsx(
-              'absolute inset-x-0 bottom-0 z-10',
-              'pb-2 pt-8 px-2',
-              'bg-gradient-to-t from-black/50 to-transparent',
-              'opacity-0 group-hover:opacity-100 transition-opacity',
-            )}>
-              <PhotoTags
-                tags={tags}
-                contrast="high"
-                badged
-              />
-            </div>}
-          <ImageMedium
-            src={photo.url}
-            aspectRatio={photo.aspectRatio}
-            blurDataURL={photo.blurData}
-            blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
-            className="flex object-cover w-full h-full"
-            classNameImage="object-cover w-full h-full"
-            alt={altTextForPhoto(photo)}
-            priority={priority}
-          />
-        </span>}
-    </LinkWithStatus>
+    <div className={clsx(
+      'group relative',
+      className,
+    )}>
+      <LinkWithStatus
+        ref={ref}
+        href={pathForPhoto({ photo, ...categories })}
+        className={clsx(
+          'block',
+          'active:brightness-75',
+          selected && 'brightness-50',
+        )}
+        prefetch={prefetch}
+      >
+        {({ isLoading }) =>
+          <span className="w-full h-full relative block">
+            {isLoading &&
+              <div className={clsx(
+                'absolute inset-0 flex items-center justify-center',
+                'text-white bg-black/25 backdrop-blur-xs',
+                'animate-fade-in',
+                'z-10',
+              )}>
+                <Spinner size={20} color="text" />
+              </div>}
+            {debugColor && photo.colorData &&
+              <div className={clsx(
+                'absolute inset-2 z-10',
+                'opacity-0 group-hover:opacity-100 transition-opacity',
+              )}>
+                <PhotoColors
+                  className="justify-end"
+                  colorData={photo.colorData}
+                />
+              </div>}
+            <ImageMedium
+              src={photo.url}
+              aspectRatio={photo.aspectRatio}
+              blurDataURL={photo.blurData}
+              blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
+              className="flex object-cover w-full h-full"
+              classNameImage="object-cover w-full h-full"
+              alt={altTextForPhoto(photo)}
+              priority={priority}
+            />
+          </span>}
+      </LinkWithStatus>
+      {tags.length > 0 &&
+        <div className={clsx(
+          'absolute inset-x-0 bottom-0 z-10',
+          'pb-2 pt-8 px-2',
+          'bg-gradient-to-t from-black/50 to-transparent',
+          'opacity-0 group-hover:opacity-100 transition-opacity',
+          'pointer-events-none', // Allow clicks to pass through to photo link
+        )}>
+          <div className="pointer-events-auto"> {/* Re-enable clicks for tags */}
+            <PhotoTags
+              tags={tags}
+              contrast="high"
+              badged
+            />
+          </div>
+        </div>}
+    </div>
   );
 };

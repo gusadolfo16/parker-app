@@ -107,13 +107,13 @@ export default function EntityHover({
         <div className="flex flex-col gap-1 h-full">
           {/* Header */}
           <div className="grow">
-            <span className={clsx(
+            <div className={clsx(
               'flex text-base',
               'grow',
               'translate-x-[4px]',
             )}>
               {header}
-            </span>
+            </div>
           </div>
           {/* Caption */}
           <div className={clsx(

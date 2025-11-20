@@ -54,7 +54,7 @@ export default function EntityLink({
   suppressSpinner,
   debug,
 }: {
-  icon: ReactNode
+  icon?: ReactNode
   iconBadgeStart?: ReactNode
   iconBadgeEnd?: ReactNode
   label: string
@@ -135,7 +135,7 @@ export default function EntityLink({
       }}>
         {badged && !useForHover
           ? <Badge
-            type="small"
+            type={type === 'text-only' ? 'text-only' : 'small'}
             contrast={contrast}
             className={clsx(
               'translate-y-[-0.5px]',

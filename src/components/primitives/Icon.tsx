@@ -18,7 +18,7 @@ export default function Icon({
   debug?: boolean,
 }) {
   return (
-    <span className={clsx(
+    <div className={clsx(
       'h-[0.95rem]',
       'sm:h-[1rem] *:translate-y-[2.5px]',
       wide ? 'w-[28px]' : 'w-[14px]',
@@ -31,6 +31,6 @@ export default function Icon({
         : <span className={iconClassName}>
           {isValidElement(children) ? children : null}
         </span>}
-    </span>
+    </div>
   );
 }

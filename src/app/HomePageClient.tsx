@@ -6,7 +6,7 @@ import { Photo } from '@/photo';
 import { PhotoSetCategories } from '@/category';
 import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import AppGrid from '@/components/AppGrid';
-import PhotoSidebar from '@/photo/PhotoSidebar';
+import PhotoGridSidebar from '@/photo/PhotoGridSidebar';
 
 export default function HomePageClient({
   photos,
@@ -37,7 +37,7 @@ export default function HomePageClient({
         />
       }
       contentSide={
-        <PhotoSidebar {...categories} />
+        <PhotoGridSidebar {...categories} photosCount={photosCount} />
       }
     />
   );
