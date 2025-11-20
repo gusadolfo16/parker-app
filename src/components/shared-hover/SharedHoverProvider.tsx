@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
   MutableRefObject,
+  useMemo,
 } from 'react';
 import { SharedHoverContext, SharedHoverProps } from './state';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -77,7 +78,7 @@ export default function SharedHoverProvider({
             ? trigger.bottom + HOVER_MARGIN + hover.offsetBelow
             // Position above trigger
             : trigger.top - (hover.height + HOVER_MARGIN)
-              + hover.offsetAbove;
+            + hover.offsetAbove;
         const horizontalOffset =
           window.innerWidth - (trigger.left + hover.width) < VIEWPORT_SAFE_AREA
             ? { right: VIEWPORT_SAFE_AREA }
@@ -103,7 +104,7 @@ export default function SharedHoverProvider({
 
   const isHoverBeingShown = useCallback((key: string) =>
     Boolean(hoverProps?.key && hoverProps.key === key)
-  , [hoverProps]);
+    , [hoverProps]);
 
   useEffect(() => {
     const onWindowChange = () => clearState(0);
@@ -117,15 +118,15 @@ export default function SharedHoverProvider({
     };
   }, [clearState]);
 
+  const contextValue = useMemo(() => ({
+    showHover,
+    dismissHover,
+    renderHover: setHoverContent,
+    isHoverBeingShown,
+  }), [showHover, dismissHover, isHoverBeingShown]);
+
   return (
-    <SharedHoverContext.Provider
-      value={{
-        showHover,
-        dismissHover,
-        renderHover: setHoverContent,
-        isHoverBeingShown,
-      }}
-    >
+    <SharedHoverContext.Provider value={contextValue}>
       <div className="relative inset-0 z-100 pointer-events-none">
         <AnimatePresence>
           {hoverProps &&

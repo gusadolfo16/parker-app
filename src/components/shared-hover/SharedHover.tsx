@@ -13,7 +13,7 @@ export default function SharedHover({
   color,
 }: {
   hoverKey: string
-  children :ReactNode
+  children: ReactNode
   content: ReactNode
   width: number
   height: number
@@ -43,7 +43,7 @@ export default function SharedHover({
     if (isHovering) {
       renderHover?.(content);
     }
-  }, [isHovering, renderHover, content]);
+  }, [isHovering, renderHover]);
 
   return (
     <div

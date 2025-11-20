@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, ReactNode, RefObject, useState } from 'react';
+import { ComponentProps, ReactNode, RefObject, useCallback, useState } from 'react';
 import LabeledIcon, { LabeledIconType } from '../primitives/LabeledIcon';
 import Badge from '../Badge';
 import { clsx } from 'clsx/lite';
@@ -159,7 +159,8 @@ export default function EntityLink({
       </LabeledIcon>
     </LinkWithStatus>;
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
+
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (showHover && countOnHover && hoverPhotoQueryOptions && showSharedHover && renderSharedHover) {
       showSharedHover(e.currentTarget as HTMLElement, {
         key: path,
@@ -186,13 +187,13 @@ export default function EntityLink({
         </EntityHover>
       );
     }
-  };
+  }, [showHover, countOnHover, hoverPhotoQueryOptions, showSharedHover, renderSharedHover, path, contrast]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     if (showHover && countOnHover && hoverPhotoQueryOptions && dismissSharedHover) {
       dismissSharedHover(ref && 'current' in ref ? ref.current : null);
     }
-  };
+  }, [showHover, countOnHover, hoverPhotoQueryOptions, dismissSharedHover, ref]);
 
   return (
     <div

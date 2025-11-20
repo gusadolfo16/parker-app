@@ -58,7 +58,7 @@ export default function PhotoMedium({
         prefetch={prefetch}
       >
         {({ isLoading }) =>
-          <span className="w-full h-full relative block">
+          <div className="w-full h-full relative block">
             {isLoading &&
               <div className={clsx(
                 'absolute inset-0 flex items-center justify-center',
@@ -88,7 +88,7 @@ export default function PhotoMedium({
               alt={altTextForPhoto(photo)}
               priority={priority}
             />
-          </span>}
+          </div>}
       </LinkWithStatus>
       {tags.length > 0 &&
         <div className={clsx(
