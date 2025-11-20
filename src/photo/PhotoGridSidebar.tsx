@@ -62,7 +62,7 @@ export default function PhotoGridSidebar({
       tags: limitTagsByCount(_categories.tags, 2),
     }
     : _categories
-  , [_categories]);
+    , [_categories]);
 
   const {
     recents,
@@ -102,7 +102,7 @@ export default function PhotoGridSidebar({
 
   const tagsIncludingHidden = useMemo(() =>
     addPrivateToTags(tags, photosCountHidden)
-  , [tags, photosCountHidden]);
+    , [tags, photosCountHidden]);
 
   const recentsContent = recents.length > 0
     ? <HeaderList

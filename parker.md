@@ -1739,3 +1739,16 @@ Se mejoró la robustez de la función `dateRangeForPhotos` para manejar casos do
 #### Calidad del Código y Refactorización
 - **Limpieza de Código:** Se eliminaron importaciones y variables no utilizadas en múltiples archivos para mejorar la legibilidad y el mantenimiento del código.
 - **Simplificación:** Se simplificaron y refactorizaron varias partes del código para una mayor claridad y eficiencia.
+
+### 60. Correcciones y Mejoras (Iteración 40)
+
+**Paso 60.1: Añadir el elemento "Report" al menú de administrador**
+
+Se ha añadido un nuevo elemento de menú para acceder a la página de informes en el menú de administrador.
+
+**Detalles de la acción:**
+- Se modificó el archivo `src/admin/AdminAppMenu.tsx`.
+- Se añadió un nuevo objeto al array `menuItems` con la etiqueta "Report", la ruta `PATH_ADMIN_REPORT` y un icono `HiOutlineChartBar`.
+- Se añadieron iconos a todos los demás elementos del menú para mantener la coherencia visual.
+- Se importaron los iconos necesarios de `react-icons/fi` y `react-icons/hi`.
+- Se ajustó el JSX para renderizar el icono junto a la etiqueta en cada elemento del menú.

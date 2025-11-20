@@ -118,9 +118,6 @@ export default function AppViewSwitcher({
         )}
       >
         {renderItemGrid}
-        {/* Show spinner if admin is suspected to be logged in */}
-        
-        
       </Switcher>
       {showSortControl &&
         <motion.div

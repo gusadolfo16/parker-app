@@ -27,6 +27,7 @@ export default function Badge({
           'border border-medium',
         );
       case 'small':
+      case 'text-only':
         return clsx(
           'px-[5px] h-[17px] md:h-[18px]',
           'text-[0.7rem] font-medium rounded-[0.25rem]',
@@ -49,7 +50,7 @@ export default function Badge({
     }
   };
   return (
-    <span className={clsx(
+    <div className={clsx(
       'max-w-full',
       'inline-flex items-center',
       stylesForType(),
@@ -62,6 +63,6 @@ export default function Badge({
       )}>
         {children}
       </span>
-    </span>
+    </div>
   );
 }

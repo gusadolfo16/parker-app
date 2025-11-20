@@ -14,6 +14,11 @@ import { useAppText } from '@/i18n/state/client';
 import { capitalize } from '@/utility/string';
 import { clsx } from 'clsx/lite';
 import { usePathname } from 'next/navigation';
+import { ReactNode } from 'react';
+import CategoryHeader from '@/category/CategoryHeader';
+import IconTag from '@/components/icons/IconTag';
+import IconCamera from '@/components/icons/IconCamera';
+import { FiFilm, FiAperture, FiCalendar } from 'react-icons/fi';
 
 export default function PhotoSidebar({
   cameras,
@@ -28,11 +33,12 @@ export default function PhotoSidebar({
 
   const renderCategoryLinks = (
     title: string,
+    icon: ReactNode,
     items: { path: string; label: string; count: number }[],
   ) => (
     items.length > 0 && ( // Only render if there are items
       <div className="mb-6">
-        <h3 className="text-lg font-bold mb-2">{title}</h3>
+        <CategoryHeader title={title} icon={icon} />
         <ul className="space-y-1">
           {items.map(({ path, label, count }) => (
             <li key={path}>
@@ -90,12 +96,12 @@ export default function PhotoSidebar({
 
   return (
     <div className="p-4 space-y-6">
-      {renderCategoryLinks(appText.category.tagPlural, tagLinks)}
-      {renderCategoryLinks(appText.category.cameraPlural, cameraLinks)}
-      {renderCategoryLinks(appText.category.lensPlural, lensLinks)}
-      {renderCategoryLinks(appText.category.filmPlural, filmLinks)}
-      {renderCategoryLinks(appText.category.focalLengthPlural, focalLengthLinks)}
-      {renderCategoryLinks(appText.category.yearPlural, yearLinks)}
+      {renderCategoryLinks(appText.category.tagPlural, <IconTag />, tagLinks)}
+      {renderCategoryLinks(appText.category.cameraPlural, <IconCamera />, cameraLinks)}
+      {renderCategoryLinks(appText.category.lensPlural, <IconCamera />, lensLinks)}
+      {renderCategoryLinks(appText.category.filmPlural, <FiFilm />, filmLinks)}
+      {renderCategoryLinks(appText.category.focalLengthPlural, <FiAperture />, focalLengthLinks)}
+      {renderCategoryLinks(appText.category.yearPlural, <FiCalendar />, yearLinks)}
     </div>
   );
 }

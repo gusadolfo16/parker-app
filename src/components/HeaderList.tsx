@@ -34,11 +34,12 @@ export default function HeaderList({
       duration={0.5}
       staggerDelay={0.05}
       items={(title || icon
-        ? [<div
+        ? [<h4
           key="header"
           className={clsx(
-            'text-gray-900',
-            'dark:text-gray-100',
+            'metadata-section-title',
+            'text-dim dark:text-dim', // CAMBIO 1: Atenuar el color en ambos temas
+            'text-xs font-bold tracking-wider', // CAMBIO 2: Tamaño pequeño, negrita y espaciado ancho
             'flex items-center mb-1 gap-1',
             'uppercase select-none',
           )}
@@ -48,7 +49,7 @@ export default function HeaderList({
               {icon}
             </span>}
           {title}
-        </div>]
+        </h4>]
         : [] as ReactNode[]
       )
         .concat(items.slice(

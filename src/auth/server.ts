@@ -2,6 +2,7 @@ import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next
 import NextAuth, { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import { query } from '@/platforms/postgres';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -17,8 +18,9 @@ export const authOptions: NextAuthOptions = {
           process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
           process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD === password
         ) {
-          const user = { id: email, email, name: 'Admin User' };
-          return user;
+          const { rows } = await query('SELECT * FROM users WHERE email = $1', [email]);
+          const user = rows[0];
+          return user ? { id: user.id, email: user.email, name: user.name } : null;
         } else {
           return null;
         }
@@ -36,11 +38,14 @@ export const authOptions: NextAuthOptions = {
     signIn: '/sign-in',
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.email = user.email ?? undefined;
         token.name = user.name ?? undefined;
+      }
+      if (account) {
+        token.providerAccountId = account.providerAccountId;
       }
       return token;
     },
@@ -50,6 +55,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).email = token.email;
         (session.user as any).name = token.name;
       }
+      session.providerAccountId = token.providerAccountId;
       return session;
     },
   },

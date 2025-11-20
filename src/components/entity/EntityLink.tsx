@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, ReactNode, RefObject, useState } from 'react';
+import { ComponentProps, ReactNode, RefObject, useCallback, useState } from 'react';
 import LabeledIcon, { LabeledIconType } from '../primitives/LabeledIcon';
 import Badge from '../Badge';
 import { clsx } from 'clsx/lite';
@@ -13,8 +13,10 @@ import { getPhotosCachedAction } from '@/photo/actions';
 import { PhotoQueryOptions } from '@/photo/db';
 import { MAX_PHOTOS_TO_SHOW_PER_CATEGORY } from '@/image-response';
 
+import { useSharedHoverState } from '../shared-hover/state';
+
 export interface EntityLinkExternalProps {
-  ref?: RefObject<HTMLSpanElement>
+  ref?: RefObject<HTMLDivElement>
   type?: LabeledIconType
   badged?: boolean
   contrast?: ComponentProps<typeof Badge>['contrast']
@@ -52,7 +54,7 @@ export default function EntityLink({
   suppressSpinner,
   debug,
 }: {
-  icon: ReactNode
+  icon?: ReactNode
   iconBadgeStart?: ReactNode
   iconBadgeEnd?: ReactNode
   label: string
@@ -95,6 +97,12 @@ export default function EntityLink({
       {label}
     </ResponsiveText>;
 
+  const {
+    showHover: showSharedHover,
+    dismissHover: dismissSharedHover,
+    renderHover: renderSharedHover,
+  } = useSharedHoverState();
+
   const renderLink = (useForHover?: boolean) =>
     <LinkWithStatus
       href={path}
@@ -103,7 +111,7 @@ export default function EntityLink({
         'inline-flex items-center gap-2 max-w-full truncate',
         classForContrast(),
         path && !badged && contrast !== 'frosted' &&
-          'hover:text-gray-900 dark:hover:text-gray-100',
+        'hover:text-gray-900 dark:hover:text-gray-100',
         path && !badged && 'active:text-medium!',
       )}
       isLoading={isLoading}
@@ -127,7 +135,7 @@ export default function EntityLink({
       }}>
         {badged && !useForHover
           ? <Badge
-            type="small"
+            type={type === 'text-only' ? 'text-only' : 'small'}
             contrast={contrast}
             className={clsx(
               'translate-y-[-0.5px]',
@@ -151,9 +159,47 @@ export default function EntityLink({
       </LabeledIcon>
     </LinkWithStatus>;
 
+
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (showHover && countOnHover && hoverPhotoQueryOptions && showSharedHover && renderSharedHover) {
+      showSharedHover(e.currentTarget as HTMLElement, {
+        key: path,
+        width: 300, // Default width
+        height: 200, // Default height
+        offsetAbove: 0,
+        offsetBelow: 0,
+        color: contrast === 'frosted' ? 'frosted' : undefined,
+      });
+      renderSharedHover(
+        <EntityHover
+          hoverKey={path}
+          header={renderLink(true)}
+          photosCount={countOnHover}
+          getPhotos={() =>
+            getPhotosCachedAction({
+              ...hoverPhotoQueryOptions,
+              limit: MAX_PHOTOS_TO_SHOW_PER_CATEGORY,
+            })}
+          color={contrast === 'frosted' ? 'frosted' : undefined}
+        >
+          {/* Add empty children to satisfy the type requirement */}
+          <></>
+        </EntityHover>
+      );
+    }
+  }, [showHover, countOnHover, hoverPhotoQueryOptions, showSharedHover, renderSharedHover, path, contrast]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (showHover && countOnHover && hoverPhotoQueryOptions && dismissSharedHover) {
+      dismissSharedHover(ref && 'current' in ref ? ref.current : null);
+    }
+  }, [showHover, countOnHover, hoverPhotoQueryOptions, dismissSharedHover, ref]);
+
   return (
-    <span
+    <div
       ref={ref}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={clsx(
         'inline-flex items-center gap-2',
         'max-w-full overflow-hidden select-none',
@@ -193,6 +239,6 @@ export default function EntityLink({
           )}
           color={contrast === 'frosted' ? 'text' : undefined}
         />}
-    </span>
+    </div>
   );
 }

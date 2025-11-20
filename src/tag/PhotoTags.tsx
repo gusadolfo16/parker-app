@@ -5,20 +5,35 @@ import { EntityLinkExternalProps } from '@/components/entity/EntityLink';
 import { Fragment } from 'react';
 
 export default function PhotoTags({
+
   tags,
+
   tagCounts = {},
+
   contrast,
+
   prefetch,
+
 }: {
+
   tags: string[]
+
   tagCounts?: Record<string, number>
+
 } & EntityLinkExternalProps) {
+
   return (
-    <div className="flex flex-col">
+
+    <div className="flex flex-row flex-wrap gap-x-1">
+
       {tags.map(tag =>
+
         <Fragment key={tag}>
+
           {isTagFavs(tag)
+
             ? <PhotoFavs {...{
+
               contrast,
               prefetch,
               countOnHover: tagCounts[tag],
@@ -26,7 +41,8 @@ export default function PhotoTags({
             : <PhotoTag {...{
               tag,
               contrast,
-              prefetch, countOnHover: tagCounts[tag] }} />}
+              prefetch, countOnHover: tagCounts[tag]
+            }} />}
         </Fragment>)}
     </div>
   );

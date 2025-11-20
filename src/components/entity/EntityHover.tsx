@@ -39,10 +39,10 @@ export default function EntityHover({
   } = useSWR(
     isHovering ? `${SWR_KEYS.SHARED_HOVER}-${hoverKey}` : null,
     getPhotos, {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    });
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 
   const photosToShow = useMemo(() => {
     if (photosCount >= 6) {
@@ -74,10 +74,10 @@ export default function EntityHover({
       <div className={clsx('absolute inset-0 grid', gridClass)}>
         {Array.from({ length: photosToShow }).map((_, index) =>
           photos?.[index] &&
-            <PhotoMedium
-              key={photos[index].id}
-              photo={photos[index]}
-            />)}
+          <PhotoMedium
+            key={photos[index].id}
+            photo={photos[index]}
+          />)}
       </div>
       {/* Placeholder grid */}
       <div className={clsx(
@@ -102,24 +102,24 @@ export default function EntityHover({
       )} />
       {/* Text */}
       <div className={clsx(
-        'absolute inset-0 p-2.5',
+        'absolute inset-0 pt-2.5 px-2.5 pb-0',
       )}>
-        <div className="flex flex-col gap-1 h-full">
+        <div className="flex flex-col h-full justify-between gap-0">
           {/* Header */}
-          <div className="grow">
-            <span className={clsx(
+          <div>
+            <div className={clsx(
               'flex text-base',
-              'grow',
               'translate-x-[4px]',
             )}>
               {header}
-            </span>
+            </div>
           </div>
           {/* Caption */}
           <div className={clsx(
             'self-start',
             'flex items-center gap-2',
-            'px-1.5 py-0.5 rounded-sm',
+            'px-1.5 py-0',
+            'rounded-sm',
             'text-white/90 bg-black/40 backdrop-blur-lg',
             'outline-medium shadow-sm',
             'uppercase text-[0.7rem]',
@@ -131,15 +131,15 @@ export default function EntityHover({
         </div>
       </div>
     </div>
-  , [
-    gridClass,
-    photosToShow,
-    photos,
-    header,
-    photosCount,
-    appText,
-    isLoading,
-  ]);
+    , [
+      gridClass,
+      photosToShow,
+      photos,
+      header,
+      photosCount,
+      appText,
+      isLoading,
+    ]);
 
   return <SharedHover {...{
     hoverKey,

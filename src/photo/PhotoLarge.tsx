@@ -345,6 +345,7 @@ export default function PhotoLarge({
                           tagCounts={tagCounts}
                           contrast="medium"
                           prefetch={prefetchRelatedLinks}
+                          badged
                         />}
                     </div>}
                 </div>

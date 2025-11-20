@@ -12,7 +12,6 @@ import AnimateItems from '@/components/AnimateItems';
 import { useAppState } from '@/app/AppState';
 import Spinner from '@/components/Spinner';
 import { useAppText } from '@/i18n/state/client';
-import { signOut } from 'next-auth/react';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -21,6 +20,7 @@ export default function Footer() {
     userEmail,
     userEmailEager,
     isCheckingAuth,
+    clearAuthStateAndRedirectIfNecessary,
   } = useAppState();
 
   const appText = useAppText();
@@ -50,7 +50,7 @@ export default function Footer() {
                       {userEmail || userEmailEager}
                     </div>
                     <button
-                      onClick={() => signOut({ callbackUrl: PATH_ROOT })}
+                      onClick={clearAuthStateAndRedirectIfNecessary}
                       className={clsx(
                         'font-mono link h-4 active:text-medium',
                         'disabled:bg-transparent! hover:text-dim',

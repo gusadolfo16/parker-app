@@ -379,3 +379,4 @@ Thank you ❤️ translators: [@sconetto](https://github.com/sconetto) (`pt-br`,
 
 #### Why am I seeing many merge conflicts when syncing my fork?
 > Previous versions of this template stored Next.js "App Router" files in `/src`, and app-level functionality in `/src/site`. If you've made customizations and are having difficulty merging updates, consider moving `/src/app` files to `/`, and renaming `src/site` to `/src/app`. Other structural changes include moving `tailwind.css` and `middleware.ts` to `/`. Additionally, it may be helpful to review [PR #195](https://github.com/sambecker/exif-photo-blog/pull/195) for an overview of the most significant changes.
+<!-- dummy comment to generate commit -->

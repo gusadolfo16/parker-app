@@ -23,12 +23,12 @@ export default function LabeledIcon({
   className?: string,
   classNameIcon?: string,
   children: ReactNode,
-  iconWide?:boolean,
+  iconWide?: boolean,
   uppercase?: boolean,
   debug?: boolean,
 }) {
   return (
-    <span className={clsx(
+    <div className={clsx(
       'inline-flex gap-x-1.5 min-w-0',
       debug && 'border border-green-500 m-[-1px]',
       className,
@@ -52,6 +52,6 @@ export default function LabeledIcon({
         )}>
           {children}
         </span>}
-    </span>
+    </div>
   );
 }

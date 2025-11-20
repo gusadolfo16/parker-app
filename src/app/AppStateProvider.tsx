@@ -27,7 +27,7 @@ import {
   clearAuthEmailCookie,
   getAuthEmailCookie,
 } from '@/auth';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { isPathProtected, PATH_ROOT } from '@/app/path';
 import { INITIAL_UPLOAD_STATE, UploadState } from '@/admin/upload';
 import { RecipeProps } from '@/recipe';
@@ -41,6 +41,7 @@ import {
   SWRKey,
 } from '@/swr';
 import { getPhotosMetaAction } from '@/photo/actions';
+import { signOut } from 'next-auth/react';
 
 export default function AppStateProvider({
   children,
@@ -50,8 +51,6 @@ export default function AppStateProvider({
   areAdminDebugToolsEnabled?: boolean
 }) {
   const router = useRouter();
-
-  const pathname = usePathname();
 
   const { previousPathname } = usePathnames();
 
@@ -196,11 +195,13 @@ export default function AppStateProvider({
   , []);
 
   const clearAuthStateAndRedirectIfNecessary = useCallback(() => {
-    setUserEmail(undefined);
-    setUserEmailEager(undefined);
-    clearAuthEmailCookie();
-    router.push(PATH_ROOT);
-    toastSuccess('Signed out');
+    signOut({ redirect: false }).then(() => {
+      setUserEmail(undefined);
+      setUserEmailEager(undefined);
+      clearAuthEmailCookie();
+      router.push(PATH_ROOT);
+      toastSuccess('Signed out');
+    });
   }, [router]);
 
   // Returns false when upload is cancelled
