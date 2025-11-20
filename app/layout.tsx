@@ -93,6 +93,12 @@ export default async function RootLayout({
       // Suppress hydration errors due to next-themes behavior
       suppressHydrationWarning
     >
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className={clsx(
         // Center on large screens
         '3xl:flex flex-col items-center',

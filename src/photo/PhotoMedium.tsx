@@ -44,13 +44,13 @@ export default function PhotoMedium({
 
   return (
     <LinkWithStatus
-      ref={ref}
       href={pathForPhoto({ photo, ...categories })}
       className={clsx(
         'group',
         'active:brightness-75',
         selected && 'brightness-50',
         className,
+        'block' // Add block here
       )}
       prefetch={prefetch}
     >

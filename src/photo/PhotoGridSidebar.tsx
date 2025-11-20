@@ -62,7 +62,7 @@ export default function PhotoGridSidebar({
       tags: limitTagsByCount(_categories.tags, 2),
     }
     : _categories
-  , [_categories]);
+    , [_categories]);
 
   const {
     recents,
@@ -102,7 +102,7 @@ export default function PhotoGridSidebar({
 
   const tagsIncludingHidden = useMemo(() =>
     addPrivateToTags(tags, photosCountHidden)
-  , [tags, photosCountHidden]);
+    , [tags, photosCountHidden]);
 
   const recentsContent = recents.length > 0
     ? <HeaderList
@@ -161,7 +161,7 @@ export default function PhotoGridSidebar({
             type="text-only"
             countOnHover={count}
             prefetch={false}
-            contrast="medium"
+            contrast="low"
             badged
           />)}
     />
@@ -181,7 +181,7 @@ export default function PhotoGridSidebar({
             type="text-only"
             countOnHover={count}
             prefetch={false}
-            contrast="medium"
+            contrast="low"
             badged
           />)}
     />
@@ -205,7 +205,7 @@ export default function PhotoGridSidebar({
                 countOnHover={count}
                 type="icon-last"
                 prefetch={false}
-                contrast="medium"
+                contrast="low"
                 badged
               />;
             case TAG_PRIVATE:
@@ -214,7 +214,7 @@ export default function PhotoGridSidebar({
                 countOnHover={count}
                 type="icon-last"
                 prefetch={false}
-                contrast="medium"
+                contrast="low"
                 badged
               />;
             default:
@@ -224,7 +224,7 @@ export default function PhotoGridSidebar({
                 type="text-only"
                 countOnHover={count}
                 prefetch={false}
-                contrast="medium"
+                contrast="low"
                 badged
               />;
           }

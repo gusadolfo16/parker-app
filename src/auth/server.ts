@@ -38,11 +38,14 @@ export const authOptions: NextAuthOptions = {
     signIn: '/sign-in',
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.email = user.email ?? undefined;
         token.name = user.name ?? undefined;
+      }
+      if (account) {
+        token.providerAccountId = account.providerAccountId;
       }
       return token;
     },
@@ -52,6 +55,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).email = token.email;
         (session.user as any).name = token.name;
       }
+      session.providerAccountId = token.providerAccountId;
       return session;
     },
   },

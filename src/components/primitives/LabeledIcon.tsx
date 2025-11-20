@@ -23,7 +23,7 @@ export default function LabeledIcon({
   className?: string,
   classNameIcon?: string,
   children: ReactNode,
-  iconWide?:boolean,
+  iconWide?: boolean,
   uppercase?: boolean,
   debug?: boolean,
 }) {
