@@ -18,16 +18,16 @@ interface SelectionContextType {
   selectedPhotos: Photo[];
   toggleSelectionMode: () => void;
   togglePhotoSelection: (photo: Photo) => void;
-  clearSelection: (userId?: string) => void;
-  confirmSelection: (userId: string) => Promise<boolean>;
-  clearAndUnlockSelection: (userId: string) => Promise<boolean>;
+  clearSelection: () => void;
+  confirmSelection: () => Promise<boolean>;
+  clearAndUnlockSelection: () => Promise<boolean>;
 }
 
 const SelectionContext = createContext<SelectionContextType | undefined>(
   undefined,
 );
 
-export const clearAndUnlockSelection = async (userId: string, photoIds: string[]): Promise<boolean> => {
+export const clearAndUnlockSelection = async (photoIds: string[]): Promise<boolean> => {
   if (photoIds.length === 0) {
     toast.error('No photos to unlock.');
     return false;
@@ -37,7 +37,7 @@ export const clearAndUnlockSelection = async (userId: string, photoIds: string[]
     const response = await fetch('/api/selection', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ photoIds, userId }),
+      body: JSON.stringify({ photoIds }),
     });
 
     if (response.ok) {
@@ -80,17 +80,17 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
-  const clearSelection = useCallback(async (userId?: string) => {
+  const clearSelection = useCallback(async () => {
     const photoIds = selectedPhotos.map(photo => photo.id);
 
-    if (userId && photoIds.length > 0) {
+    if (photoIds.length > 0) {
       try {
         const response = await fetch('/api/selection', {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ photoIds, userId }),
+          body: JSON.stringify({ photoIds }),
         });
         if (!response.ok) {
           toast.error('Failed to unlock photos.');
@@ -105,7 +105,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
     setSelectionMode(false);
   }, [selectedPhotos, setSelectedPhotos, setSelectionMode]);
 
-  const confirmSelection = useCallback(async (userId: string): Promise<boolean> => {
+  const confirmSelection = useCallback(async (): Promise<boolean> => {
     const photoIds = selectedPhotos.map(photo => photo.id);
 
     if (photoIds.length === 0) {
@@ -119,7 +119,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
       const response = await fetch('/api/selection', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ photoIds, userId }),
+        body: JSON.stringify({ photoIds }),
       });
 
       if (response.ok) {
@@ -146,7 +146,7 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
         togglePhotoSelection,
         clearSelection,
         confirmSelection,
-        clearAndUnlockSelection: (userId: string) => clearAndUnlockSelection(userId, selectedPhotos.map(p => p.id)),
+        clearAndUnlockSelection: () => clearAndUnlockSelection(selectedPhotos.map(p => p.id)),
       }}
     >
       {children}

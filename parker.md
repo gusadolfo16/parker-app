@@ -1785,23 +1785,3 @@ Se ha añadido un nuevo elemento de menú para acceder a la página de informes 
 **Paso 61.8: Corrección: Actualizar pnpm-lock.yaml después de cambios en dependencias**
 **Detalles de la acción:**
 - Se actualizó el archivo `pnpm-lock.yaml` después de realizar cambios en las dependencias.
-
----
-
-### Últimos Commits
-
-80112299 - Gus, 6 days ago : feat: implement shared hover state and update entity hover
-23bb0233 - Gus, 6 days ago : fix: display tags in a row with spacing
-3ded5ea9 - Gus, 6 days ago : Fix hydration errors and implement styled tags in sidebar
-32e377d3 - Gus, 6 days ago : Fix hydration error in EntityLink and update tag styling to text-only pill
-8034b1bd - Gus, 7 days ago : feat: Display photo tags on main page grid
-6fddc813 - Gus, 7 days ago : feat: Refactor main page tag styles and fix DB query
-183704a3 - Gus, 12 days ago : chore: Add comment to README to generate commit
-e28991e3 - Gus, 12 days ago : fix: Update pnpm-lock.yaml after dependency changes
-eebd2209 - Gus, 12 days ago : feat: Implement admin report enhancements and fix build errors
-20de252f - Gus, 2 months ago : feat: Implement photo selection and locking workflow and fix related bugs
-093af7cc - Gus, 2 months ago : Fix: Prerendering error in tag pages by disabling generateStaticParams
-81f8bb30 - Gus, 2 months ago : Fix: Prerendering error in lens metadata by disabling generateStaticParams
-2c28416a - Gus, 2 months ago : Fix: Prerendering error in lens metadata by returning minimal metadata when no photos are found
-bba33445 - Gus, 2 months ago : Fix: Prerendering error in lens metadata by commenting out description and images
-15d137bb - Gus, 2 months ago : Fix: Prerendering error in lens metadata when no photos are found

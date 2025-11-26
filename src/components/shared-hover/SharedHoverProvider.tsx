@@ -140,7 +140,7 @@ export default function SharedHoverProvider({
               style={hoverStyle}
             >
               <MenuSurface
-                className="max-w-none p-1!"
+                className="max-w-none p-0!"
                 color={hoverProps.color}
               >
                 <div

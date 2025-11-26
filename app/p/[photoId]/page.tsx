@@ -35,9 +35,9 @@ const getPhotosNearIdCachedCached = cache(async (photoId: string) => {
     );
 });
 
-export const generateStaticParams = staticallyGeneratePhotosIfConfigured(
-  'page',
-);
+// export const generateStaticParams = staticallyGeneratePhotosIfConfigured(
+//   'page',
+// );
 
 interface PhotoProps {
   params: Promise<{ photoId: string }>

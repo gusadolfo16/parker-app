@@ -5,17 +5,16 @@ import { useCallback } from 'react';
 import { toastSuccess } from '@/toast';
 
 interface DownloadReportButtonProps {
-  photosByOwner: Record<string, LockedPhotoWithUser[]>;
+  photosByOwner: Record<string, { userName?: string, userEmail?: string, lockedBy: string, photos: LockedPhotoWithUser[] }>;
 }
 
 export default function DownloadReportButton({ photosByOwner }: DownloadReportButtonProps) {
   const handleDownload = useCallback(() => {
     let csvContent = "User Name,User Email,Photo ID,Photo Title,Photo URL,Locked At\n";
 
-    Object.entries(photosByOwner).forEach(([ownerId, photos]) => {
-      const firstPhoto = photos[0];
-      const displayEmail = firstPhoto.userEmail || ownerId;
-      const displayUserName = firstPhoto.userName || (displayEmail.includes('@') ? displayEmail.split('@')[0] : displayEmail);
+    Object.entries(photosByOwner).forEach(([ownerId, { userName, userEmail, photos }]) => {
+      const displayEmail = userEmail || ownerId;
+      const displayUserName = userName || (displayEmail.includes('@') ? displayEmail.split('@')[0] : displayEmail);
 
       photos.forEach(photo => {
         csvContent += `"${displayUserName}","${displayEmail}","${photo.id}","${photo.title}","${photo.url}","${photo.lockedAt?.toLocaleString() ?? ''}"\n`;

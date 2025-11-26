@@ -152,6 +152,7 @@ export default function AppStateProvider({
     error: authError,
     isLoading: isCheckingAuth,
   } = useSWR(SWR_KEYS.GET_AUTH, getAuthSessionAction, { revalidateOnFocus: true });
+
   useEffect(() => {
     if (auth === null || authError) {
       setUserEmail(undefined);
@@ -192,7 +193,7 @@ export default function AppStateProvider({
 
   const registerAdminUpdate = useCallback(() =>
     setAdminUpdateTimes(updates => [...updates, new Date()])
-  , []);
+    , []);
 
   const clearAuthStateAndRedirectIfNecessary = useCallback(() => {
     signOut({ redirect: false }).then(() => {
@@ -215,7 +216,7 @@ export default function AppStateProvider({
       resolve(false);
     }
   })
-  , []);
+    , []);
   const setUploadState = useCallback((uploadState: Partial<UploadState>) => {
     _setUploadState(prev => ({ ...prev, ...uploadState }));
   }, []);
