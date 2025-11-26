@@ -9,17 +9,14 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   const session = await getServerSession();
 
-  if (!session || !session.user) {
+  if (!session || !session.user || !session.user.email) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { photoIds, userId } = await req.json();
+  const { photoIds } = await req.json();
+  const userId = session.user.email; // Use email as the identifier
 
-  if (session.user.id !== userId) {
-    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
-  }
-
-  await lockPhotos(photoIds, session.providerAccountId as string);
+  await lockPhotos(photoIds, userId);
 
   return NextResponse.json({ message: 'Selection received' });
 }
@@ -27,17 +24,14 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const session = await getServerSession();
 
-  if (!session || !session.user) {
+  if (!session || !session.user || !session.user.email) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  const { photoIds, userId } = await req.json();
+  const { photoIds } = await req.json();
+  const userId = session.user.email; // Use email as the identifier
 
-  if (session.user.id !== userId) {
-    return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
-  }
-
-  await unlockPhotos(photoIds, session.providerAccountId as string);
+  await unlockPhotos(photoIds, userId);
 
   return NextResponse.json({ message: 'Selection updated' });
 }

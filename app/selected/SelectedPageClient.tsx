@@ -19,7 +19,7 @@ export default function SelectedPageClient() {
   const handleClearAndUnlock = async () => {
     if (session?.user?.id) {
       setIsLoading(true);
-      const success = await clearAndUnlockSelection(session.user.id, selectedPhotos.map(photo => photo.id));
+      const success = await clearAndUnlockSelection(selectedPhotos.map(photo => photo.id));
       if (success) {
         clearSelection();
         toast.success('Selection cleared and unlocked');

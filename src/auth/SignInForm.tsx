@@ -9,12 +9,16 @@ import { signIn } from 'next-auth/react';
 import { useAppText } from '@/i18n/state/client';
 import { PATH_ROOT } from '@/app/path';
 import { useRouter } from 'next/navigation';
+import { useAppState } from '@/app/AppState';
+
+import { SWR_KEYS } from '@/swr';
 
 export default function SignInForm() {
   const [error, setError] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
   const appText = useAppText();
+  const { invalidateSwr } = useAppState();
   const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -28,6 +32,7 @@ export default function SignInForm() {
     if (result?.error) {
       setError(result.error);
     } else {
+      invalidateSwr?.(SWR_KEYS.GET_AUTH);
       router.push(PATH_ROOT);
       router.refresh();
     }

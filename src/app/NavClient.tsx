@@ -100,13 +100,13 @@ export default function NavClient({
           distanceOffset={10}
           items={showNav
             ? [<nav
-                key="nav"
-                ref={ref}
-                className={clsx(
-                  'w-full flex items-center bg-main z-10',
-                  NAV_HEIGHT_CLASS,
-                  classNameStickyNav,
-                )}>
+              key="nav"
+              ref={ref}
+              className={clsx(
+                'w-full flex items-center bg-main z-10',
+                NAV_HEIGHT_CLASS,
+                classNameStickyNav,
+              )}>
               <AppViewSwitcher
                 currentSelection={switcherSelectionForPath()}
                 animate={hasLoadedWithAnimations && isNavVisible}
@@ -123,11 +123,9 @@ export default function NavClient({
                     <SwitcherItem
                       icon={<span>Confirm</span>}
                       onClick={async () => {
-                        if (session?.user?.id) {
-                          const success = await confirmSelection(session.user.id);
-                          if (success) {
-                            router.push('/selected');
-                          }
+                        const success = await confirmSelection();
+                        if (success) {
+                          router.push('/selected');
                         }
                       }}
                       tooltip={{
@@ -137,7 +135,7 @@ export default function NavClient({
                     />
                     <SwitcherItem
                       icon={<span>Cancel</span>}
-                      onClick={() => clearSelection(session?.user?.id)}
+                      onClick={() => clearSelection()}
                       tooltip={{
                         content: 'Cancel Selection',
                       }}

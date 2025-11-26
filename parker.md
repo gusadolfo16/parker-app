@@ -20,7 +20,7 @@ Se ha creado un archivo `.env.local` en la raíz del proyecto (`/home/u631133/de
 
 **Paso 1.2: Configurar Variables de Entorno en Vercel**
 
-Es crucial que estas mismas variables de entorno sean añadidas en la configuración de tu proyecto en Vercel (en la sección "Environment Variables") para que estén disponibles durante el despliegue. Esto asegura que la aplicación funcione correctamente en el entorno de producción.
+Es crucial que estas mismas variables de entorno sean añadidas en la configuración de tu proyecto en Vercel (en la sección "Environment Variables") para que estén disponibles durante el despliegue para el entorno de producción.
 
 ### 2. Gestión de Dependencias y Control de Versiones
 
@@ -47,7 +47,7 @@ Se ha deshabilitado la función de clic derecho (`onContextMenu`) en las imágen
 - Se modificó el componente `src/components/image/ImageWithFallback.tsx`.
 - Se añadió la propiedad `onContextMenu={(e) => e.preventDefault()}` tanto al componente `Image` de `next/image` como a la etiqueta `<img>` de fallback dentro de `ImageWithFallback.tsx`.
 
-**Paso 3.2: Eliminar botones de Zoom y Compartir**
+**Paso 3.2: Eliminar bloques de código relacionados con el zoom y compartir**
 
 Se han eliminados los bloques de código correspondientes a `LoaderButton` (para el zoom) y `ShareButton` (para compartir).
 
@@ -112,7 +112,6 @@ Se ha modificado el componente `PhotoGrid` para permitir la selección de fotos 
 **Detalles de la acción:**
 - Se modificó el componente `src/photo/PhotoGrid.tsx`.
 - Se reemplazó el uso de `selectedPhotoIds` y `setSelectedPhotoIds` de `useAppState` por `selectionMode`, `selectedPhotos` y `togglePhotoSelection` del nuevo `useSelection` hook.
-
 - Se actualizó la lógica para determinar si una foto está seleccionada (`isSelected`).
 - Se actualizó la función `onSelectChange` de `SelectTileOverlay` para usar `togglePhotoSelection`.
 - Se modificó la condición de renderizado de `SelectTileOverlay` para que dependa de `selectionMode`.
@@ -124,7 +123,8 @@ Se ha creado una nueva página en `/selected` que muestra todas las fotos que el
 
 **Detalles de la acción:**
 - Se creó un nuevo componente de página en `app/selected/page.tsx`.
-- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
+- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
+- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
 ### 6. Ajustes de Interfaz de Usuario
 
@@ -143,7 +143,6 @@ Se ha reubicado el botón de selección de fotos a la izquierda del título de l
 
 **Detalles de la acción:**
 - Se modificó el componente `src/app/AppViewSwitcher.tsx` para eliminar el `SwitcherItem` del botón de selección.
-
 - Se modificó el componente `src/app/NavClient.tsx`:
   - Se añadió un nuevo `SwitcherItem` para el botón de selección justo después de `AppViewSwitcher` y antes del `div` que contiene el título de la navegación.
   - Se importaron `Switcher`, `SwitcherItem` y `useSelection` en `NavClient.tsx` para soportar el nuevo botón.
@@ -296,7 +295,8 @@ Se ha creado una nueva página en `/selected` que muestra todas las fotos que el
 
 **Detalles de la acción:**
 - Se creó un nuevo componente de página en `app/selected/page.tsx`.
-- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
+- Esta página utiliza el hook `useSelection` para obtener las fotos seleccionadas y las muestra en un componente `PhotoGrid`.
+- Se añadió un botón "View Selections" en la barra de navegación (`src/app/NavClient.tsx`) que aparece cuando el modo de selección está activo y hay fotos seleccionadas.
 
 ### 15. Correcciones y Mejoras (Iteración 3)
 
@@ -608,7 +608,6 @@ Se ha implementado un mecanismo para bloquear las fotos que un usuario ha selecc
 - Se ha añadido un campo `locked_by` y `locked_at` a la tabla `photos` en la base de datos.
 - Se ha actualizado la función `confirmSelection` en `src/selection/SelectionContext.tsx` para que envíe el ID del usuario al API de selección.
 - Se ha creado un nuevo endpoint de API (`DELETE /api/selection`) para desbloquear las fotos.
-
 - Se ha actualizado la interfaz de usuario en `src/photo/PhotoGrid.tsx` and `src/photo/PhotoLarge.tsx` para mostrar las fotos bloqueadas con un filtro de escala de grises y deshabilitar la selección.
 
 ### 31. Correcciones y Mejoras (Iteración 19)
@@ -659,7 +658,7 @@ Se ha corregido un error de tipo que ocurría en la función `convertPhotoToPhot
 
 **Detalles de la acción:**
 - Se modificó el archivo `src/photo/index.ts`.
-- Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
+- Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` if es `null` antes de asignarlo a la propiedad `lockedAt`.
 
 ### 36. Correcciones y Mejoras (Iteración 24)
 
@@ -669,7 +668,7 @@ Se ha corregido un error de tipo que ocurría en la ruta de la API de selección
 
 **Detalles de la acción:**
 - Se modificó el archivo `app/api/selection/route.ts`.
-- Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` si es `null` antes de asignarlo a la propiedad `lockedAt`.
+- Se añadió una comprobación para convertir `photo.lockedAt` a `undefined` if es `null` antes de asignarlo a la propiedad `lockedAt`.
 
 ### 37. Correcciones y Mejoras (Iteración 25)
 
@@ -720,7 +719,7 @@ Se ha corregido un error de compilación que ocurría al pre-renderizar las pág
 
 **Details of the action:**
 - Se modificó el archivo `src/camera/CameraHeader.tsx`.
-- Se añadió una comprobación en la función `CameraHeader` para asegurar que no se intente acceder a las propiedades de las fotos si el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
+- Se añadió una comprobación en la función `CameraHeader` para asegurar que no se intente acceder a las propiedades de las fotos if el array está vacío. Esto evita el `TypeError` y permite que el proceso de compilación se complete correctamente, incluso para cámaras sin fotos.
 
 ### 42. Correcciones y Mejoras (Iteración 30)
 
@@ -1752,3 +1751,37 @@ Se ha añadido un nuevo elemento de menú para acceder a la página de informes 
 - Se añadieron iconos a todos los demás elementos del menú para mantener la coherencia visual.
 - Se importaron los iconos necesarios de `react-icons/fi` y `react-icons/hi`.
 - Se ajustó el JSX para renderizar el icono junto a la etiqueta en cada elemento del menú.
+
+### 61. Últimos Cambios (Iteración 41)
+
+**Paso 61.1: Implementación de estado de hover compartido y actualización de hover de entidad**
+**Detalles de la acción:**
+- Se implementó un estado de hover compartido y se actualizó el comportamiento de hover para las entidades.
+
+**Paso 61.2: Corrección: Mostrar etiquetas en una fila con espaciado**
+**Detalles de la acción:**
+- Se corrigió la visualización de etiquetas para que se muestren en una fila con espaciado adecuado.
+
+**Paso 61.3: Corrección de errores de hidratación e implementación de etiquetas con estilo en la barra lateral**
+**Detalles de la acción:**
+- Se corrigieron errores de hidratación y se implementaron etiquetas con estilo en la barra lateral.
+
+**Paso 61.4: Corrección de error de hidratación en EntityLink y actualización del estilo de etiquetas a píldora de solo texto**
+**Detalles de la acción:**
+- Se corrigió un error de hidratación en `EntityLink` y se actualizó el estilo de las etiquetas a un formato de píldora de solo texto.
+
+**Paso 61.5: Característica: Mostrar etiquetas de fotos en la cuadrícula de la página principal**
+**Detalles de la acción:**
+- Se añadió la funcionalidad para mostrar etiquetas de fotos en la cuadrícula de la página principal.
+
+**Paso 61.6: Característica: Refactorizar estilos de etiquetas de la página principal y corregir consulta a la base de datos**
+**Detalles de la acción:**
+- Se refactorizaron los estilos de las etiquetas de la página principal y se corrigió una consulta a la base de datos.
+
+**Paso 61.7: Tarea: Añadir comentario a README para generar commit**
+**Detalles de la acción:**
+- Se añadió un comentario al archivo `README` para generar un commit.
+
+**Paso 61.8: Corrección: Actualizar pnpm-lock.yaml después de cambios en dependencias**
+**Detalles de la acción:**
+- Se actualizó el archivo `pnpm-lock.yaml` después de realizar cambios en las dependencias.

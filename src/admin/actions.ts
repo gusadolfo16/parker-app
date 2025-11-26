@@ -91,3 +91,37 @@ export const deleteStoragePhotosAction = async (photoIds: string[]) => {
   }
   revalidateAllKeysAndPaths();
 };
+
+export const cleanAllUsersAction = async () => {
+  const { query } = await import('@/platforms/postgres');
+
+  try {
+    // 1. Unlock all photos
+    await query(`
+      UPDATE photos
+      SET locked_by = NULL, locked_at = NULL
+      WHERE locked_by IS NOT NULL
+    `);
+
+    // 2. Delete all sessions
+    await query(`DELETE FROM sessions`);
+
+    // 3. Delete all accounts (Google OAuth)
+    await query(`DELETE FROM accounts`);
+
+    // 4. Delete all users except admin
+    const adminEmail = process.env.ADMIN_EMAIL;
+    if (adminEmail) {
+      await query(`
+        DELETE FROM users
+        WHERE email != $1
+      `, [adminEmail]);
+    }
+
+    revalidateAdminPaths();
+    return { success: true };
+  } catch (error) {
+    console.error('Error cleaning users:', error);
+    return { success: false, error: String(error) };
+  }
+};
