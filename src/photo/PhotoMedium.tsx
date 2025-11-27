@@ -51,7 +51,7 @@ export default function PhotoMedium({
         ref={ref}
         href={pathForPhoto({ photo, ...categories })}
         className={clsx(
-          'block',
+          'block h-full',
           'active:brightness-75',
           selected && 'brightness-50',
         )}
