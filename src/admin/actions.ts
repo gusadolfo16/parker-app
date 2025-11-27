@@ -51,7 +51,7 @@ export type AdminData = Awaited<ReturnType<typeof getAdminDataAction>>;
 
 export const clearAllSelectionsAction = async () => {
   await unlockAllPhotos();
-  revalidateAdminPaths();
+  revalidateAllKeysAndPaths();
 };
 
 export const revalidateAdminPathAction = async () => {
@@ -118,7 +118,7 @@ export const cleanAllUsersAction = async () => {
       `, [adminEmail]);
     }
 
-    revalidateAdminPaths();
+    revalidateAllKeysAndPaths();
     return { success: true };
   } catch (error) {
     console.error('Error cleaning users:', error);

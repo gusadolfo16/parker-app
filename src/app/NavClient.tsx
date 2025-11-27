@@ -135,7 +135,10 @@ export default function NavClient({
                     />
                     <SwitcherItem
                       icon={<span>Cancel</span>}
-                      onClick={() => clearSelection()}
+                      onClick={() => {
+                        clearSelection();
+                        router.refresh();
+                      }}
                       tooltip={{
                         content: 'Cancel Selection',
                       }}
