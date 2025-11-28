@@ -224,21 +224,21 @@ export default function PhotoLarge({
         // Allow clicks to pass through to zoom controls
         // when not showing recipe overlay
         !(isShowingRecipeOverlay || shouldDebugRecipeOverlays) &&
-          'pointer-events-none',
+        'pointer-events-none',
       )}>
         <AnimatePresence>
           {(isShowingRecipeOverlay || shouldDebugRecipeOverlays) &&
             photo.recipeData &&
             photo.film &&
-              <PhotoRecipeOverlay
-                ref={refRecipe}
-                title={photo.recipeTitle}
-                data={photo.recipeData}
-                film={photo.film}
-                iso={photo.isoFormatted}
-                exposure={photo.exposureCompensationFormatted}
-                onClose={hideRecipeOverlay}
-              />}
+            <PhotoRecipeOverlay
+              ref={refRecipe}
+              title={photo.recipeTitle}
+              data={photo.recipeData}
+              film={photo.film}
+              iso={photo.isoFormatted}
+              exposure={photo.exposureCompensationFormatted}
+              onClose={hideRecipeOverlay}
+            />}
         </AnimatePresence>
       </div>
     </div>;

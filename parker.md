@@ -1785,3 +1785,20 @@ Se ha añadido un nuevo elemento de menú para acceder a la página de informes 
 **Paso 61.8: Corrección: Actualizar pnpm-lock.yaml después de cambios en dependencias**
 **Detalles de la acción:**
 - Se actualizó el archivo `pnpm-lock.yaml` después de realizar cambios en las dependencias.
+
+### 62. Correcciones de Despliegue y Visuales (Iteración 42)
+
+**Paso 62.1: Solución al error "Clear Selection" en Vercel**
+**Detalles de la acción:**
+- Se actualizó `src/admin/actions.ts` para que `clearAllSelectionsAction` y `cleanAllUsersAction` revaliden todas las rutas y claves de caché (`revalidateAllKeysAndPaths`), asegurando que la galería pública se actualice inmediatamente.
+- Se añadió `router.refresh()` en `src/app/NavClient.tsx` al limpiar la selección para forzar una actualización del cliente.
+
+**Paso 62.2: Correcciones Visuales en Grid y Previsualizaciones**
+**Detalles de la acción:**
+- **Grid:** Se añadió la clase `h-full` al componente `LinkWithStatus` en `src/photo/PhotoMedium.tsx`. Esto corrige el problema donde las fotos verticales tenían barras negras o espacios vacíos porque el contenedor del enlace no ocupaba toda la altura de la celda.
+- **Tags:** Se pasó `className="w-full h-full"` al componente `PhotoMedium` dentro de `src/components/entity/EntityHover.tsx` para asegurar que las imágenes de previsualización de etiquetas llenen correctamente su contenedor.
+
+**Paso 62.3: Solución al error de Google OAuth (redirect_uri_mismatch)**
+**Detalles de la acción:**
+- Se identificó que el error 400 en producción se debía a una URI de redirección no autorizada.
+- Se instruyó al usuario para agregar la URL de producción de Vercel (`.../api/auth/callback/google`) a la lista de URIs autorizadas en la consola de Google Cloud.
