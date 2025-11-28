@@ -68,7 +68,7 @@ export default function PhotoGridPage({
         return <div
           key={photo.id}
           className={clsx(
-            'flex relative overflow-hidden',
+            'relative overflow-hidden',
             'group',
             isSelected && 'border-4 border-green-500', // Added green border
             isLocked && 'grayscale cursor-not-allowed',
@@ -81,7 +81,7 @@ export default function PhotoGridPage({
         >
           <PhotoMedium
             className={clsx(
-              'flex w-full h-full',
+              'w-full h-full',
             )}
             {...{
               photo,
