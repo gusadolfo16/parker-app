@@ -51,7 +51,7 @@ export default function PhotoMedium({
         ref={ref}
         href={pathForPhoto({ photo, ...categories })}
         className={clsx(
-          'block',
+          'block h-full',
           'active:brightness-75',
           selected && 'brightness-50',
         )}
@@ -83,7 +83,7 @@ export default function PhotoMedium({
               aspectRatio={photo.aspectRatio}
               blurDataURL={photo.blurData}
               blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
-              className="flex object-cover w-full h-full"
+              className="object-cover w-full h-full"
               classNameImage="object-cover w-full h-full"
               alt={altTextForPhoto(photo)}
               priority={priority}

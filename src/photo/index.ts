@@ -32,7 +32,7 @@ export const INFINITE_SCROLL_FULL_MULTIPLE =
 
 // INFINITE SCROLL: GRID
 export const INFINITE_SCROLL_GRID_INITIAL =
-  process.env.NODE_ENV === 'development' ? 12 : 60;
+  process.env.NODE_ENV === 'development' ? 20 : 60;
 export const INFINITE_SCROLL_GRID_MULTIPLE =
   process.env.NODE_ENV === 'development' ? 12 : 60;
 
@@ -266,7 +266,7 @@ export const photoQuantityText = (
 ) =>
   includeParentheses
     ? `(${count} ${photoLabelForCount(count, appText, capitalize)})`
-    : `${count} ${photoLabelForCount(count, appText, capitalize)}`;  
+    : `${count} ${photoLabelForCount(count, appText, capitalize)}`;
 
 export const deleteConfirmationTextForPhoto = (
   photo: Photo,
@@ -277,7 +277,7 @@ export const deleteConfirmationTextForPhoto = (
 export type PhotoDateRange = { start: string, end: string };
 
 export const descriptionForPhotoSet = (
-  photos:Photo[] = [],
+  photos: Photo[] = [],
   appText: AppTextState,
   descriptor?: string,
   dateBased?: boolean,

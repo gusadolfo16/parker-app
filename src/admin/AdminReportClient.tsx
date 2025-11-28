@@ -7,6 +7,20 @@ import { useState } from 'react';
 
 export default function AdminReportClient({ photos }: { photos: LockedPhotoWithUser[] }) {
   const [isCleaningUsers, setIsCleaningUsers] = useState(false);
+  const [isClearingSelections, setIsClearingSelections] = useState(false);
+
+  const handleClearSelections = async () => {
+    if (!confirm('⚠️ This will unlock all selected photos. Are you sure?')) {
+      return;
+    }
+
+    setIsClearingSelections(true);
+    await clearAllSelectionsAction();
+    setIsClearingSelections(false);
+
+    // Reload the page to show the updated state
+    window.location.reload();
+  };
 
   const handleCleanUsers = async () => {
     if (!confirm('⚠️ This will delete ALL Google users and their sessions. The admin user will be preserved. Are you sure?')) {
@@ -55,10 +69,11 @@ export default function AdminReportClient({ photos }: { photos: LockedPhotoWithU
         <div className="ml-auto flex gap-2">
           <DownloadReportButton photosByOwner={photosByUser} />
           <button
-            onClick={() => clearAllSelectionsAction()}
-            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+            onClick={handleClearSelections}
+            disabled={isClearingSelections}
+            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 disabled:opacity-50"
           >
-            Clear All Selections
+            {isClearingSelections ? 'Clearing...' : 'Clear All Selections'}
           </button>
           <button
             onClick={handleCleanUsers}

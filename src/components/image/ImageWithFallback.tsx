@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { BLUR_ENABLED } from '@/app/config';
 import { useAppState } from '@/app/AppState';
-import { clsx}  from 'clsx/lite';
+import { clsx } from 'clsx/lite';
 import Image, { ImageProps } from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -42,7 +42,7 @@ export default function ImageWithFallback({
   const getBlurClass = () => {
     switch (blurCompatibilityLevel) {
       case 'high':
-      // Fix poorly blurred placeholder data generated on client
+        // Fix poorly blurred placeholder data generated on client
         return 'blur-[4px] @xs:blue-md scale-[1.05]';
       case 'low':
         return 'blur-[2px] @xs:blue-md scale-[1.01]';
@@ -56,26 +56,32 @@ export default function ImageWithFallback({
         className,
       )}
     >
-      <Image ref={ref} {...{
-        ...props,
-        priority,
-        className: classNameImage,
-        onLoad,
-        onError,
-        onContextMenu: (e) => e.preventDefault(),
-      }} />
+      <Image
+        ref={ref}
+        {...props}
+        priority={priority}
+        className={clsx(
+          classNameImage,
+          'select-none touch-none',
+        )}
+        onLoad={onLoad}
+        onError={onError}
+        onContextMenu={(e) => e.preventDefault()}
+        draggable={false}
+      />
       <div
         className={clsx(
           '@container',
           'absolute inset-0 pointer-events-none',
           'overflow-hidden',
           fadeFallbackTransition &&
-            'transition-opacity duration-300 ease-in',
+          'transition-opacity duration-300 ease-in',
           !(BLUR_ENABLED && blurDataURL) && 'bg-main',
           (isLoading || didError || shouldDebugImageFallbacks)
             ? 'opacity-100'
             : 'opacity-0',
         )}
+        style={{ WebkitTouchCallout: 'none' } as React.CSSProperties}
       >
         {(BLUR_ENABLED && blurDataURL)
           ? <img {...{
@@ -84,10 +90,13 @@ export default function ImageWithFallback({
             className: clsx(
               getBlurClass(),
               classNameImage,
+              'select-none',
             ),
             onContextMenu: (e) => e.preventDefault(),
+            draggable: false,
+            style: { WebkitTouchCallout: 'none' } as React.CSSProperties,
           }} />
-          :  <div className={clsx(
+          : <div className={clsx(
             'w-full h-full',
             'bg-gray-100/50 dark:bg-gray-900/50',
           )} />}

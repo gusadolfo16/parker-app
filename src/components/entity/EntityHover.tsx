@@ -77,6 +77,7 @@ export default function EntityHover({
           <PhotoMedium
             key={photos[index].id}
             photo={photos[index]}
+            className="w-full h-full"
           />)}
       </div>
       {/* Placeholder grid */}

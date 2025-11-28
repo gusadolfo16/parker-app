@@ -45,7 +45,7 @@ export default function PhotoGrid({
         return <div
           key={photo.id}
           className={clsx(
-            'flex relative overflow-hidden',
+            'relative overflow-hidden',
             'group',
             isSelected && 'border-4 border-green-500',
             isLocked && 'grayscale cursor-not-allowed',
@@ -57,7 +57,7 @@ export default function PhotoGrid({
           }}
         >
           <PhotoMedium
-            className="flex w-full h-full"
+            className="w-full h-full"
             photo={photo}
             priority={prioritizeInitialPhotos ? index < 6 : undefined}
             {...categories}
