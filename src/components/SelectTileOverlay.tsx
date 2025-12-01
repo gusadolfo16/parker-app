@@ -18,13 +18,17 @@ export default function SelectTileOverlay({
 
   return (
     <div className={clsx(
-      'absolute w-full h-full',
+      'absolute inset-0 w-full h-full',
+      'z-50',
       !disabled && 'cursor-pointer',
       'active:bg-gray-950/40 dark:active:bg-gray-950/60',
-      isPerformingSelectEdit && 'pointer-events-none',
+      isPerformingSelectEdit ? 'pointer-events-none' : 'pointer-events-auto',
     )}>
       <div
-        className="w-full h-full"
+        className={clsx(
+          'w-full h-full',
+          !isPerformingSelectEdit && 'pointer-events-auto',
+        )}
         onClick={() => !disabled && onSelectChange()}
       >
         <div
