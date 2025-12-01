@@ -60,57 +60,6 @@ const SELECTED_PHOTOS_KEY = 'parker_selected_photos';
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Restore selection state from sessionStorage on mount
-  useEffect(() => {
-    try {
-      const savedMode = sessionStorage.getItem(SELECTION_MODE_KEY);
-      const savedPhotos = sessionStorage.getItem(SELECTED_PHOTOS_KEY);
-
-      if (savedMode === 'true') {
-        setSelectionMode(true);
-      }
-
-      if (savedPhotos) {
-        const photos = JSON.parse(savedPhotos);
-        setSelectedPhotos(photos);
-      }
-    } catch (error) {
-      console.error('Error restoring selection state:', error);
-    }
-    setIsHydrated(true);
-  }, []);
-
-  // Persist selection mode to sessionStorage
-  useEffect(() => {
-    if (!isHydrated) return;
-
-    try {
-      if (selectionMode) {
-        sessionStorage.setItem(SELECTION_MODE_KEY, 'true');
-      } else {
-        sessionStorage.removeItem(SELECTION_MODE_KEY);
-      }
-    } catch (error) {
-      console.error('Error persisting selection mode:', error);
-    }
-  }, [selectionMode, isHydrated]);
-
-  // Persist selected photos to sessionStorage
-  useEffect(() => {
-    if (!isHydrated) return;
-
-    try {
-      if (selectedPhotos.length > 0) {
-        sessionStorage.setItem(SELECTED_PHOTOS_KEY, JSON.stringify(selectedPhotos));
-      } else {
-        sessionStorage.removeItem(SELECTED_PHOTOS_KEY);
-      }
-    } catch (error) {
-      console.error('Error persisting selected photos:', error);
-    }
-  }, [selectedPhotos, isHydrated]);
 
   const toggleSelectionMode = useCallback(() => {
     setSelectionMode(prevMode => {
@@ -118,13 +67,6 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
       if (!newMode) {
         // Clear selection when exiting selection mode
         setSelectedPhotos([]);
-        // Clear sessionStorage
-        try {
-          sessionStorage.removeItem(SELECTION_MODE_KEY);
-          sessionStorage.removeItem(SELECTED_PHOTOS_KEY);
-        } catch (error) {
-          console.error('Error clearing selection from sessionStorage:', error);
-        }
       }
       return newMode;
     });
@@ -164,14 +106,6 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
 
     setSelectedPhotos([]);
     setSelectionMode(false);
-
-    // Clear sessionStorage
-    try {
-      sessionStorage.removeItem(SELECTION_MODE_KEY);
-      sessionStorage.removeItem(SELECTED_PHOTOS_KEY);
-    } catch (error) {
-      console.error('Error clearing selection from sessionStorage:', error);
-    }
   }, [selectedPhotos, setSelectedPhotos, setSelectionMode]);
 
   const confirmSelection = useCallback(async (): Promise<boolean> => {
@@ -193,13 +127,6 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
 
       if (response.ok) {
         toast.success('Selection confirmed!');
-        // Clear sessionStorage after successful confirmation
-        try {
-          sessionStorage.removeItem(SELECTION_MODE_KEY);
-          sessionStorage.removeItem(SELECTED_PHOTOS_KEY);
-        } catch (error) {
-          console.error('Error clearing selection from sessionStorage:', error);
-        }
         return true;
       } else {
         console.error('Failed to confirm selection:', response.statusText);

@@ -60,6 +60,7 @@ export default function PhotoGrid({
             className="w-full h-full"
             photo={photo}
             priority={prioritizeInitialPhotos ? index < 6 : undefined}
+            disableLink={selectionMode}
             {...categories}
           />
           {selectionMode &&

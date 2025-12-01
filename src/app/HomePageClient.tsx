@@ -7,17 +7,22 @@ import { PhotoSetCategories } from '@/category';
 import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import AppGrid from '@/components/AppGrid';
 import PhotoGridSidebar from '@/photo/PhotoGridSidebar';
+import { SortBy } from '@/photo/sort';
 
 export default function HomePageClient({
   photos,
   photosCount,
   photosCountWithExcludes,
   categories,
+  sortBy = USER_DEFAULT_SORT_OPTIONS.sortBy,
+  sortWithPriority = USER_DEFAULT_SORT_OPTIONS.sortWithPriority,
 }: {
   photos: Photo[],
   photosCount: number,
   photosCountWithExcludes: number,
   categories: PhotoSetCategories,
+  sortBy?: SortBy
+  sortWithPriority?: boolean
 }) {
   const {
     selectionMode,
@@ -30,10 +35,12 @@ export default function HomePageClient({
       contentMain={
         <PhotoGridPage
           photos={photos}
-          {...USER_DEFAULT_SORT_OPTIONS}
+          sortBy={sortBy}
+          sortWithPriority={sortWithPriority}
           selectionMode={selectionMode}
           selectedPhotos={selectedPhotos}
           togglePhotoSelection={togglePhotoSelection}
+          {...categories}
         />
       }
       contentSide={

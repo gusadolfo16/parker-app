@@ -22,7 +22,7 @@ export default function ImageMedium(props: CustomImageProps) {
       <img
         src={srcString}
         alt={alt}
-        className={clsx(classNameImage || 'object-cover w-full h-full')}
+        className={clsx(classNameImage || 'object-cover w-full h-full', 'select-none')}
         loading={priority ? 'eager' : 'lazy'}
         onContextMenu={(e) => e.preventDefault()}
         draggable={false}
@@ -30,6 +30,7 @@ export default function ImageMedium(props: CustomImageProps) {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
+          WebkitTouchCallout: 'none',
         }}
       />
     </div>

@@ -3,7 +3,7 @@ import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import { Metadata } from 'next/types';
 import { getPhotos } from '@/photo/db/query';
 import { cache } from 'react';
-import PhotoGridPage from '@/photo/PhotoGridPage';
+import HomePageClient from '@/app/HomePageClient';
 import { getDataForCategoriesCached } from '@/category/cache';
 import { getPhotosMetaCached } from '@/photo/cache';
 import { SortProps } from '@/photo/sort';
@@ -52,13 +52,13 @@ export default async function GridPage({ params }: SortProps) {
 
   return (
     photos.length > 0
-      ? <PhotoGridPage
+      ? <HomePageClient
         {...{
           photos,
           photosCount,
           photosCountWithExcludes,
+          categories,
           ...sortOptions,
-          ...categories,
         }}
       />
       : <PhotosEmptyState appText={appText.onboarding} />

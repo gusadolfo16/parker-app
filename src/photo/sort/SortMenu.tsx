@@ -13,6 +13,7 @@ export default function SortMenu({
   isTakenAt,
   isUploadedAt,
   isColor,
+  isSortedByDefault,
   descendingLabel,
   ascendingLabel,
   pathDescending,
@@ -20,6 +21,7 @@ export default function SortMenu({
   pathTakenAt,
   pathUploadedAt,
   pathColor,
+  pathClearSort,
 }: {
   isOpen?: boolean
   setIsOpen?: (isOpen: boolean) => void
@@ -68,6 +70,14 @@ export default function SortMenu({
       ...renderLabel(appText.sort.color, isColor),
       icon: renderIcon(isColor),
       href: pathColor,
+    });
+  }
+
+  if (!isSortedByDefault) {
+    itemsSortType.push({
+      ...renderLabel(appText.sort.clearSort, false),
+      icon: <span />,
+      href: pathClearSort,
     });
   }
 

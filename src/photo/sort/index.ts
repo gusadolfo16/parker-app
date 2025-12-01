@@ -1,6 +1,6 @@
 export type NavSortControl = 'none' | 'toggle' | 'menu';
 
-export const NAV_SORT_CONTROL_DEFAULT: NavSortControl = 'toggle';
+export const NAV_SORT_CONTROL_DEFAULT: NavSortControl = 'menu';
 
 export const getNavSortControlFromString = (
   navSortControl = '',

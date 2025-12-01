@@ -19,7 +19,7 @@ export default function SelectTileOverlay({
   return (
     <div className={clsx(
       'absolute inset-0 w-full h-full',
-      'z-50',
+      'z-[100]',
       !disabled && 'cursor-pointer',
       'active:bg-gray-950/40 dark:active:bg-gray-950/60',
       isPerformingSelectEdit ? 'pointer-events-none' : 'pointer-events-auto',
@@ -29,7 +29,13 @@ export default function SelectTileOverlay({
           'w-full h-full',
           !isPerformingSelectEdit && 'pointer-events-auto',
         )}
-        onClick={() => !disabled && onSelectChange()}
+        onClick={(e) => {
+          if (!disabled) {
+            e.preventDefault();
+            e.stopPropagation();
+            onSelectChange();
+          }
+        }}
       >
         <div
           className={clsx(
