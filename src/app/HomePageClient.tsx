@@ -14,15 +14,11 @@ export default function HomePageClient({
   photosCount,
   photosCountWithExcludes,
   categories,
-  sortBy = USER_DEFAULT_SORT_OPTIONS.sortBy,
-  sortWithPriority = USER_DEFAULT_SORT_OPTIONS.sortWithPriority,
 }: {
   photos: Photo[],
   photosCount: number,
   photosCountWithExcludes: number,
   categories: PhotoSetCategories,
-  sortBy?: SortBy
-  sortWithPriority?: boolean
 }) {
   const {
     selectionMode,
@@ -35,8 +31,6 @@ export default function HomePageClient({
       contentMain={
         <PhotoGridPage
           photos={photos}
-          sortBy={sortBy}
-          sortWithPriority={sortWithPriority}
           selectionMode={selectionMode}
           selectedPhotos={selectedPhotos}
           togglePhotoSelection={togglePhotoSelection}
