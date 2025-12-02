@@ -64,6 +64,10 @@ export default function ImageWithFallback({
           classNameImage,
           'select-none touch-none',
         )}
+        style={{
+          WebkitTouchCallout: 'none',
+          ...props.style,
+        } as React.CSSProperties}
         onLoad={onLoad}
         onError={onError}
         onContextMenu={(e) => e.preventDefault()}

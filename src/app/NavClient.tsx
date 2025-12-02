@@ -171,7 +171,7 @@ export default function NavClient({
                   )
                 )}
                 {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
-                {!selectionMode && selectedPhotos.length > 0 && (
+                {!selectionMode && selectedPhotos.length > 0 && status === 'authenticated' && (
                   <Switcher type="borderless">
                     <SwitcherItem
                       icon={<span className="whitespace-nowrap">View ({selectedPhotos.length})</span>}

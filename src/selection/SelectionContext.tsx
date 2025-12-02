@@ -10,6 +10,7 @@ import {
   useEffect,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import { toast } from 'sonner';
 
@@ -58,6 +59,7 @@ const SELECTION_MODE_KEY = 'parker_selection_mode';
 const SELECTED_PHOTOS_KEY = 'parker_selected_photos';
 
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
+  const { status } = useSession();
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
 
@@ -73,6 +75,14 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
       setSelectedPhotos(JSON.parse(savedPhotos));
     }
   }, []);
+
+  // Clear selection if user is not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      setSelectionMode(false);
+      setSelectedPhotos([]);
+    }
+  }, [status]);
 
   // Save state to localStorage whenever it changes
   useEffect(() => {
