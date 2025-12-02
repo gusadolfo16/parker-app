@@ -1802,3 +1802,38 @@ Se ha añadido un nuevo elemento de menú para acceder a la página de informes 
 **Detalles de la acción:**
 - Se identificó que el error 400 en producción se debía a una URI de redirección no autorizada.
 - Se instruyó al usuario para agregar la URL de producción de Vercel (`.../api/auth/callback/google`) a la lista de URIs autorizadas en la consola de Google Cloud.
+
+### 63. Mejoras de Navegación y Correcciones en Móvil (Iteración 43)
+
+**Paso 63.1: Permitir navegación pública en rutas de etiquetas y fotos**
+
+Se ha configurado el middleware para permitir el acceso público a las páginas de etiquetas (`/tag`), fotos (`/p`), y otras rutas de navegación (`/shot-on`, `/film`, etc.), sin requerir inicio de sesión.
+
+**Detalles de la acción:**
+- Se modificó `middleware.ts`.
+- Se actualizaron las exclusiones del `matcher` para incluir `tag`, `p`, `shot-on`, `film`, `lens`, `focal`, `recipe`, `year`, `recents`.
+- Se actualizó el callback `authorized` para permitir explícitamente las rutas de reescritura interna `/t/` y `/photos/`.
+
+**Paso 63.2: Condicionar la UI de selección a la autenticación**
+
+Se han ocultado los controles de selección ("Select" y "View Selections") en la barra de navegación para los usuarios que no han iniciado sesión.
+
+**Detalles de la acción:**
+- Se modificó `src/app/NavClient.tsx`.
+- Se añadieron comprobaciones `status === 'authenticated'` alrededor de los botones de selección.
+
+**Paso 63.3: Limpieza automática del estado de selección**
+
+Se implementó una medida de seguridad en el contexto de selección para limpiar cualquier selección activa si el usuario no está autenticado (por ejemplo, tras cerrar sesión).
+
+**Detalles de la acción:**
+- Se modificó `src/selection/SelectionContext.tsx`.
+- Se añadió un `useEffect` que resetea `selectionMode` y `selectedPhotos` si `status === 'unauthenticated'`.
+
+**Paso 63.4: Deshabilitar menú contextual (Long Press) en iOS**
+
+Se ha corregido el comportamiento donde mantener presionada una imagen en dispositivos móviles (iOS) aún mostraba el menú contextual del sistema (guardar imagen, copiar), a pesar de tener el clic derecho deshabilitado.
+
+**Detalles de la acción:**
+- Se modificó `src/components/image/ImageWithFallback.tsx`.
+- Se añadió la propiedad de estilo `WebkitTouchCallout: 'none'` directamente al componente `Image` de Next.js.

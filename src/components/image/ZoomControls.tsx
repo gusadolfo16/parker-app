@@ -55,6 +55,8 @@ const ZoomControls = forwardRef<ZoomControlsRef, {
     <div
       ref={refImageContainer}
       className={clsx('h-full', props.isEnabled && 'cursor-zoom-in')}
+      style={{ WebkitTouchCallout: 'none' } as React.CSSProperties}
+      onContextMenu={(e) => e.preventDefault()}
     >
       {children}
       {refViewerContainer.current

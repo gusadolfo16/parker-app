@@ -55,6 +55,8 @@ export default function ImageWithFallback({
         'flex relative',
         className,
       )}
+      style={{ WebkitTouchCallout: 'none' } as React.CSSProperties}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <Image
         ref={ref}
