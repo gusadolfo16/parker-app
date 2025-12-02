@@ -8,6 +8,7 @@ import AnimateItems from '@/components/AnimateItems';
 import { ComponentProps, useCallback, useState, ReactNode } from 'react';
 import { GRID_SPACE_CLASSNAME } from '@/components';
 import { SortBy } from './sort';
+import { useSelection } from '@/selection/SelectionContext';
 
 export default function PhotoGridContainer({
   cacheKey,
@@ -32,6 +33,12 @@ export default function PhotoGridContainer({
   header?: ReactNode
   sidebar?: ReactNode
 } & ComponentProps<typeof PhotoGrid>) {
+  const {
+    selectionMode,
+    selectedPhotos,
+    togglePhotoSelection,
+  } = useSelection();
+
   const [
     shouldAnimateDynamicItems,
     setShouldAnimateDynamicItems,
@@ -58,6 +65,9 @@ export default function PhotoGridContainer({
             animateOnFirstLoadOnly,
             prioritizeInitialPhotos,
             onAnimationComplete,
+            selectionMode,
+            selectedPhotos,
+            togglePhotoSelection,
           }} />
           {count > photos.length && (
             <PhotoGridInfinite {...{

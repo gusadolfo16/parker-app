@@ -200,7 +200,11 @@ export default function PhotoLarge({
       arePhotosMatted && matteContentWidthForAspectRatio,
       isSelected && 'border-4 border-green-500',
       isLocked && 'grayscale',
-    )}>
+      'select-none',
+    )}
+      style={{ WebkitTouchCallout: 'none' }}
+      onContextMenu={(e) => e.preventDefault()}
+    >
       <ZoomControls
         ref={refZoomControls}
         selectImageElement={selectZoomImageElement}

@@ -7,6 +7,7 @@ import { PhotoSetCategories } from '@/category';
 import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import AppGrid from '@/components/AppGrid';
 import PhotoGridSidebar from '@/photo/PhotoGridSidebar';
+import PhotoGridMobileFilters from '@/photo/PhotoGridMobileFilters';
 import { SortBy } from '@/photo/sort';
 
 export default function HomePageClient({
@@ -27,19 +28,27 @@ export default function HomePageClient({
   } = useSelection();
 
   return (
-    <AppGrid
-      contentMain={
-        <PhotoGridPage
-          photos={photos}
-          selectionMode={selectionMode}
-          selectedPhotos={selectedPhotos}
-          togglePhotoSelection={togglePhotoSelection}
-          {...categories}
-        />
-      }
-      contentSide={
-        <PhotoGridSidebar {...categories} photosCount={photosCount} />
-      }
-    />
+    <div className="space-y-4">
+      {/* Mobile filters - visible only on mobile */}
+      <div className="md:hidden">
+        <PhotoGridMobileFilters {...categories} />
+      </div>
+
+      <AppGrid
+        sideHiddenOnMobile={true}
+        contentMain={
+          <PhotoGridPage
+            photos={photos}
+            selectionMode={selectionMode}
+            selectedPhotos={selectedPhotos}
+            togglePhotoSelection={togglePhotoSelection}
+            {...categories}
+          />
+        }
+        contentSide={
+          <PhotoGridSidebar {...categories} photosCount={photosCount} />
+        }
+      />
+    </div>
   );
 }

@@ -61,6 +61,25 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
 
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const savedMode = localStorage.getItem(SELECTION_MODE_KEY);
+    const savedPhotos = localStorage.getItem(SELECTED_PHOTOS_KEY);
+
+    if (savedMode) {
+      setSelectionMode(JSON.parse(savedMode));
+    }
+    if (savedPhotos) {
+      setSelectedPhotos(JSON.parse(savedPhotos));
+    }
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(SELECTION_MODE_KEY, JSON.stringify(selectionMode));
+    localStorage.setItem(SELECTED_PHOTOS_KEY, JSON.stringify(selectedPhotos));
+  }, [selectionMode, selectedPhotos]);
+
   const toggleSelectionMode = useCallback(() => {
     setSelectionMode(prevMode => {
       const newMode = !prevMode;

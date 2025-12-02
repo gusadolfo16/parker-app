@@ -1,6 +1,7 @@
 'use client';
 
 import { ComponentProps, ReactNode, RefObject, useCallback, useState } from 'react';
+import { useSWRConfig } from 'swr';
 import LabeledIcon, { LabeledIconType } from '../primitives/LabeledIcon';
 import Badge from '../Badge';
 import { clsx } from 'clsx/lite';
@@ -9,6 +10,7 @@ import Spinner from '../Spinner';
 import ResponsiveText from '../primitives/ResponsiveText';
 import { SHOW_CATEGORY_IMAGE_HOVERS } from '@/app/config';
 import EntityHover from './EntityHover';
+import { SWR_KEYS } from '@/swr';
 import { getPhotosCachedAction } from '@/photo/actions';
 import { PhotoQueryOptions } from '@/photo/db';
 import { MAX_PHOTOS_TO_SHOW_PER_CATEGORY } from '@/image-response';
@@ -70,6 +72,7 @@ export default function EntityLink({
   uppercase?: boolean
   debug?: boolean
 } & EntityLinkExternalProps) {
+  const { mutate } = useSWRConfig();
   const [isLoading, setIsLoading] = useState(false);
 
   const hasBadgeIcon = Boolean(iconBadgeStart || iconBadgeEnd);
@@ -162,6 +165,14 @@ export default function EntityLink({
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLElement>) => {
     if (showHover && countOnHover && hoverPhotoQueryOptions && showSharedHover && renderSharedHover) {
+      // Prefetch photos
+      mutate(
+        `${SWR_KEYS.SHARED_HOVER}-${path}`,
+        getPhotosCachedAction({
+          ...hoverPhotoQueryOptions,
+          limit: MAX_PHOTOS_TO_SHOW_PER_CATEGORY,
+        }),
+      );
       showSharedHover(e.currentTarget as HTMLElement, {
         key: path,
         width: 300, // Default width
@@ -198,11 +209,14 @@ export default function EntityLink({
   return (
     <div
       ref={ref}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      {...(showHover && countOnHover && hoverPhotoQueryOptions && {
+        onMouseEnter: handleMouseEnter,
+        onMouseLeave: handleMouseLeave,
+      })}
       className={clsx(
         'inline-flex items-center gap-2',
-        'max-w-full overflow-hidden select-none',
+        showHover ? 'max-w-full overflow-hidden' : 'whitespace-nowrap',
+        'select-none',
         // Underline link text when action is hovered
         '[&:has(.action:hover)_.text-content]:underline',
         className,

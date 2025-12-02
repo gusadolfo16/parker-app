@@ -107,79 +107,85 @@ export default function NavClient({
                 NAV_HEIGHT_CLASS,
                 classNameStickyNav,
               )}>
-              <AppViewSwitcher
-                currentSelection={switcherSelectionForPath()}
-                animate={hasLoadedWithAnimations && isNavVisible}
-              />
-              {isUserAdmin &&
-                <div className="relative ml-2">
-                  <AdminAppMenu />
-                </div>
-              }
-              {/* Selection Buttons */}
-              {status !== 'loading' && selectionMode && status === 'authenticated' ? (
-                <div className="flex items-center">
-                  <Switcher type="borderless" className="mr-2">
-                    <SwitcherItem
-                      icon={<span>Confirm</span>}
-                      onClick={async () => {
-                        const success = await confirmSelection();
-                        if (success) {
-                          router.push('/selected');
-                        }
-                      }}
-                      tooltip={{
-                        content: 'Confirm Selection',
-                      }}
-                      width="narrow"
-                    />
-                    <SwitcherItem
-                      icon={<span>Cancel</span>}
-                      onClick={() => {
-                        clearSelection();
-                        router.refresh();
-                      }}
-                      tooltip={{
-                        content: 'Cancel Selection',
-                      }}
-                      width="narrow"
-                    />
-                  </Switcher>
-                  <span className="text-dim ml-2">({selectedPhotos.length})</span>
-                </div>
-              ) : (
-                status !== 'loading' && status === 'authenticated' && (
-                  <div className="mr-2">
+              <div className="flex items-center gap-0.5 sm:gap-1">
+                <AppViewSwitcher
+                  currentSelection={switcherSelectionForPath()}
+                  animate={hasLoadedWithAnimations && isNavVisible}
+                />
+                {isUserAdmin &&
+                  <div className="relative">
+                    <AdminAppMenu />
+                  </div>
+                }
+                {/* Selection Buttons */}
+                {status !== 'loading' && selectionMode && status === 'authenticated' ? (
+                  <div className="flex items-center">
                     <Switcher type="borderless">
                       <SwitcherItem
+                        className="px-3"
+                        width="auto"
+                        noPadding
+                        icon={<span>Confirm</span>}
+                        onClick={async () => {
+                          const success = await confirmSelection();
+                          if (success) {
+                            router.push('/selected');
+                          }
+                        }}
+                        tooltip={{
+                          content: 'Confirm Selection',
+                        }}
+                      />
+                      <SwitcherItem
+                        className="px-3"
+                        width="auto"
+                        noPadding
+                        icon={<span>Cancel</span>}
+                        onClick={() => {
+                          clearSelection();
+                          router.refresh();
+                        }}
+                        tooltip={{
+                          content: 'Cancel Selection',
+                        }}
+                      />
+                    </Switcher>
+                    <span className="text-dim ml-1">({selectedPhotos.length})</span>
+                  </div>
+                ) : (
+                  status !== 'loading' && status === 'authenticated' && (
+                    <Switcher type="borderless">
+                      <SwitcherItem
+                        className="px-3"
+                        width="auto"
+                        noPadding
                         icon={<span>Select</span>}
                         onClick={() => toggleSelectionMode()}
                         tooltip={{
                           content: 'Select Photos',
                         }}
-                        width="narrow"
                       />
                     </Switcher>
-                  </div>
-                )
-              )}
-              {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
-              {!selectionMode && selectedPhotos.length > 0 && (
-                <Switcher type="borderless" className="mr-2">
-                  <SwitcherItem
-                    icon={<span>View Selections ({selectedPhotos.length})</span>}
-                    href="/selected"
-                    tooltip={{
-                      content: 'View Selections',
-                    }}
-                    width="narrow"
-                  />
-                </Switcher>
-              )}
+                  )
+                )}
+                {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
+                {!selectionMode && selectedPhotos.length > 0 && (
+                  <Switcher type="borderless">
+                    <SwitcherItem
+                      icon={<span className="hidden sm:inline">View ({selectedPhotos.length})</span>}
+                      href="/selected"
+                      tooltip={{
+                        content: 'View Selections',
+                      }}
+                      width="narrow"
+                    />
+                  </Switcher>
+                )}
+              </div>
               <div className={clsx(
                 'grow text-right min-w-0',
                 'translate-y-[-1px]',
-                'mr-4', // Added margin-right
+                'ml-4 sm:ml-6',
               )}>
                 <div className="truncate overflow-hidden select-none">
                   {renderLink(navTitle, PATH_ROOT)}
@@ -194,7 +200,7 @@ export default function NavClient({
               </div>
               {/* Sign-in Button */}
               {!isUserSignedIn && (
-                <div>
+                <div className="ml-3 sm:ml-4">
                   <Link
                     href="/sign-in"
                     className={clsx(
@@ -204,13 +210,14 @@ export default function NavClient({
                       'whitespace-nowrap focus:outline-hidden text-medium',
                     )}
                   >
-                    Sign In
+                    <span className="hidden sm:inline">Sign In</span>
+                    <span className="sm:hidden">-</span>
                   </Link>
                 </div>
               )}
               {/* Admin Button */}
               {isUserAdmin && (
-                <div>
+                <div className="ml-3 sm:ml-4">
                   <Link
                     href="/admin/photos"
                     className={clsx(
@@ -220,7 +227,8 @@ export default function NavClient({
                       'whitespace-nowrap focus:outline-hidden text-medium',
                     )}
                   >
-                    Admin
+                    <span className="hidden sm:inline">Admin</span>
+                    <span className="sm:hidden">A</span>
                   </Link>
                 </div>
               )}
