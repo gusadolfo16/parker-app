@@ -12,6 +12,8 @@ import {
   isPathGrid,
   isPathProtected,
   isPathSignIn,
+  isPathSelected,
+  PATH_SELECTED,
 } from '@/app/path';
 import AnimateItems from '../components/AnimateItems';
 import {
@@ -129,7 +131,7 @@ export default function NavClient({
                         onClick={async () => {
                           const success = await confirmSelection();
                           if (success) {
-                            router.push('/selected');
+                            router.push(PATH_SELECTED);
                           }
                         }}
                         tooltip={{
@@ -150,10 +152,10 @@ export default function NavClient({
                         }}
                       />
                     </Switcher>
-                    <span className="text-dim ml-1">({selectedPhotos.length})</span>
+                    <span className="text-dim ml-1 whitespace-nowrap">({selectedPhotos.length})</span>
                   </div>
                 ) : (
-                  status !== 'loading' && status === 'authenticated' && (
+                  status !== 'loading' && status === 'authenticated' && !isPathSelected(pathname) && (
                     <Switcher type="borderless">
                       <SwitcherItem
                         className="px-3"
@@ -172,8 +174,8 @@ export default function NavClient({
                 {!selectionMode && selectedPhotos.length > 0 && (
                   <Switcher type="borderless">
                     <SwitcherItem
-                      icon={<span className="hidden sm:inline">View ({selectedPhotos.length})</span>}
-                      href="/selected"
+                      icon={<span className="whitespace-nowrap">View ({selectedPhotos.length})</span>}
+                      href={PATH_SELECTED}
                       tooltip={{
                         content: 'View Selections',
                       }}
