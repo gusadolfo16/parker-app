@@ -1837,3 +1837,21 @@ Se ha corregido el comportamiento donde mantener presionada una imagen en dispos
 **Detalles de la acción:**
 - Se modificó `src/components/image/ImageWithFallback.tsx`.
 - Se añadió la propiedad de estilo `WebkitTouchCallout: 'none'` directamente al componente `Image` de Next.js.
+### 64. Optimización de Carga de Imágenes (Iteración 44)
+
+**Paso 64.1: Optimizar `ImageMedium` con `next/image`**
+
+Se ha refactorizado el componente `ImageMedium` para utilizar `ImageWithFallback` (que envuelve `next/image`) en lugar de una etiqueta `<img>` estándar. Esto habilita la optimización automática de imágenes, incluyendo redimensionamiento y conversión de formato (WebP/AVIF).
+
+**Detalles de la acción:**
+- Se modificó `src/components/image/ImageMedium.tsx`.
+- Se reemplazó `<img>` por `ImageWithFallback`.
+- Se configuró `width` a `IMAGE_WIDTH_MEDIUM` (300px) y `quality` a `IMAGE_QUALITY`.
+
+**Paso 64.2: Priorizar carga de imágenes en vista previa de etiquetas**
+
+Se ha optimizado la vista previa de etiquetas al pasar el mouse (`EntityHover`) para cargar con prioridad las primeras 4 imágenes.
+
+**Detalles de la acción:**
+- Se modificó `src/components/entity/EntityHover.tsx`.
+- Se añadió la propiedad `priority={index < 4}` al componente `PhotoMedium` dentro del bucle de renderizado.

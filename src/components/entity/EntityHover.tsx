@@ -78,6 +78,7 @@ export default function EntityHover({
             key={photos[index].id}
             photo={photos[index]}
             className="w-full h-full"
+            priority={index < 4}
           />)}
       </div>
       {/* Placeholder grid */}
