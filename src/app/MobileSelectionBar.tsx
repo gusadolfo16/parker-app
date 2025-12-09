@@ -27,7 +27,11 @@ export default function MobileSelectionBar() {
 
     return (
         <div className="sm:hidden w-full bg-main">
-            <div className="flex items-center justify-center gap-2 py-2 px-4">
+            <div
+                className={
+                    'flex items-center justify-center gap-2 py-2 px-4'
+                }
+            >
                 {selectionMode ? (
                     <>
                         <Switcher type="borderless">
@@ -86,9 +90,15 @@ export default function MobileSelectionBar() {
                                     className="px-3"
                                     width="auto"
                                     noPadding
-                                    icon={<span>Selected ({selectedPhotos.length})</span>}
+                                    icon={
+                                        <span>
+                                            Selected ({selectedPhotos.length})
+                                        </span>
+                                    }
                                     onClick={() => {
-                                        toast.info('Redirecting to selected photos...');
+                                        toast.info(
+                                            'Redirecting to selected photos...',
+                                        );
                                         router.push(PATH_SELECTED);
                                     }}
                                     tooltip={{
