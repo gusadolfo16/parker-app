@@ -155,7 +155,30 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (response.ok) {
-        toast.success('Selection confirmed!');
+        const data = await response.json();
+
+        // Handle photos that were already locked by other users
+        if (data.alreadyLocked?.length > 0) {
+          // Update selectedPhotos to remove locked photos
+          setSelectedPhotos(prev =>
+            prev.filter(p => !data.alreadyLocked.includes(p.id)),
+          );
+
+          const count = data.alreadyLocked.length;
+          toast.warning(
+            `${count} photo${count > 1 ? 's' : ''} already selected by another user and removed from your selection.`,
+            { duration: 5000 },
+          );
+        }
+
+        // Show success message for locked photos
+        if (data.locked?.length > 0) {
+          const count = data.locked.length;
+          toast.success(
+            `${count} photo${count > 1 ? 's' : ''} confirmed!`,
+          );
+        }
+
         return true;
       } else {
         console.error('Failed to confirm selection:', response.statusText);
