@@ -43,6 +43,7 @@ export default function MobileSelectionBar() {
                                 onClick={async () => {
                                     const success = await confirmSelection();
                                     if (success) {
+                                        router.refresh();
                                         router.push(PATH_SELECTED);
                                     }
                                 }}

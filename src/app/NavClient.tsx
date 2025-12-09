@@ -132,6 +132,7 @@ export default function NavClient({
                         onClick={async () => {
                           const success = await confirmSelection();
                           if (success) {
+                            router.refresh();
                             router.push(PATH_SELECTED);
                           }
                         }}
