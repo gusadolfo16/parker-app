@@ -120,9 +120,9 @@ export default function NavClient({
                     <AdminAppMenu />
                   </div>
                 }
-                {/* Selection Buttons */}
+                {/* Selection Buttons - Hidden on mobile */}
                 {status !== 'loading' && selectionMode && status === 'authenticated' ? (
-                  <div className="flex items-center">
+                  <div className="hidden sm:flex items-center">
                     <Switcher type="borderless">
                       <SwitcherItem
                         className="px-3"
@@ -157,7 +157,7 @@ export default function NavClient({
                   </div>
                 ) : (
                   status !== 'loading' && status === 'authenticated' && !isPathSelected(pathname) && (
-                    <Switcher type="borderless">
+                    <Switcher type="borderless" className="hidden sm:flex">
                       <SwitcherItem
                         className="px-3"
                         width="auto"
@@ -171,9 +171,9 @@ export default function NavClient({
                     </Switcher>
                   )
                 )}
-                {/* View Selections Button - only visible when not in selectionMode and photos are selected */}
+                {/* View Selections Button - only visible when not in selectionMode and photos are selected - Hidden on mobile */}
                 {!selectionMode && selectedPhotos.length > 0 && status === 'authenticated' && (
-                  <Switcher type="borderless">
+                  <Switcher type="borderless" className="hidden sm:flex">
                     <SwitcherItem
                       icon={<span className="whitespace-nowrap">Selected ({selectedPhotos.length})</span>}
                       href={PATH_SELECTED}

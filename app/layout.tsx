@@ -31,6 +31,7 @@ import { SelectionProvider } from '@/selection/SelectionContext';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 import SharedHoverProvider from '@/components/shared-hover/SharedHoverProvider';
 import { PATH_FEED_JSON, PATH_RSS_XML } from '@/app/path';
+import MobileSelectionBar from '@/app/MobileSelectionBar';
 
 import '../tailwind.css';
 
@@ -116,6 +117,7 @@ export default async function RootLayout({
                       'lg:mx-6 lg:mb-6',
                     )}>
                       {nav}
+                      <MobileSelectionBar />
                       <main>
                         <ShareModalsClient />
                         <RecipeModal />
@@ -141,7 +143,7 @@ export default async function RootLayout({
                   </SharedHoverProvider>
                 </SwrConfigClient>
                 <Analytics debug={false} />
-                <SpeedInsights debug={false}  />
+                <SpeedInsights debug={false} />
                 <PhotoEscapeHandler />
                 <ToasterWithThemes />
               </ThemeProvider>
