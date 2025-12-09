@@ -64,7 +64,7 @@ export default function ImageWithFallback({
         priority={priority}
         className={clsx(
           classNameImage,
-          'select-none touch-none',
+          'select-none',
         )}
         style={{
           WebkitTouchCallout: 'none',

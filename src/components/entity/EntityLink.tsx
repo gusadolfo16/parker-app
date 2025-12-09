@@ -18,7 +18,7 @@ import { MAX_PHOTOS_TO_SHOW_PER_CATEGORY } from '@/image-response';
 import { useSharedHoverState } from '../shared-hover/state';
 
 export interface EntityLinkExternalProps {
-  ref?: RefObject<HTMLDivElement>
+  ref?: RefObject<HTMLDivElement | null>
   type?: LabeledIconType
   badged?: boolean
   contrast?: ComponentProps<typeof Badge>['contrast']
@@ -195,7 +195,7 @@ export default function EntityLink({
         >
           {/* Add empty children to satisfy the type requirement */}
           <></>
-        </EntityHover>
+        </EntityHover>,
       );
     }
   }, [showHover, countOnHover, hoverPhotoQueryOptions, showSharedHover, renderSharedHover, path, contrast]);

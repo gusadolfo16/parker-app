@@ -126,8 +126,8 @@ export default function AdminAppConfigurationClient({
   // Component props
   simplifiedView,
 }: AppConfiguration & {
-    simplifiedView?: boolean
-  }) {
+  simplifiedView?: boolean
+}) {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [connectionErrors, setConnectionErrors] = useState<any>({});
   const [isAnalyzingConfiguration, setIsAnalyzingConfiguration] = useState(true);
@@ -173,7 +173,7 @@ export default function AdminAppConfigurationClient({
         {label}
       </span>
     </div>;
-    
+
   const renderSubStatusWithEnvVar = (
     type: ComponentProps<typeof StatusIcon>['type'],
     variable: string,
@@ -214,7 +214,7 @@ export default function AdminAppConfigurationClient({
       includeTooltip={includeTooltip}
     />;
 
-  const renderGroupContent = (key: ConfigSectionKey): JSX.Element | null => {
+  const renderGroupContent = (key: ConfigSectionKey): React.ReactElement | null => {
     switch (key) {
       case 'Storage':
         return <>
@@ -226,7 +226,7 @@ export default function AdminAppConfigurationClient({
             isPending={hasDatabase && isAnalyzingConfiguration}
           >
             {connectionErrors.databaseError && renderError({
-              connection: { provider: 'Database', error: connectionErrors.databaseError},
+              connection: { provider: 'Database', error: connectionErrors.databaseError },
             })}
             {hasVercelPostgres
               ? renderSubStatus('checked', 'Vercel Postgres: connected')
@@ -234,7 +234,7 @@ export default function AdminAppConfigurationClient({
                 Vercel Postgres:
                 {' '}
                 <AdminLink
-                // eslint-disable-next-line max-len
+                  // eslint-disable-next-line max-len
                   href="https://vercel.com/docs/storage/vercel-postgres/quickstart#create-a-postgres-database"
                   externalIcon
                 >
@@ -244,11 +244,11 @@ export default function AdminAppConfigurationClient({
                 and connect to project
               </>)}
             {hasDatabase && !hasVercelPostgres &&
-            renderSubStatus('checked', <>
-              Postgres-compatible: connected
-              {' '}
-              (SSL {isPostgresSslEnabled ? 'enabled' : 'disabled'})
-            </>)}
+              renderSubStatus('checked', <>
+                Postgres-compatible: connected
+                {' '}
+                (SSL {isPostgresSslEnabled ? 'enabled' : 'disabled'})
+              </>)}
           </ChecklistRow>
           <ChecklistRow
             title={
@@ -257,14 +257,14 @@ export default function AdminAppConfigurationClient({
                 : !hasStorageProvider
                   ? 'Setup storage (one of the following)'
                   : hasMultipleStorageProviders
-                  // eslint-disable-next-line max-len
+                    // eslint-disable-next-line max-len
                     ? `Setup storage (new uploads go to: ${labelForStorage(currentStorage)})`
                     : 'Setup storage'}
             status={hasStorageProvider}
             isPending={hasStorageProvider && isAnalyzingConfiguration}
           >
             {connectionErrors.storageError && renderError({
-              connection: { provider: 'Storage', error: connectionErrors.storageError},
+              connection: { provider: 'Storage', error: connectionErrors.storageError },
             })}
             <div>
               {hasVercelBlobStorage
@@ -273,7 +273,7 @@ export default function AdminAppConfigurationClient({
                   {labelForStorage('vercel-blob')}:
                   {' '}
                   <AdminLink
-                  // eslint-disable-next-line max-len
+                    // eslint-disable-next-line max-len
                     href="https://vercel.com/docs/storage/vercel-blob/quickstart#create-a-blob-store"
                     externalIcon
                   >
@@ -289,7 +289,7 @@ export default function AdminAppConfigurationClient({
                   {labelForStorage('cloudflare-r2')}:
                   {' '}
                   <AdminLink
-                  // eslint-disable-next-line max-len
+                    // eslint-disable-next-line max-len
                     href="https://github.com/sambecker/exif-photo-blog#cloudflare-r2"
                     externalIcon
                   >
@@ -322,9 +322,9 @@ export default function AdminAppConfigurationClient({
           >
             Store auth secret in environment variable:
             {!hasAuthSecret &&
-            <div className="overflow-x-auto">
-              <SecretGenerator />
-            </div>}
+              <div className="overflow-x-auto">
+                <SecretGenerator />
+              </div>}
             {renderEnvVars(['AUTH_SECRET'])}
           </ChecklistRow>
           <ChecklistRow
@@ -352,7 +352,7 @@ export default function AdminAppConfigurationClient({
             (check README for
             {' '}
             <AdminLink
-            // eslint-disable-next-line max-len
+              // eslint-disable-next-line max-len
               href="https://github.com/sambecker/exif-photo-blog?tab=readme-ov-file#supported-languages"
             >
               supported languages
@@ -431,7 +431,7 @@ export default function AdminAppConfigurationClient({
             optional
           >
             {connectionErrors.aiError && renderError({
-              connection: { provider: 'OpenAI', error: connectionErrors.aiError},
+              connection: { provider: 'OpenAI', error: connectionErrors.aiError },
             })}
             Store your OpenAI secret key in order to enable AI-generated
             text descriptions and optionally leverage an invisible field
@@ -446,15 +446,15 @@ export default function AdminAppConfigurationClient({
           >
             <div>
               {hasAiTextAutoGeneratedFields &&
-              AI_AUTO_GENERATED_FIELDS_ALL.map(field =>
-                <Fragment key={field}>
-                  {renderSubStatus(
-                    aiTextAutoGeneratedFields.includes(field)
-                      ? 'checked'
-                      : 'optional',
-                    field,
-                  )}
-                </Fragment>)}
+                AI_AUTO_GENERATED_FIELDS_ALL.map(field =>
+                  <Fragment key={field}>
+                    {renderSubStatus(
+                      aiTextAutoGeneratedFields.includes(field)
+                        ? 'checked'
+                        : 'optional',
+                      field,
+                    )}
+                  </Fragment>)}
             </div>
             Comma-separated fields to auto-generate when
             uploading photos. Accepted values: title, caption,
@@ -472,7 +472,7 @@ export default function AdminAppConfigurationClient({
             optional
           >
             {connectionErrors.redisError && renderError({
-              connection: { provider: 'Redis', error: connectionErrors.redisError},
+              connection: { provider: 'Redis', error: connectionErrors.redisError },
             })}
             Create Upstash Redis store from storage tab
             on Vercel dashboard and connect to this project
@@ -512,7 +512,7 @@ export default function AdminAppConfigurationClient({
                 'NEXT_PUBLIC_STATICALLY_OPTIMIZE_PHOTO_CATEGORIES',
               )}
               {renderSubStatusWithEnvVar(
-              // eslint-disable-next-line max-len
+                // eslint-disable-next-line max-len
                 arePhotoCategoryOgImagesStaticallyOptimized ? 'checked' : 'optional',
                 'NEXT_PUBLIC_STATICALLY_OPTIMIZE_PHOTO_CATEGORY_OG_IMAGES',
               )}
@@ -546,7 +546,7 @@ export default function AdminAppConfigurationClient({
             Set environment variable to {'"1"'} to prevent
             image blur data being stored and displayed:
             {renderEnvVars(['NEXT_PUBLIC_BLUR_DISABLED'])}
-          </ChecklistRow> 
+          </ChecklistRow>
         </>;
       case 'Categories':
         return <>
@@ -626,8 +626,8 @@ export default function AdminAppConfigurationClient({
           >
             <div>
               {DEFAULT_SORT_BY_OPTIONS
-                .map(({sortBy, configKey }) =>
-                  <Fragment key={ sortBy }>
+                .map(({ sortBy, configKey }) =>
+                  <Fragment key={sortBy}>
                     {renderSubStatus(
                       sortBy === defaultSortBy ? 'checked' : 'optional',
                       `${configKey}${sortBy === APP_DEFAULT_SORT_BY
@@ -786,7 +786,7 @@ export default function AdminAppConfigurationClient({
             on photo grid views (if not configured, density is based on
             aspect ratio):
             {renderEnvVars(['NEXT_PUBLIC_SHOW_LARGE_THUMBNAILS'])}
-          </ChecklistRow> 
+          </ChecklistRow>
         </>;
       case 'Design':
         return <>

@@ -26,8 +26,9 @@ import { useAppState } from '@/app/AppState';
 import Switcher from '@/components/switcher/Switcher';
 import SwitcherItem from '@/components/switcher/SwitcherItem';
 import { useSelection } from '@/selection/SelectionContext';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import AdminAppMenu from '@/admin/AdminAppMenu';
+import { toast } from 'sonner';
 
 
 const NAV_HEIGHT_CLASS = NAV_CAPTION
@@ -174,8 +175,9 @@ export default function NavClient({
                 {!selectionMode && selectedPhotos.length > 0 && status === 'authenticated' && (
                   <Switcher type="borderless">
                     <SwitcherItem
-                      icon={<span className="whitespace-nowrap">View ({selectedPhotos.length})</span>}
+                      icon={<span className="whitespace-nowrap">Selected ({selectedPhotos.length})</span>}
                       href={PATH_SELECTED}
+                      onClick={() => toast.info('Redirecting to selected photos...')}
                       tooltip={{
                         content: 'View Selections',
                       }}
@@ -200,8 +202,8 @@ export default function NavClient({
                     {navCaption}
                   </div>}
               </div>
-              {/* Sign-in Button */}
-              {!isUserSignedIn && (
+              {/* Sign-in/Sign-out Button */}
+              {!isUserSignedIn ? (
                 <div className="ml-3 sm:ml-4">
                   <Link
                     href="/sign-in"
@@ -215,6 +217,21 @@ export default function NavClient({
                     <span className="hidden sm:inline">Sign In</span>
                     <span className="sm:hidden">-</span>
                   </Link>
+                </div>
+              ) : (
+                <div className="ml-3 sm:ml-4">
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    className={clsx(
+                      'font-mono link h-4 active:text-medium',
+                      'disabled:bg-transparent! hover:text-dim',
+                      'inline-flex items-center gap-1.5 self-start',
+                      'whitespace-nowrap focus:outline-hidden text-medium',
+                    )}
+                  >
+                    <span className="hidden sm:inline">Sign Out</span>
+                    <span className="sm:hidden">-</span>
+                  </button>
                 </div>
               )}
               {/* Admin Button */}

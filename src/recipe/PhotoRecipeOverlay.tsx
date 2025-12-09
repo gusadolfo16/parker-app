@@ -28,7 +28,7 @@ export default function PhotoRecipeOverlay({
   onClose,
   isOnPhoto = true,
 }: RecipeProps & {
-  ref?: RefObject<HTMLDivElement>
+  ref?: RefObject<HTMLDivElement | null>
   onClose?: () => void
   isOnPhoto?: boolean
 }) {

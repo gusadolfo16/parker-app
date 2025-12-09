@@ -93,7 +93,7 @@ export const formatLensText = (
     'long' |    // Unmodified make and model
     'medium' |  // Make and model, with modifiers removed
     'short'     // Model only
-  = 'medium',
+      = 'medium',
 ) => {
   const { make, model: modelRaw } = lens;
 

@@ -104,7 +104,7 @@ export default function SharedHoverProvider({
 
   const isHoverBeingShown = useCallback((key: string) =>
     Boolean(hoverProps?.key && hoverProps.key === key)
-    , [hoverProps]);
+  , [hoverProps]);
 
   useEffect(() => {
     const onWindowChange = () => clearState(0);

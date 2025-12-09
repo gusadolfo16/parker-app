@@ -55,7 +55,7 @@ export default function AdminPhotoMenu({
             toastSuccess(
               isFav
                 ? `Unfavorited ${title}`
-                : `Favorited ${title}`
+                : `Favorited ${title}`,
             );
           },
         },
@@ -67,7 +67,7 @@ export default function AdminPhotoMenu({
             toastSuccess(
               hidden
                 ? `Made ${title} public`
-                : `Made ${title} private`
+                : `Made ${title} private`,
             );
           },
         },

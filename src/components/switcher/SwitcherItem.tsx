@@ -38,9 +38,9 @@ export default function SwitcherItem({
 }) {
   const widthClass = ((): string => {
     switch (width) {
-    case 'narrow': return WIDTH_CLASS_NARROW;
-    case 'auto': return WIDTH_CLASS_AUTO;
-    default: return WIDTH_CLASS;
+      case 'narrow': return WIDTH_CLASS_NARROW;
+      case 'auto': return WIDTH_CLASS_AUTO;
+      default: return WIDTH_CLASS;
     }
   })();
   const className = clsx(

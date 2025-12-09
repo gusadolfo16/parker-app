@@ -11,14 +11,15 @@ import AdminShowRecipeButton from '@/admin/AdminShowRecipeButton';
 const MAX_PHOTO_TO_SHOW = 6;
 
 interface Props {
-  params: { recipe: string }
+  params: Promise<{ recipe: string }>
 }
 
 export default async function RecipePageEdit({
-  params: { recipe: recipeFromParams },
+  params,
 }: Props) {
+  const { recipe: recipeFromParams } = await params;
   const recipe = decodeURIComponent(recipeFromParams);
-  
+
   const [
     { count },
     photos,
@@ -40,7 +41,7 @@ export default async function RecipePageEdit({
       breadcrumb={breadcrumb}
       accessory={data && film &&
         <AdminShowRecipeButton
-          onClick={() => {}}
+          onClick={() => { }}
         />
       }
     >

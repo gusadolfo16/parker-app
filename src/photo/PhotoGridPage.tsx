@@ -70,8 +70,9 @@ export default function PhotoGridPage({
           className={clsx(
             'relative overflow-hidden',
             'group',
-            isSelected && 'border-4 border-green-500', // Added green border
-            isLocked && 'grayscale cursor-not-allowed',
+            isSelected && 'border-4 border-red-800',
+            isLocked && 'border-4 border-red-800',
+            isLocked && 'cursor-not-allowed',
           )}
           style={{
             ...GRID_ASPECT_RATIO !== 0 && {
@@ -82,6 +83,7 @@ export default function PhotoGridPage({
           <PhotoMedium
             className={clsx(
               'w-full h-full',
+              (isSelected || isLocked) && 'opacity-50',
             )}
             {...{
               photo,

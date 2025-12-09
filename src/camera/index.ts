@@ -64,7 +64,7 @@ export const formatCameraText = (
     'long' |    // Unmodified make and model
     'medium' |  // Make and model, with modifiers removed
     'short'     // Model only
-  = 'medium',
+      = 'medium',
 ) => {
   // Capture simple make without modifiers like 'Corporation' or 'Company'
   const makeSimple = make.match(/^(\S+)/)?.[1];

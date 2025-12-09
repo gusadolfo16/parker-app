@@ -49,6 +49,7 @@ import MaskedScroll from '@/components/MaskedScroll';
 import useCategoryCountsForPhoto from '@/category/useCategoryCountsForPhoto';
 import { useAppText } from '@/i18n/state/client';
 import { useSelection } from '@/selection/SelectionContext';
+import SelectTileOverlay from '@/components/SelectTileOverlay';
 
 export default function PhotoLarge({
   photo,
@@ -198,8 +199,8 @@ export default function PhotoLarge({
       // Always specify height to ensure fallback doesn't collapse
       arePhotosMatted && 'h-[90%]',
       arePhotosMatted && matteContentWidthForAspectRatio,
-      isSelected && 'border-4 border-green-500',
-      isLocked && 'grayscale',
+      isSelected && 'border-4 border-red-800',
+      isLocked && 'border-4 border-red-800',
       'select-none',
     )}
       style={{ WebkitTouchCallout: 'none' }}
@@ -211,7 +212,10 @@ export default function PhotoLarge({
         {...{ isEnabled: false, shouldZoomOnFKeydown }}
       >
         <ImageLarge
-          className={clsx(arePhotosMatted && 'h-full')}
+          className={clsx(
+            arePhotosMatted && 'h-full',
+            (isSelected || isLocked) && 'opacity-50',
+          )}
           classNameImage={clsx(arePhotosMatted &&
             'object-contain w-full h-full')}
           alt={altTextForPhoto(photo)}
@@ -245,6 +249,12 @@ export default function PhotoLarge({
             />}
         </AnimatePresence>
       </div>
+      {selectionMode &&
+        <SelectTileOverlay
+          isSelected={isSelected}
+          onSelectChange={() => !isLocked && togglePhotoSelection(photo)}
+          disabled={isLocked}
+        />}
     </div>;
 
   const renderAdminMenu =
@@ -292,15 +302,7 @@ export default function PhotoLarge({
                 <div className="float-end hidden md:block">
                   {isUserAdmin && renderAdminMenu}
                 </div>
-                {selectionMode && (
-                  <button
-                    onClick={() => !isLocked && togglePhotoSelection(photo)}
-                    disabled={isLocked}
-                    className={clsx(isLocked && 'cursor-not-allowed')}
-                  >
-                    {isSelected ? 'Deselect' : 'Select'}
-                  </button>
-                )}
+
                 {hasTitle && (showTitleAsH1
                   ? <h1>{renderPhotoLink}</h1>
                   : renderPhotoLink)}

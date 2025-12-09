@@ -45,22 +45,9 @@ export default function Footer() {
               )}>
               <div className="flex gap-x-3 xs:gap-x-4 grow flex-wrap">
                 {userEmail || userEmailEager
-                  ? <>
-                    <div className="truncate max-w-full">
-                      {userEmail || userEmailEager}
-                    </div>
-                    <button
-                      onClick={clearAuthStateAndRedirectIfNecessary}
-                      className={clsx(
-                        'font-mono link h-4 active:text-medium',
-                        'disabled:bg-transparent! hover:text-dim',
-                        'inline-flex items-center gap-1.5 self-start',
-                        'whitespace-nowrap focus:outline-hidden text-medium',
-                      )}
-                    >
-                      {appText.auth.signOut}
-                    </button>
-                  </>
+                  ? <div className="truncate max-w-full">
+                    {userEmail || userEmailEager}
+                  </div>
                   : isCheckingAuth
                     ? <Spinner size={16} className="translate-y-[2px]" />
                     : SHOW_REPO_LINK

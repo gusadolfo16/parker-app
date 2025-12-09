@@ -105,7 +105,7 @@ export default function AppViewSwitcher({
         ...SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
           content: appText.nav.grid,
           keyCommand: KEY_COMMANDS.grid,
-        }
+        },
       }}
       noPadding
     />;
@@ -145,7 +145,7 @@ export default function AppViewSwitcher({
             content: isAscending
               ? appText.sort.viewNewest
               : appText.sort.viewOldest,
-          }
+          },
         }}
         noPadding
       />
@@ -160,7 +160,7 @@ export default function AppViewSwitcher({
           content: appText.nav.search,
           keyCommandModifier: KEY_COMMANDS.search[0],
           keyCommand: KEY_COMMANDS.search[1],
-        }
+        },
       }}
       noPadding
     />;

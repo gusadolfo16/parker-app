@@ -40,7 +40,7 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
     disabled: disabledProp,
     debug,
   },
-  ref
+  ref,
 ) => {
   const inputRefInternal = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -57,7 +57,7 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
     setUploadState,
     resetUploadState,
   } = useAppState();
-  
+
   const appText = useAppText();
 
   const disabled = disabledProp || isUploading;
@@ -124,7 +124,7 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
                   };
 
                   const isPng = callbackArgs.extension === 'png';
-                  
+
                   const canvas = canvasRef.current;
 
                   // Specify wide gamut to avoid data loss while resizing
@@ -139,7 +139,7 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
                     setUploadState?.({ image });
 
                     ctx.save();
-                    
+
                     let orientation = await getOrientation(file)
                       .catch(() => 1) ?? 1;
 
@@ -160,7 +160,7 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
                     }
 
                     const ratio = image.width / image.height;
-  
+
                     const width =
                       Math.round(ratio >= 1 ? maxSize : maxSize * ratio);
                     const height =
@@ -172,8 +172,8 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
                     // Orientation transforms from:
                     // eslint-disable-next-line max-len
                     // https://gist.github.com/SagiMedina/f00a57de4e211456225d3114fd10b0d0
-                    
-                    switch(orientation) {
+
+                    switch (orientation) {
                       case 2:
                         ctx.translate(width, 0);
                         ctx.scale(-1, 1);
@@ -260,5 +260,7 @@ const ImageInput = forwardRef<HTMLInputElement, ImageInputProps>((
     </div>
   );
 });
+
+ImageInput.displayName = 'ImageInput';
 
 export default ImageInput;

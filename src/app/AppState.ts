@@ -62,7 +62,7 @@ export type AppStateContextType = {
   photosCountHidden?: number
   // UPLOAD
   startUpload?: () => Promise<boolean>
-  uploadInputRef?: RefObject<HTMLInputElement>
+  uploadInputRef?: RefObject<HTMLInputElement | null>
   uploadState: UploadState
   setUploadState?: (uploadState: Partial<UploadState>) => void
   resetUploadState?: () => void

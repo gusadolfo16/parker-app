@@ -37,7 +37,7 @@ export default function PhotoGrid({
           ? 'grid-cols-2 xs:grid-cols-4 lg:grid-cols-6'
           : 'grid-cols-2 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4',
       'items-center',
-      'gap-1'
+      'gap-1',
     )}>
       {photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
@@ -47,8 +47,9 @@ export default function PhotoGrid({
           className={clsx(
             'relative overflow-hidden',
             'group',
-            isSelected && 'border-4 border-green-500',
-            isLocked && 'grayscale cursor-not-allowed',
+            isSelected && 'border-4 border-red-800',
+            isLocked && 'border-4 border-red-800',
+            isLocked && 'cursor-not-allowed',
           )}
           style={{
             ...GRID_ASPECT_RATIO !== 0 && {
@@ -57,7 +58,10 @@ export default function PhotoGrid({
           }}
         >
           <PhotoMedium
-            className="w-full h-full"
+            className={clsx(
+              'w-full h-full',
+              (isSelected || isLocked) && 'opacity-50',
+            )}
             photo={photo}
             priority={prioritizeInitialPhotos ? index < 6 : undefined}
             disableLink={selectionMode}

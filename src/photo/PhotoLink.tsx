@@ -22,7 +22,7 @@ export default function PhotoLink({
   loaderType = 'spinner',
   ...categories
 }: {
-  ref?: RefObject<HTMLAnchorElement>
+  ref?: RefObject<HTMLAnchorElement | null>
   photo?: Photo
   scroll?: boolean
   prefetch?: boolean

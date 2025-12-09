@@ -35,7 +35,7 @@ const ZoomControls = forwardRef<ZoomControlsRef, {
 
   const shouldZoomTo2x = zoomLevel !== 2;
 
-  const button = 
+  const button =
     <button
       type="button"
       className={clsx(
@@ -65,5 +65,7 @@ const ZoomControls = forwardRef<ZoomControlsRef, {
     </div>
   );
 });
+
+ZoomControls.displayName = 'ZoomControls';
 
 export default ZoomControls;
