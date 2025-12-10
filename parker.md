@@ -1903,3 +1903,43 @@ Se verificó que el proyecto compila correctamente con las nuevas versiones.
 - El build se completó sin errores de tipo
 - Solo se reportaron warnings de ESLint (max-len y unused vars) que no afectan la funcionalidad
 
+
+### 67. Persistencia de Selección y Arreglos de Autenticación (Iteración 46)
+
+**Paso 67.1: Solución a Login de Admin y Google OAuth**
+
+Se corrigió un problema crítico donde las variables de entorno `ADMIN_EMAIL` y `ADMIN_PASSWORD` contenían comillas dobles extra, impidiendo el login de administrador. También se habilitó `allowDangerousEmailAccountLinking: true` en la configuración de Google Provider para permitir vincular cuentas existentes por email, resolviendo el error `OAuthAccountNotLinked`.
+
+**Detalles de la acción:**
+- Se modificó `.env.local` para limpiar las comillas.
+- Se modificó `src/auth/server.ts` para habilitar el enlace de cuentas.
+
+**Paso 67.2: Persistencia Visual de Selección (Checkmark)**
+
+Se implementó la lógica para que las fotos seleccionadas y confirmadas por el usuario actual muestren un checkmark rojo persistente en la grilla, diferenciándose de las fotos bloqueadas por otros usuarios (que solo muestran borde rojo y opacidad).
+
+**Detalles de la acción:**
+- Se creó la propiedad `userEmail` en `PhotoGrid` y componentes padres para identificar al usuario actual.
+- Se modificó `SelectTileOverlay.tsx` para mostrar el checkmark si `isSelected` es verdadero, incluso si el ítem está bloqueado (`disabled`).
+- Se introdujo la lógica `isLockedByMe` para determinar si el bloqueo pertenece al usuario actual.
+
+**Paso 67.3: Corrección de Estilo (Borde Blanco)**
+
+Se eliminó un borde blanco no deseado que aparecía en las fotos confirmadas debido a la herencia de estilos de selección genéricos.
+
+**Detalles de la acción:**
+- Se modificó `SelectTileOverlay.tsx` para aplicar el borde de selección solo si el ítem no está deshabilitado (`!disabled`).
+
+**Paso 67.4: Corrección de Error de Build (SSG)**
+
+Se solucionó un error que rompía el build (`Event handlers cannot be passed to Client Component props`) causado por una evaluación incorrecta de `isLockedByMe` durante la generación estática (cuando no hay usuario).
+
+**Detalles de la acción:**
+- Se corrigió la lógica en `PhotoGrid.tsx` y `PhotoGridPage.tsx` para verificar explícitamente la existencia de `userEmail` (`!!userEmail && ...`).
+
+**Paso 67.5: Configuración de Título Fijo en Vercel**
+
+Se forzó el título del sitio a "Intervenido" para evitar que Vercel utilice la URL del despliegue como título por defecto cuando no se configuran variables de entorno específicas.
+
+**Detalles de la acción:**
+- Se modificó `src/app/config.ts` estableciendo `TEMPLATE_TITLE = 'Intervenido'`.
