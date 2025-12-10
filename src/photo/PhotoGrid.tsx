@@ -49,15 +49,9 @@ export default function PhotoGrid({
       {photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
         const isLocked = photo.lockedBy != null;
-        const isLockedByMe = currentUserEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
+        const isLockedByMe = !!currentUserEmail && currentUserEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
 
-        console.log('Debug PhotoGrid:', {
-          id: photo.id,
-          userEmail: session?.user?.email,
-          lockedBy: photo.lockedBy,
-          isLockedByMe,
-          selectionMode
-        });
+
 
         const showOverlay = selectionMode || isLockedByMe;
 

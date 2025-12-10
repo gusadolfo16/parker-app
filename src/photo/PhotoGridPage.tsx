@@ -67,7 +67,7 @@ export default function PhotoGridPage({
       items={photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
         const isLocked = photo.lockedBy != null;
-        const isLockedByMe = userEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
+        const isLockedByMe = !!userEmail && userEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
 
         const showOverlay = selectionMode || isLockedByMe;
 
