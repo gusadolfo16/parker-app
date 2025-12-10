@@ -1,6 +1,7 @@
 'use client';
 
 import { useSelection } from '@/selection/SelectionContext';
+import { useSession } from 'next-auth/react';
 import PhotoGridPage from '@/photo/PhotoGridPage';
 import { Photo } from '@/photo';
 import { PhotoSetCategories } from '@/category';
@@ -27,6 +28,10 @@ export default function HomePageClient({
     togglePhotoSelection,
   } = useSelection();
 
+
+
+  const { data: session } = useSession();
+
   return (
     <div className="space-y-4">
       {/* Mobile filters - visible only on mobile */}
@@ -42,6 +47,7 @@ export default function HomePageClient({
             selectionMode={selectionMode}
             selectedPhotos={selectedPhotos}
             togglePhotoSelection={togglePhotoSelection}
+            userEmail={session?.user?.email ?? undefined}
             {...categories}
           />
         }

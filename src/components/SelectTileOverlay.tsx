@@ -43,7 +43,7 @@ export default function SelectTileOverlay({
             'border-black dark:border-white',
             // eslint-disable-next-line max-len
             'bg-[radial-gradient(169.40%_89.55%_at_94.76%_6.29%,rgba(1,0,0,0.40)_0%,rgba(255,255,255,0.00)_75%)]',
-            isSelected && 'border-4',
+            isSelected && !disabled && 'border-4',
           )}
         />
       </div>
@@ -57,9 +57,9 @@ export default function SelectTileOverlay({
               className="m-[1px]"
             />
             : null
-          : (isSelected || disabled) ? null : <SimpleCheckbox
+          : (disabled && !isSelected) ? null : <SimpleCheckbox
             className={clsx(
-              'text-white',
+              isSelected ? 'text-red-500' : 'text-white',
               // Required to prevent Safari jitter
               'translate-x-[0.1px]',
             )}

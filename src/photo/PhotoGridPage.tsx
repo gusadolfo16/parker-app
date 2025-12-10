@@ -24,6 +24,7 @@ export default function PhotoGridPage({
   selectionMode,
   selectedPhotos,
   togglePhotoSelection,
+  userEmail,
   ...categories
 }: {
   photos: Photo[]
@@ -41,6 +42,7 @@ export default function PhotoGridPage({
   selectionMode?: boolean
   selectedPhotos?: Photo[]
   togglePhotoSelection?: (photo: Photo) => void
+  userEmail?: string
 } & PhotoSetCategory) {
   return (
     <AnimateItems
@@ -65,6 +67,10 @@ export default function PhotoGridPage({
       items={photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
         const isLocked = photo.lockedBy != null;
+        const isLockedByMe = userEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
+
+        const showOverlay = selectionMode || isLockedByMe;
+
         return <div
           key={photo.id}
           className={clsx(
@@ -96,9 +102,9 @@ export default function PhotoGridPage({
               disableLink: selectionMode,
             }}
           />
-          {selectionMode &&
+          {showOverlay &&
             <SelectTileOverlay
-              isSelected={isSelected ?? false}
+              isSelected={isSelected || isLockedByMe}
               onSelectChange={() => !isLocked && togglePhotoSelection?.(photo)}
               disabled={isLocked}
             />}

@@ -21,6 +21,7 @@ export default function PhotoGridContainer({
   prioritizeInitialPhotos,
   header,
   sidebar,
+  userEmail,
   ...categories
 }: {
   cacheKey: string
@@ -32,6 +33,7 @@ export default function PhotoGridContainer({
   prioritizeInitialPhotos?: boolean
   header?: ReactNode
   sidebar?: ReactNode
+  userEmail?: string
 } & ComponentProps<typeof PhotoGrid>) {
   const {
     selectionMode,
@@ -68,6 +70,7 @@ export default function PhotoGridContainer({
             selectionMode,
             selectedPhotos,
             togglePhotoSelection,
+            userEmail,
           }} />
           {count > photos.length && (
             <PhotoGridInfinite {...{

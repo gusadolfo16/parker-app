@@ -8,6 +8,8 @@ import { GRID_ASPECT_RATIO } from '@/app/config';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
 import { ReactNode } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 export default function PhotoGrid({
   photos,
   small,
@@ -17,6 +19,7 @@ export default function PhotoGrid({
   togglePhotoSelection,
   prioritizeInitialPhotos,
   additionalTile,
+  userEmail,
   ...categories
 }: {
   photos: Photo[],
@@ -27,7 +30,11 @@ export default function PhotoGrid({
   togglePhotoSelection?: (photo: Photo) => void,
   prioritizeInitialPhotos?: boolean,
   additionalTile?: ReactNode,
+  userEmail?: string,
 } & PhotoSetCategory) {
+  const { data: session } = useSession();
+  const currentUserEmail = userEmail ?? session?.user?.email;
+
   return (
     <div className={clsx(
       'grid',
@@ -42,6 +49,18 @@ export default function PhotoGrid({
       {photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
         const isLocked = photo.lockedBy != null;
+        const isLockedByMe = currentUserEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
+
+        console.log('Debug PhotoGrid:', {
+          id: photo.id,
+          userEmail: session?.user?.email,
+          lockedBy: photo.lockedBy,
+          isLockedByMe,
+          selectionMode
+        });
+
+        const showOverlay = selectionMode || isLockedByMe;
+
         return <div
           key={photo.id}
           className={clsx(
@@ -67,9 +86,9 @@ export default function PhotoGrid({
             disableLink={selectionMode}
             {...categories}
           />
-          {selectionMode &&
+          {showOverlay &&
             <SelectTileOverlay
-              isSelected={isSelected ?? false}
+              isSelected={isSelected || isLockedByMe}
               onSelectChange={() => !isLocked && togglePhotoSelection?.(photo)}
               disabled={isLocked}
             />}
