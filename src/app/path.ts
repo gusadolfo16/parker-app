@@ -14,6 +14,7 @@ export const PATH_ADMIN                 = '/admin';
 export const PATH_API                   = '/api';
 export const PATH_SIGN_IN               = '/sign-in';
 export const PATH_OG                    = '/og';
+export const PATH_SELECTED              = '/selected';
 
 // Core: inferred
 export const PATH_GRID_INFERRED = GRID_HOMEPAGE_ENABLED
@@ -393,6 +394,9 @@ export const isPathTopLevel = (pathname?: string) =>
 
 export const isPathSignIn = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_SIGN_IN);
+
+export const isPathSelected = (pathname?: string) =>
+  checkPathPrefix(pathname, PATH_SELECTED);
 
 export const isPathAdmin = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_ADMIN);

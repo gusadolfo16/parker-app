@@ -22,7 +22,7 @@ export default function AppGrid({
   sideHiddenOnMobile = true,
   ...props
 }: {
-  containerRef?: RefObject<HTMLDivElement> | undefined
+  containerRef?: RefObject<HTMLDivElement | null> | undefined
   className?: string
   classNameMain?: string
   classNameSide?: string

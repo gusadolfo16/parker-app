@@ -19,7 +19,7 @@ export default function Checkbox({
   type: _type,
   ...props
 }: Omit<InputHTMLAttributes<HTMLInputElement>, 'ref'> & {
-  ref?: RefObject<HTMLInputElement>
+  ref?: RefObject<HTMLInputElement | null>
   accessory?: ReactNode
 }) {
   return (

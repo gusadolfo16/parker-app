@@ -39,10 +39,10 @@ export default function EntityHover({
   } = useSWR(
     isHovering ? `${SWR_KEYS.SHARED_HOVER}-${hoverKey}` : null,
     getPhotos, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-  });
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    });
 
   const photosToShow = useMemo(() => {
     if (photosCount >= 6) {
@@ -78,6 +78,7 @@ export default function EntityHover({
             key={photos[index].id}
             photo={photos[index]}
             className="w-full h-full"
+            priority={index < 4}
           />)}
       </div>
       {/* Placeholder grid */}
@@ -132,15 +133,15 @@ export default function EntityHover({
         </div>
       </div>
     </div>
-    , [
-      gridClass,
-      photosToShow,
-      photos,
-      header,
-      photosCount,
-      appText,
-      isLoading,
-    ]);
+  , [
+    gridClass,
+    photosToShow,
+    photos,
+    header,
+    photosCount,
+    appText,
+    isLoading,
+  ]);
 
   return <SharedHover {...{
     hoverKey,

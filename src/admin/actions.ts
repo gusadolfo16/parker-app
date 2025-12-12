@@ -104,10 +104,10 @@ export const cleanAllUsersAction = async () => {
     `);
 
     // 2. Delete all sessions
-    await query(`DELETE FROM sessions`);
+    await query('DELETE FROM sessions');
 
     // 3. Delete all accounts (Google OAuth)
-    await query(`DELETE FROM accounts`);
+    await query('DELETE FROM accounts');
 
     // 4. Delete all users except admin
     const adminEmail = process.env.ADMIN_EMAIL;

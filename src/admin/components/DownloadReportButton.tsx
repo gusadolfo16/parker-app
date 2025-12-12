@@ -10,7 +10,7 @@ interface DownloadReportButtonProps {
 
 export default function DownloadReportButton({ photosByOwner }: DownloadReportButtonProps) {
   const handleDownload = useCallback(() => {
-    let csvContent = "User Name,User Email,Photo ID,Photo Title,Photo URL,Locked At\n";
+    let csvContent = 'User Name,User Email,Photo ID,Photo Title,Photo URL,Locked At\n';
 
     Object.entries(photosByOwner).forEach(([ownerId, { userName, userEmail, photos }]) => {
       const displayEmail = userEmail || ownerId;

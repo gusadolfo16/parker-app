@@ -8,6 +8,8 @@ import { GRID_ASPECT_RATIO } from '@/app/config';
 import SelectTileOverlay from '@/components/SelectTileOverlay';
 import { ReactNode } from 'react';
 
+import { useSession } from 'next-auth/react';
+
 export default function PhotoGrid({
   photos,
   small,
@@ -17,6 +19,7 @@ export default function PhotoGrid({
   togglePhotoSelection,
   prioritizeInitialPhotos,
   additionalTile,
+  userEmail,
   ...categories
 }: {
   photos: Photo[],
@@ -27,7 +30,11 @@ export default function PhotoGrid({
   togglePhotoSelection?: (photo: Photo) => void,
   prioritizeInitialPhotos?: boolean,
   additionalTile?: ReactNode,
+  userEmail?: string,
 } & PhotoSetCategory) {
+  const { data: session } = useSession();
+  const currentUserEmail = userEmail ?? session?.user?.email;
+
   return (
     <div className={clsx(
       'grid',
@@ -37,18 +44,25 @@ export default function PhotoGrid({
           ? 'grid-cols-2 xs:grid-cols-4 lg:grid-cols-6'
           : 'grid-cols-2 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4',
       'items-center',
-      'gap-1'
+      'gap-1',
     )}>
       {photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
         const isLocked = photo.lockedBy != null;
+        const isLockedByMe = !!currentUserEmail && currentUserEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
+
+
+
+        const showOverlay = selectionMode || isLockedByMe;
+
         return <div
           key={photo.id}
           className={clsx(
             'relative overflow-hidden',
             'group',
-            isSelected && 'border-4 border-green-500',
-            isLocked && 'grayscale cursor-not-allowed',
+            isSelected && 'border-4 border-red-800',
+            isLocked && 'border-4 border-red-800',
+            isLocked && 'cursor-not-allowed',
           )}
           style={{
             ...GRID_ASPECT_RATIO !== 0 && {
@@ -57,14 +71,18 @@ export default function PhotoGrid({
           }}
         >
           <PhotoMedium
-            className="w-full h-full"
+            className={clsx(
+              'w-full h-full',
+              (isSelected || isLocked) && 'opacity-50',
+            )}
             photo={photo}
             priority={prioritizeInitialPhotos ? index < 6 : undefined}
+            disableLink={selectionMode}
             {...categories}
           />
-          {selectionMode &&
+          {showOverlay &&
             <SelectTileOverlay
-              isSelected={isSelected ?? false}
+              isSelected={isSelected || isLockedByMe}
               onSelectChange={() => !isLocked && togglePhotoSelection?.(photo)}
               disabled={isLocked}
             />}

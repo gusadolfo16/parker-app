@@ -11,7 +11,7 @@ export default async function AdminConfigurationPage() {
       title={appText.admin.appConfig}
     >
       <Suspense fallback={null}>
-        {/* eslint-disable-next-line max-len */}
+        { }
         {appText.onboarding.setupConfig}
       </Suspense>
       {await AdminAppConfiguration({ simplifiedView: false })}

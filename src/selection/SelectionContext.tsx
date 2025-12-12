@@ -10,6 +10,7 @@ import {
   useEffect,
 } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 import { toast } from 'sonner';
 
@@ -54,9 +55,40 @@ export const clearAndUnlockSelection = async (photoIds: string[]): Promise<boole
   }
 };
 
+const SELECTION_MODE_KEY = 'parker_selection_mode';
+const SELECTED_PHOTOS_KEY = 'parker_selected_photos';
+
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
+  const { status } = useSession();
   const [selectionMode, setSelectionMode] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Photo[]>([]);
+
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const savedMode = localStorage.getItem(SELECTION_MODE_KEY);
+    const savedPhotos = localStorage.getItem(SELECTED_PHOTOS_KEY);
+
+    if (savedMode) {
+      setSelectionMode(JSON.parse(savedMode));
+    }
+    if (savedPhotos) {
+      setSelectedPhotos(JSON.parse(savedPhotos));
+    }
+  }, []);
+
+  // Clear selection if user is not authenticated
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      setSelectionMode(false);
+      setSelectedPhotos([]);
+    }
+  }, [status]);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem(SELECTION_MODE_KEY, JSON.stringify(selectionMode));
+    localStorage.setItem(SELECTED_PHOTOS_KEY, JSON.stringify(selectedPhotos));
+  }, [selectionMode, selectedPhotos]);
 
   const toggleSelectionMode = useCallback(() => {
     setSelectionMode(prevMode => {
@@ -123,7 +155,30 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
       });
 
       if (response.ok) {
-        toast.success('Selection confirmed!');
+        const data = await response.json();
+
+        // Handle photos that were already locked by other users
+        if (data.alreadyLocked?.length > 0) {
+          // Update selectedPhotos to remove locked photos
+          setSelectedPhotos(prev =>
+            prev.filter(p => !data.alreadyLocked.includes(p.id)),
+          );
+
+          const count = data.alreadyLocked.length;
+          toast.warning(
+            `${count} photo${count > 1 ? 's' : ''} already selected by another user and removed from your selection.`,
+            { duration: 5000 },
+          );
+        }
+
+        // Show success message for locked photos
+        if (data.locked?.length > 0) {
+          const count = data.locked.length;
+          toast.success(
+            `${count} photo${count > 1 ? 's' : ''} confirmed!`,
+          );
+        }
+
         return true;
       } else {
         console.error('Failed to confirm selection:', response.statusText);

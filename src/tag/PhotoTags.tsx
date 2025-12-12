@@ -41,7 +41,7 @@ export default function PhotoTags({
             : <PhotoTag {...{
               tag,
               contrast,
-              prefetch, countOnHover: tagCounts[tag]
+              prefetch, countOnHover: tagCounts[tag],
             }} />}
         </Fragment>)}
     </div>

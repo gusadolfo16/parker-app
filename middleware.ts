@@ -37,7 +37,12 @@ const middleware = (req: NextRequest) => {
 
 export default withAuth(middleware, {
   callbacks: {
-    authorized: ({ token }) => !!token,
+    authorized: ({ token, req }) => {
+      const pathname = req.nextUrl.pathname;
+      return !!token
+        || pathname.startsWith('/t/')
+        || pathname.startsWith('/photos/');
+    },
   },
 });
 
@@ -47,13 +52,23 @@ export const config = {
   // - /_next/static*
   // - /_next/image*
   // - /favicon.ico + /favicons/*
+  // - /sign-in
   // - /grid
   // - /full
+  // - /p
+  // - /tag
+  // - /shot-on
+  // - /film
+  // - /lens
+  // - /focal
+  // - /recipe
+  // - /year
+  // - /recents
   // - / (root)
   // - /home-image
   // - /template-image
   // - /template-image-tight
   // - /template-url
   // eslint-disable-next-line max-len
-  matcher: ['/((?!api|api/auth|_next/static|_next/image|favicon.ico|favicons|sign-in|grid|full|home-image|template-image|template-image-tight|template-url).+)'],
+  matcher: ['/((?!api|api/auth|_next/static|_next/image|favicon.ico|favicons|sign-in|grid|full|p|tag|shot-on|film|lens|focal|recipe|year|recents|home-image|template-image|template-image-tight|template-url).+)'],
 };

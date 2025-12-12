@@ -38,12 +38,12 @@ export default function PhotoTagFieldset(props: {
       return () => clearTimeout(timeout);
     }
   }, [openOnLoad]);
-  
+
   return (
     <div ref={ref}>
       <FieldsetWithStatus
         {...rest}
-        inputRef={ref}
+        inputRef={ref as React.RefObject<HTMLInputElement>}
         label="Tags"
         value={tags}
         tagOptions={convertTagsForForm(tagOptions, appText)}

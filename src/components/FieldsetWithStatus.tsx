@@ -69,7 +69,7 @@ export default function FieldsetWithStatus({
   spellCheck?: boolean
   capitalize?: boolean
   type?: FieldSetType
-  inputRef?: RefObject<HTMLInputElement>
+  inputRef?: RefObject<HTMLInputElement | null>
   accessory?: React.ReactNode
   hideLabel?: boolean
   tabIndex?: number
@@ -132,7 +132,7 @@ export default function FieldsetWithStatus({
               'inline-flex flex-wrap gap-x-2 items-center select-none',
               type === 'checkbox' && 'order-2 m-0 translate-y-[0.25px]',
               type === 'checkbox' && readOnly &&
-                'opacity-50 cursor-not-allowed',
+              'opacity-50 cursor-not-allowed',
             )}
           >
             <span className="inline-flex items-center gap-x-[5px]">

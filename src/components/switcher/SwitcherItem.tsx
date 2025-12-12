@@ -7,6 +7,7 @@ import Tooltip from '../Tooltip';
 
 const WIDTH_CLASS       = 'w-[42px]';
 const WIDTH_CLASS_NARROW = 'w-[120px]';
+const WIDTH_CLASS_AUTO   = 'w-auto';
 
 export default function SwitcherItem({
   icon,
@@ -33,9 +34,15 @@ export default function SwitcherItem({
   noPadding?: boolean
   prefetch?: boolean
   tooltip?: ComponentProps<typeof Tooltip>
-  width?: 'narrow' | 'normal'
+  width?: 'narrow' | 'normal' | 'auto'
 }) {
-  const widthClass = width === 'narrow' ? WIDTH_CLASS_NARROW : WIDTH_CLASS;
+  const widthClass = ((): string => {
+    switch (width) {
+      case 'narrow': return WIDTH_CLASS_NARROW;
+      case 'auto': return WIDTH_CLASS_AUTO;
+      default: return WIDTH_CLASS;
+    }
+  })();
   const className = clsx(
     'flex items-center justify-center',
     `${widthClass} h-[28px]`,

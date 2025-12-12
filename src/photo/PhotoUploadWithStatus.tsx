@@ -21,7 +21,7 @@ export default function PhotoUploadWithStatus({
   className,
   debug,
 }: {
-  inputRef?: RefObject<HTMLInputElement>
+  inputRef?: RefObject<HTMLInputElement | null>
   inputId: string
   shouldResize: boolean
   onLastUpload?: () => Promise<void>
@@ -105,7 +105,7 @@ export default function PhotoUploadWithStatus({
           }}
           onBlobReady={async ({
             blob,
-            extension, 
+            extension,
             hasMultipleUploads,
             isLastBlob,
           }) => {

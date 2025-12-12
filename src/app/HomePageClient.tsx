@@ -1,12 +1,15 @@
 'use client';
 
 import { useSelection } from '@/selection/SelectionContext';
+import { useSession } from 'next-auth/react';
 import PhotoGridPage from '@/photo/PhotoGridPage';
 import { Photo } from '@/photo';
 import { PhotoSetCategories } from '@/category';
 import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import AppGrid from '@/components/AppGrid';
 import PhotoGridSidebar from '@/photo/PhotoGridSidebar';
+import PhotoGridMobileFilters from '@/photo/PhotoGridMobileFilters';
+import { SortBy } from '@/photo/sort';
 
 export default function HomePageClient({
   photos,
@@ -25,20 +28,33 @@ export default function HomePageClient({
     togglePhotoSelection,
   } = useSelection();
 
+
+
+  const { data: session } = useSession();
+
   return (
-    <AppGrid
-      contentMain={
-        <PhotoGridPage
-          photos={photos}
-          {...USER_DEFAULT_SORT_OPTIONS}
-          selectionMode={selectionMode}
-          selectedPhotos={selectedPhotos}
-          togglePhotoSelection={togglePhotoSelection}
-        />
-      }
-      contentSide={
-        <PhotoGridSidebar {...categories} photosCount={photosCount} />
-      }
-    />
+    <div className="space-y-4">
+      {/* Mobile filters - visible only on mobile */}
+      <div className="md:hidden">
+        <PhotoGridMobileFilters {...categories} />
+      </div>
+
+      <AppGrid
+        sideHiddenOnMobile={true}
+        contentMain={
+          <PhotoGridPage
+            photos={photos}
+            selectionMode={selectionMode}
+            selectedPhotos={selectedPhotos}
+            togglePhotoSelection={togglePhotoSelection}
+            userEmail={session?.user?.email ?? undefined}
+            {...categories}
+          />
+        }
+        contentSide={
+          <PhotoGridSidebar {...categories} photosCount={photosCount} />
+        }
+      />
+    </div>
   );
 }

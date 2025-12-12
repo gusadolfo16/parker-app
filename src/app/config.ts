@@ -17,13 +17,13 @@ export const SHOULD_PREFETCH_ALL_LINKS: boolean | undefined = undefined;
 
 // TEMPLATE META
 
-export const TEMPLATE_TITLE = 'Photo Blog';
+export const TEMPLATE_TITLE = 'Intervenido';
 export const TEMPLATE_DESCRIPTION = 'Store photos with original camera data';
 
 // SOURCE CODE
 
-export const TEMPLATE_REPO_OWNER  = 'sambecker';
-export const TEMPLATE_REPO_NAME   = 'exif-photo-blog';
+export const TEMPLATE_REPO_OWNER = 'sambecker';
+export const TEMPLATE_REPO_NAME = 'exif-photo-blog';
 export const TEMPLATE_REPO_BRANCH = 'main';
 export const TEMPLATE_REPO_URL =
   `https://github.com/${TEMPLATE_REPO_OWNER}/${TEMPLATE_REPO_NAME}`;
@@ -323,17 +323,17 @@ export const HIGH_DENSITY_GRID =
 // DESIGN
 
 export const DEFAULT_THEME =
-process.env.NEXT_PUBLIC_DEFAULT_THEME === 'dark'
-  ? 'dark'
-  : process.env.NEXT_PUBLIC_DEFAULT_THEME === 'light'
-    ? 'light'
-    : 'system';
+  process.env.NEXT_PUBLIC_DEFAULT_THEME === 'dark'
+    ? 'dark'
+    : process.env.NEXT_PUBLIC_DEFAULT_THEME === 'light'
+      ? 'light'
+      : 'system';
 export const MATTE_PHOTOS =
-process.env.NEXT_PUBLIC_MATTE_PHOTOS === '1';
+  process.env.NEXT_PUBLIC_MATTE_PHOTOS === '1';
 export const MATTE_COLOR =
-process.env.NEXT_PUBLIC_MATTE_COLOR;
+  process.env.NEXT_PUBLIC_MATTE_COLOR;
 export const MATTE_COLOR_DARK =
-process.env.NEXT_PUBLIC_MATTE_COLOR_DARK;
+  process.env.NEXT_PUBLIC_MATTE_COLOR_DARK;
 
 // SETTINGS
 

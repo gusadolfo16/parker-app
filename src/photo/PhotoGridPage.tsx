@@ -24,6 +24,7 @@ export default function PhotoGridPage({
   selectionMode,
   selectedPhotos,
   togglePhotoSelection,
+  userEmail,
   ...categories
 }: {
   photos: Photo[]
@@ -41,6 +42,7 @@ export default function PhotoGridPage({
   selectionMode?: boolean
   selectedPhotos?: Photo[]
   togglePhotoSelection?: (photo: Photo) => void
+  userEmail?: string
 } & PhotoSetCategory) {
   return (
     <AnimateItems
@@ -65,13 +67,18 @@ export default function PhotoGridPage({
       items={photos.map((photo, index) => {
         const isSelected = selectedPhotos?.some(p => p.id === photo.id);
         const isLocked = photo.lockedBy != null;
+        const isLockedByMe = !!userEmail && userEmail?.toLowerCase() === photo.lockedBy?.toLowerCase();
+
+        const showOverlay = selectionMode || isLockedByMe;
+
         return <div
           key={photo.id}
           className={clsx(
             'relative overflow-hidden',
             'group',
-            isSelected && 'border-4 border-green-500', // Added green border
-            isLocked && 'grayscale cursor-not-allowed',
+            isSelected && 'border-4 border-red-800',
+            isLocked && 'border-4 border-red-800',
+            isLocked && 'cursor-not-allowed',
           )}
           style={{
             ...GRID_ASPECT_RATIO !== 0 && {
@@ -82,6 +89,7 @@ export default function PhotoGridPage({
           <PhotoMedium
             className={clsx(
               'w-full h-full',
+              (isSelected || isLocked) && 'opacity-50',
             )}
             {...{
               photo,
@@ -91,11 +99,12 @@ export default function PhotoGridPage({
               onVisible: index === photos.length - 1
                 ? onLastPhotoVisible
                 : undefined,
+              disableLink: selectionMode,
             }}
           />
-          {selectionMode &&
+          {showOverlay &&
             <SelectTileOverlay
-              isSelected={isSelected ?? false}
+              isSelected={isSelected || isLockedByMe}
               onSelectChange={() => !isLocked && togglePhotoSelection?.(photo)}
               disabled={isLocked}
             />}

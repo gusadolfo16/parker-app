@@ -26,6 +26,7 @@ export default function PhotoMedium({
   className,
   onVisible,
   debugColor,
+  disableLink,
   ...categories
 }: {
   photo: Photo
@@ -35,6 +36,7 @@ export default function PhotoMedium({
   className?: string
   onVisible?: () => void
   debugColor?: boolean
+  disableLink?: boolean
 } & PhotoSetCategory) {
   const ref = useRef<HTMLAnchorElement>(null);
 
@@ -54,8 +56,11 @@ export default function PhotoMedium({
           'block h-full',
           'active:brightness-75',
           selected && 'brightness-50',
+          disableLink && 'pointer-events-none',
         )}
         prefetch={prefetch}
+        onContextMenu={(e) => e.preventDefault()}
+        style={{ WebkitTouchCallout: 'none' }}
       >
         {({ isLoading }) =>
           <div className="w-full h-full relative block">

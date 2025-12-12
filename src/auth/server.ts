@@ -18,8 +18,8 @@ export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials) {
@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
             if (!user) {
               const { rows: newUserRows } = await query(
                 'INSERT INTO users (email, name, "emailVerified") VALUES ($1, $2, NOW()) RETURNING *',
-                [email, 'Admin User']
+                [email, 'Admin User'],
               );
               user = newUserRows[0];
             }
@@ -57,6 +57,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      allowDangerousEmailAccountLinking: true,
       httpOptions: {
         timeout: 10000,
       },
@@ -108,11 +109,11 @@ export async function getServerSession() {
 }
 
 export const runAuthenticatedAdminServerAction = async <T>(
-  action: () => Promise<T>
+  action: () => Promise<T>,
 ): Promise<T> => {
   const session = await getServerSession();
   if (!session || !session.user) {
-    throw new Error("Unauthorized");
+    throw new Error('Unauthorized');
   }
   return action();
 };

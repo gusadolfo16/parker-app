@@ -31,6 +31,7 @@ import { SelectionProvider } from '@/selection/SelectionContext';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 import SharedHoverProvider from '@/components/shared-hover/SharedHoverProvider';
 import { PATH_FEED_JSON, PATH_RSS_XML } from '@/app/path';
+import MobileSelectionBar from '@/app/MobileSelectionBar';
 
 import '../tailwind.css';
 
@@ -105,48 +106,49 @@ export default async function RootLayout({
       )}>
         <AppStateProvider areAdminDebugToolsEnabled={ADMIN_DEBUG_TOOLS_ENABLED}>
           {appTextProvider}
-            <SessionProviderClient>
-              <SelectionProvider>
-                <ThemeColors />
-                <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
-                  <SwrConfigClient>
-                    <SharedHoverProvider>
-                      <div className={clsx(
-                        'mx-3 mb-3',
-                        'lg:mx-6 lg:mb-6',
-                      )}>
-                        {nav}
-                        <main>
-                          <ShareModalsClient />
-                          <RecipeModal />
-                          <div className={clsx(
-                            'min-h-[16rem] sm:min-h-[30rem]',
-                            'mb-12',
-                            'space-y-5',
-                          )}>
-                            <AdminUploadPanel
-                              shouldResize={!PRESERVE_ORIGINAL_UPLOADS}
-                              onLastUpload={async () => {
-                                'use server';
-                                // Update upload count in admin nav
-                                revalidatePath('/admin', 'layout');
-                              }}
-                            />
-                            {children}
-                          </div>
-                        </main>
-                        <Footer />
-                      </div>
-                      {commandK}
-                    </SharedHoverProvider>
-                  </SwrConfigClient>
-                  <Analytics debug={false} />
-                  <SpeedInsights debug={false}  />
-                  <PhotoEscapeHandler />
-                  <ToasterWithThemes />
-                </ThemeProvider>
-              </SelectionProvider>
-            </SessionProviderClient>
+          <SessionProviderClient>
+            <SelectionProvider>
+              <ThemeColors />
+              <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
+                <SwrConfigClient>
+                  <SharedHoverProvider>
+                    <div className={clsx(
+                      'mx-3 mb-3',
+                      'lg:mx-6 lg:mb-6',
+                    )}>
+                      {nav}
+                      <MobileSelectionBar />
+                      <main>
+                        <ShareModalsClient />
+                        <RecipeModal />
+                        <div className={clsx(
+                          'min-h-[16rem] sm:min-h-[30rem]',
+                          'mb-12',
+                          'space-y-5',
+                        )}>
+                          <AdminUploadPanel
+                            shouldResize={!PRESERVE_ORIGINAL_UPLOADS}
+                            onLastUpload={async () => {
+                              'use server';
+                              // Update upload count in admin nav
+                              revalidatePath('/admin', 'layout');
+                            }}
+                          />
+                          {children}
+                        </div>
+                      </main>
+                      <Footer />
+                    </div>
+                    {commandK}
+                  </SharedHoverProvider>
+                </SwrConfigClient>
+                <Analytics debug={false} />
+                <SpeedInsights debug={false} />
+                <PhotoEscapeHandler />
+                <ToasterWithThemes />
+              </ThemeProvider>
+            </SelectionProvider>
+          </SessionProviderClient>
         </AppStateProvider>
       </body>
     </html>

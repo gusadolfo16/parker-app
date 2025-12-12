@@ -17,10 +17,14 @@ export async function POST(req: NextRequest) {
   const { photoIds } = await req.json();
   const userId = session.user.email; // Use email as the identifier
 
-  await lockPhotos(photoIds, userId);
+  const result = await lockPhotos(photoIds, userId);
   revalidateAllKeysAndPaths();
 
-  return NextResponse.json({ message: 'Selection received' });
+  return NextResponse.json({
+    message: 'Selection processed',
+    locked: result.locked,
+    alreadyLocked: result.alreadyLocked,
+  });
 }
 
 export async function DELETE(req: NextRequest) {

@@ -17,6 +17,7 @@ export default function PhotoGridPageClient({
   photosCountWithExcludes,
   sortBy,
   sortWithPriority,
+  userEmail,
   ...categories
 }: ComponentProps<typeof PhotoGridSidebar> & {
   photos: Photo[]
@@ -24,13 +25,14 @@ export default function PhotoGridPageClient({
   photosCountWithExcludes: number
   sortBy: SortBy
   sortWithPriority: boolean
+  userEmail?: string
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const viewPortHeight = useViewportHeight();
   const containerHeight = useMemo(() =>
     viewPortHeight - (ref.current?.getBoundingClientRect().y ?? 0),
-  [viewPortHeight]);
+    [viewPortHeight]);
 
   return (
     <PhotoGridContainer
@@ -41,6 +43,7 @@ export default function PhotoGridPageClient({
       sortWithPriority={sortWithPriority}
       excludeFromFeeds
       prioritizeInitialPhotos
+      userEmail={userEmail}
       sidebar={
         <MaskedScroll
           ref={ref}

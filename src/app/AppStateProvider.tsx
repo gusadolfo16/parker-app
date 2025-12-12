@@ -193,7 +193,7 @@ export default function AppStateProvider({
 
   const registerAdminUpdate = useCallback(() =>
     setAdminUpdateTimes(updates => [...updates, new Date()])
-    , []);
+  , []);
 
   const clearAuthStateAndRedirectIfNecessary = useCallback(() => {
     signOut({ redirect: false }).then(() => {
@@ -216,7 +216,7 @@ export default function AppStateProvider({
       resolve(false);
     }
   })
-    , []);
+  , []);
   const setUploadState = useCallback((uploadState: Partial<UploadState>) => {
     _setUploadState(prev => ({ ...prev, ...uploadState }));
   }, []);

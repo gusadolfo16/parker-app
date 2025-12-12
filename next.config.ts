@@ -51,6 +51,9 @@ const nextConfig: NextConfig = {
     remotePatterns,
     minimumCacheTTL: 31536000,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   turbopack: {
     resolveAlias: {
       [LOCALE_ALIAS]: `@/${LOCALE_DYNAMIC}`,

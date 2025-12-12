@@ -35,7 +35,7 @@ const ZoomControls = forwardRef<ZoomControlsRef, {
 
   const shouldZoomTo2x = zoomLevel !== 2;
 
-  const button = 
+  const button =
     <button
       type="button"
       className={clsx(
@@ -55,6 +55,8 @@ const ZoomControls = forwardRef<ZoomControlsRef, {
     <div
       ref={refImageContainer}
       className={clsx('h-full', props.isEnabled && 'cursor-zoom-in')}
+      style={{ WebkitTouchCallout: 'none' } as React.CSSProperties}
+      onContextMenu={(e) => e.preventDefault()}
     >
       {children}
       {refViewerContainer.current
@@ -63,5 +65,7 @@ const ZoomControls = forwardRef<ZoomControlsRef, {
     </div>
   );
 });
+
+ZoomControls.displayName = 'ZoomControls';
 
 export default ZoomControls;

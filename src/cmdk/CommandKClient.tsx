@@ -679,7 +679,7 @@ export default function CommandKClient({
     });
     if (areAdminDebugToolsEnabled) {
       adminSection.items.push({
-                label: 'Baseline Overview',
+        label: 'Baseline Overview',
         annotation: <BiLockAltIcon />,        path: PATH_ADMIN_BASELINE,
       }, {
         label: 'Components Overview',

@@ -1,4 +1,4 @@
-/* eslint-disable quotes */
+
 import {
   sql,
   query,
@@ -671,19 +671,51 @@ export const getPhotosInNeedOfUpdateCount = async (
 `.then(({ rows }) => parseInt(rows[0].count, 10))
   , 'getPhotosInNeedOfUpdateCount');
 
-export const lockPhotos = async (photoIds: string[], userId: string) => {
-  const lockedAt = new Date();
-  return safelyQueryPhotos(() => query(`
-    UPDATE photos
-    SET
-      locked_by = $1,
-      locked_at = $2
-    WHERE id = ANY($3)
-  `, [
-    userId,
-    lockedAt.toISOString(),
-    convertArrayToPostgresString(photoIds),
-  ]), 'lockPhotos');
+export const lockPhotos = async (
+  photoIds: string[],
+  userId: string,
+): Promise<{
+  locked: string[];
+  alreadyLocked: string[];
+}> => {
+  return safelyQueryPhotos(async () => {
+    // First, check which photos are already locked by other users
+    const checkResult = await query(`
+      SELECT id, locked_by
+      FROM photos
+      WHERE id = ANY($1)
+    `, [convertArrayToPostgresString(photoIds)]);
+
+    const alreadyLocked = checkResult.rows
+      .filter(row => row.locked_by && row.locked_by !== userId)
+      .map(row => row.id);
+
+    const availableToLock = photoIds.filter(
+      id => !alreadyLocked.includes(id),
+    );
+
+    // Lock only available photos
+    if (availableToLock.length > 0) {
+      const lockedAt = new Date();
+      await query(`
+        UPDATE photos
+        SET
+          locked_by = $1,
+          locked_at = $2
+        WHERE id = ANY($3)
+          AND (locked_by IS NULL OR locked_by = $1)
+      `, [
+        userId,
+        lockedAt.toISOString(),
+        convertArrayToPostgresString(availableToLock),
+      ]);
+    }
+
+    return {
+      locked: availableToLock,
+      alreadyLocked,
+    };
+  }, 'lockPhotos');
 };
 
 export const unlockPhotos = async (photoIds: string[], userId: string) => {
