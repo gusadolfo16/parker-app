@@ -105,10 +105,10 @@ export default function PhotoPrevNextActions({
 
   const deletePhoto = useNavigateOrRunActionWithToast({
     pathOrAction: useCallback(() => {
-      if (photo?.id && photo.url) {
-        return deletePhotoAction(photo.id, photo.url, true);
+      if (photo?.id) {
+        return deletePhotoAction(photo.id, true);
       }
-    }, [photo?.id, photo?.url]),
+    }, [photo?.id]),
     toastMessage: `Deleting ${photoTitle} ...`,
   });
 

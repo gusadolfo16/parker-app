@@ -18,7 +18,7 @@ export const SHOULD_PREFETCH_ALL_LINKS: boolean | undefined = undefined;
 // TEMPLATE META
 
 export const TEMPLATE_TITLE = 'Intervenido';
-export const TEMPLATE_DESCRIPTION = 'Store photos with original camera data';
+export const TEMPLATE_DESCRIPTION = 'Proyecto para que intervengan mis fotos';
 
 // SOURCE CODE
 

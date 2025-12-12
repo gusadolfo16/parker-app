@@ -46,6 +46,7 @@ const createPhotosTable = () =>
     CREATE TABLE IF NOT EXISTS photos (
       id VARCHAR(8) PRIMARY KEY,
       url VARCHAR(255) NOT NULL,
+      url_high_res VARCHAR(255),
       extension VARCHAR(255) NOT NULL,
       aspect_ratio REAL DEFAULT 1.5,
       blur_data TEXT,
@@ -132,9 +133,10 @@ const safelyQueryPhotos = async <T>(
       console.log('Creating photos table ...');
       await createPhotosTable();
       result = await callback();
-    } else if (/endpoint is in transition/i.test(e.message)) {
+    } else if (/endpoint is in transition/i.test(e.message) ||
+               /Connection terminated unexpectedly/i.test(e.message)) {
       console.log(
-        'SQL query error: endpoint is in transition (setting timeout)',
+        `SQL query error: ${e.message} (setting timeout for retry)`,
       );
       // Wait 5 seconds and try again
       await new Promise(resolve => setTimeout(resolve, 5000));
@@ -177,6 +179,7 @@ export const insertPhoto = (photo: PhotoDbInsert) =>
     INSERT INTO photos (
       id,
       url,
+      url_high_res,
       extension,
       aspect_ratio,
       blur_data,
@@ -213,6 +216,7 @@ export const insertPhoto = (photo: PhotoDbInsert) =>
     VALUES (
       ${photo.id},
       ${photo.url},
+      ${photo.urlHighRes},
       ${photo.extension},
       ${photo.aspectRatio},
       ${photo.blurData},
@@ -252,6 +256,7 @@ export const updatePhoto = (photo: PhotoDbInsert) =>
   safelyQueryPhotos(() => sql`
     UPDATE photos SET
     url=${photo.url},
+    url_high_res=${photo.urlHighRes},
     extension=${photo.extension},
     aspect_ratio=${photo.aspectRatio},
     blur_data=${photo.blurData},

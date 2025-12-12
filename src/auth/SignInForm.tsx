@@ -32,6 +32,7 @@ export default function SignInForm() {
     if (result?.error) {
       setError(result.error);
     } else {
+      console.log('Login successful, redirecting to PATH_ROOT');
       invalidateSwr?.(SWR_KEYS.GET_AUTH);
       router.push(PATH_ROOT);
       router.refresh();

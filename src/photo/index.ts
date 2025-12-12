@@ -78,6 +78,7 @@ export interface PhotoExif {
 export interface PhotoDbInsert extends PhotoExif {
   id: string
   url: string
+  urlHighRes?: string
   extension: string
   blurData?: string
   caption?: string
@@ -146,6 +147,7 @@ export const parsePhotoFromDb = (photoDbRaw: PhotoDb): Photo => {
       formatExposureCompensation(photoDb.exposureCompensation),
     takenAtNaiveFormatted:
       formatDateFromPostgresString(photoDb.takenAtNaive ?? ''),
+    urlHighRes: photoDb.urlHighRes,
     recipeData: photoDb.recipeData
       // Legacy check on escaped, string-based JSON
       ? typeof photoDb.recipeData === 'string'

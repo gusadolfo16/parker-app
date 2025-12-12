@@ -117,16 +117,26 @@ export const uploadFromClientViaPresignedUrl = async (
   fileName: string,
   extension: string,
   addRandomSuffix?: boolean,
+  storageType?: StorageType,
 ) => {
   const key = addRandomSuffix
     ? `${fileName}-${generateStorageId()}.${extension}`
     : `${fileName}.${extension}`;
 
-  const url = await fetch(`${PATH_API_PRESIGNED_URL}/${key}`)
-    .then((response) => response.text());
+  const response = await fetch(
+    `${PATH_API_PRESIGNED_URL}/${key}${storageType ? `?storage=${storageType}` : ''}`
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to get presigned URL: ${errorText || response.statusText}`);
+  }
+
+  const url = await response.text();
 
   return fetch(url, { method: 'PUT', body: file })
-    .then(() => `${baseUrlForStorage(CURRENT_STORAGE)}/${key}`);
+    .then(() =>
+      `${baseUrlForStorage(storageType || CURRENT_STORAGE)}/${key}`);
 };
 
 export const uploadPhotoFromClient = async (
@@ -138,6 +148,17 @@ export const uploadPhotoFromClient = async (
 )
   ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
   : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
+
+export const uploadHighResPhotoFromClient = async (
+  file: File | Blob,
+  extension = 'jpg',
+) => uploadFromClientViaPresignedUrl(
+  file,
+  PREFIX_UPLOAD,
+  extension,
+  true,
+  'cloudflare-r2',
+);
 
 export const putFile = (
   file: Buffer,

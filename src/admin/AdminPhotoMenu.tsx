@@ -93,7 +93,7 @@ export default function AdminPhotoMenu({
           icon: <MdOutlineDeleteIcon size={18} />,
           action: async () => {
             if (confirm(appText.admin.deleteConfirm(titleForPhoto(photo)))) {
-              await deletePhotoAction(id, photo.url);
+              await deletePhotoAction(id);
               router.push(PATH_ADMIN_PHOTOS);
               toastSuccess(`Deleted ${title}`);
             }

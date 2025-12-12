@@ -2,12 +2,19 @@
 
 import { LockedPhotoWithUser } from '@/photo/db/query';
 import DownloadReportButton from './components/DownloadReportButton';
-import { clearAllSelectionsAction, cleanAllUsersAction } from './actions';
+import {
+  clearAllSelectionsAction,
+  cleanAllUsersAction,
+  cleanAllPhotosDbAction,
+  cleanAllR2FilesAction,
+} from './actions';
 import { useState } from 'react';
 
 export default function AdminReportClient({ photos }: { photos: LockedPhotoWithUser[] }) {
   const [isCleaningUsers, setIsCleaningUsers] = useState(false);
   const [isClearingSelections, setIsClearingSelections] = useState(false);
+  const [isCleaningDbPhotos, setIsCleaningDbPhotos] = useState(false);
+  const [isCleaningR2Files, setIsCleaningR2Files] = useState(false);
 
   const handleClearSelections = async () => {
     if (!confirm('⚠️ This will unlock all selected photos. Are you sure?')) {
@@ -36,6 +43,40 @@ export default function AdminReportClient({ photos }: { photos: LockedPhotoWithU
       window.location.reload();
     } else {
       alert('❌ Error cleaning users: ' + result.error);
+    }
+  };
+
+  const handleCleanDbPhotos = async () => {
+    if (!confirm('⚠️ This will delete ALL photo entries from the database. Are you sure?')) {
+      return;
+    }
+
+    setIsCleaningDbPhotos(true);
+    const result = await cleanAllPhotosDbAction();
+    setIsCleaningDbPhotos(false);
+
+    if (result.success) {
+      alert('✅ All photo entries deleted from DB!');
+      window.location.reload();
+    } else {
+      alert('❌ Error cleaning DB photos: ' + result.error);
+    }
+  };
+
+  const handleCleanR2Files = async () => {
+    if (!confirm('⚠️ This will delete ALL `photo-` and `upload-` files from R2/Blob storage. This action is irreversible. Are you sure?')) {
+      return;
+    }
+
+    setIsCleaningR2Files(true);
+    const result = await cleanAllR2FilesAction();
+    setIsCleaningR2Files(false);
+
+    if (result.success) {
+      alert('✅ All photo/upload files deleted from R2/Blob!');
+      window.location.reload();
+    } else {
+      alert('❌ Error cleaning R2/Blob files: ' + result.error);
     }
   };
 
@@ -70,17 +111,31 @@ export default function AdminReportClient({ photos }: { photos: LockedPhotoWithU
           <DownloadReportButton photosByOwner={photosByUser} />
           <button
             onClick={handleClearSelections}
-            disabled={isClearingSelections}
+            disabled={isClearingSelections || isCleaningDbPhotos || isCleaningR2Files}
             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 disabled:opacity-50"
           >
             {isClearingSelections ? 'Clearing...' : 'Clear All Selections'}
           </button>
           <button
             onClick={handleCleanUsers}
-            disabled={isCleaningUsers}
+            disabled={isCleaningUsers || isCleaningDbPhotos || isCleaningR2Files}
             className="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 disabled:opacity-50"
           >
             {isCleaningUsers ? 'Cleaning...' : 'Clean All Users'}
+          </button>
+          <button
+            onClick={handleCleanDbPhotos}
+            disabled={isCleaningDbPhotos || isCleaningUsers || isCleaningR2Files || isClearingSelections}
+            className="bg-purple-500 text-white px-4 py-2 rounded-md hover:bg-purple-600 disabled:opacity-50"
+          >
+            {isCleaningDbPhotos ? 'Cleaning DB...' : 'Clean All Photos (DB)'}
+          </button>
+          <button
+            onClick={handleCleanR2Files}
+            disabled={isCleaningR2Files || isCleaningUsers || isCleaningDbPhotos || isClearingSelections}
+            className="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 disabled:opacity-50"
+          >
+            {isCleaningR2Files ? 'Cleaning R2...' : 'Clean All R2/Blob Files'}
           </button>
         </div>
       </div>

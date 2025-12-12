@@ -1,20 +1,22 @@
 'use client';
 
-import { useSelection } from '@/selection/SelectionContext';
-import PhotoGrid from '../../src/photo/PhotoGrid';
+import { useSelection, clearAndUnlockSelection } from '@/selection/SelectionContext';
+import PhotoGrid from '@/photo/PhotoGrid';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { clearAndUnlockSelection } from '@/selection/SelectionContext';
 import LoaderButton from '@/components/primitives/LoaderButton';
 import HiOutlinePhotographIcon from '@/components/icons/HiOutlinePhotographIcon';
+import { sendSelectionEmailAction } from '@/emails/actions';
+import { HiOutlineMail } from 'react-icons/hi';
 
 export default function SelectedPageClient() {
   const { data: session } = useSession();
   const { selectedPhotos, clearSelection } = useSelection();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
 
   const handleClearAndUnlock = async () => {
     if (session?.user?.id) {
@@ -31,6 +33,20 @@ export default function SelectedPageClient() {
     }
   };
 
+  const handleSendEmail = async () => {
+    setIsSendingEmail(true);
+    try {
+      const result = await sendSelectionEmailAction();
+      if (result.success) {
+        toast.success(`Email sent with ${result.count} photos!`);
+      }
+    } catch (e: any) {
+      toast.error(e.message || 'Failed to send email');
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   useEffect(() => {
     if (selectedPhotos.length === 0) {
       router.push('/');
@@ -39,14 +55,25 @@ export default function SelectedPageClient() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <h1 className="text-2xl font-bold">Selected Photos</h1>
-        <LoaderButton
-          onClick={handleClearAndUnlock}
-          isLoading={isLoading}
-        >
-          Clear & Unlock Selection
-        </LoaderButton>
+        <div className="flex gap-2">
+          <LoaderButton
+            onClick={handleSendEmail}
+            isLoading={isSendingEmail}
+            disabled={isLoading}
+            icon={<HiOutlineMail />}
+          >
+            Enviar a mi correo
+          </LoaderButton>
+          <LoaderButton
+            onClick={handleClearAndUnlock}
+            isLoading={isLoading}
+            disabled={isSendingEmail}
+          >
+            Clear & Unlock Selection
+          </LoaderButton>
+        </div>
       </div>
       {selectedPhotos.length > 0 ? (
         <PhotoGrid photos={selectedPhotos} />

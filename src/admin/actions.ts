@@ -17,6 +17,7 @@ import {
   testStorageConnection,
   deleteFile,
 } from '@/platforms/storage';
+import { runAuthenticatedAdminServerAction } from '@/auth/server';
 
 export const getAdminDataAction = async () => {
   const [
@@ -125,3 +126,54 @@ export const cleanAllUsersAction = async () => {
     return { success: false, error: String(error) };
   }
 };
+
+export const cleanAllPhotosDbAction = async () =>
+  runAuthenticatedAdminServerAction(async () => {
+    try {
+      const { query } = await import('@/platforms/postgres');
+      await query('DELETE FROM photos');
+      revalidateAllKeysAndPaths();
+      return { success: true };
+    } catch (error) {
+      console.error('Error cleaning DB photos:', error);
+      return { success: false, error: String(error) };
+    }
+  });
+
+export const cleanAllR2FilesAction = async () =>
+  runAuthenticatedAdminServerAction(async () => {
+    try {
+      const { cloudflareR2List, cloudflareR2Delete } =
+        await import('@/platforms/storage/cloudflare-r2');
+      const { vercelBlobList, vercelBlobDelete } =
+        await import('@/platforms/storage/vercel-blob');
+
+      const [r2Files, vercelFiles] = await Promise.all([
+        cloudflareR2List('photo-'),
+        vercelBlobList('photo-'),
+        cloudflareR2List('upload-'),
+        vercelBlobList('upload-'),
+      ]);
+      
+      // Flatten and filter for unique keys
+      const filesToDelete = Array.from(new Set([
+        ...r2Files.map(f => f.url),
+        ...vercelFiles.map(f => f.url),
+      ]));
+
+      await Promise.all(filesToDelete.map(async url => {
+        try {
+          await deleteFile(url);
+          console.log(`Successfully deleted file: ${url}`);
+        } catch (deleteError) {
+          console.error(`Failed to delete file ${url}:`, deleteError);
+          throw deleteError; // Re-throw to ensure the action catches the overall failure
+        }
+      }));
+      revalidateAllKeysAndPaths();
+      return { success: true };
+    } catch (error) {
+      console.error('Error cleaning R2/Blob files:', error);
+      return { success: false, error: String(error) };
+    }
+  });

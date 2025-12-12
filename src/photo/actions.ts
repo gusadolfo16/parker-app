@@ -78,18 +78,35 @@ export const createPhotoAction = async (formData: FormData) =>
       formData,
     );
 
-    const updatedUrl = await convertUploadToPhoto({
+    // --- Handle photo.url (web-res) ---
+    const updatedWebResUrl = await convertUploadToPhoto({
       urlOrigin: photo.url,
       shouldStripGpsData,
     });
     
-    if (updatedUrl) {
-      photo.url = updatedUrl;
-      await insertPhoto(photo);
-      await propagateRecipeTitleIfNecessary(formData, photo);
-      revalidateAllKeysAndPaths();
-      redirect(PATH_ADMIN_PHOTOS);
+    if (updatedWebResUrl) {
+      photo.url = updatedWebResUrl;
+    } else {
+      throw new Error('Failed to process web-resolution image');
     }
+
+    // --- Handle photo.urlHighRes (high-res) if it exists ---
+    if (photo.urlHighRes) {
+      const updatedHighResUrl = await convertUploadToPhoto({
+        urlOrigin: photo.urlHighRes,
+        shouldStripGpsData: false, // Do not strip GPS from high-res by default
+      });
+      if (updatedHighResUrl) {
+        photo.urlHighRes = updatedHighResUrl;
+      } else {
+        throw new Error('Failed to process high-resolution image');
+      }
+    }
+
+    await insertPhoto(photo);
+    await propagateRecipeTitleIfNecessary(formData, photo);
+    revalidateAllKeysAndPaths();
+    redirect(PATH_ADMIN_PHOTOS);
   });
 
 // Helper function for:
@@ -355,9 +372,13 @@ export const togglePrivatePhotoAction = async (
 export const deletePhotosAction = async (photoIds: string[]) =>
   runAuthenticatedAdminServerAction(async () => {
     for (const photoId of photoIds) {
-      const photo = await getPhoto(photoId);
+      const photo = await getPhoto(photoId); // Fetch the full photo object
       if (photo) {
-        await deletePhoto(photoId).then(() => deleteFile(photo.url));
+        await deletePhoto(photoId);
+        await deleteFile(photo.url); // Delete web-res file
+        if (photo.urlHighRes) {
+          await deleteFile(photo.urlHighRes); // Delete high-res file if exists
+        }
       }
     }
     revalidateAllKeysAndPaths();
@@ -365,11 +386,17 @@ export const deletePhotosAction = async (photoIds: string[]) =>
 
 export const deletePhotoAction = async (
   photoId: string,
-  photoUrl: string,
   shouldRedirect?: boolean,
 ) =>
   runAuthenticatedAdminServerAction(async () => {
-    await deletePhoto(photoId).then(() => deleteFile(photoUrl));
+    const photo = await getPhoto(photoId); // Fetch the full photo object
+    if (photo) {
+      await deletePhoto(photoId);
+      await deleteFile(photo.url); // Delete web-res file
+      if (photo.urlHighRes) {
+        await deleteFile(photo.urlHighRes); // Delete high-res file if exists
+      }
+    }
     revalidateAllKeysAndPaths();
     if (shouldRedirect) {
       redirect(PATH_ROOT);

@@ -112,6 +112,7 @@ const FORM_METADATA = (
     readOnly: true,
   },
   url: { label: 'storage url', readOnly: true },
+  urlHighRes: { label: 'high-res url', readOnly: true },
   extension: { label: 'extension', readOnly: true },
   aspectRatio: { label: 'aspect ratio', readOnly: true },
   make: { label: 'camera make' },

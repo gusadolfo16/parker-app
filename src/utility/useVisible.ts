@@ -19,6 +19,7 @@ export default function useVisible({
         }
       }, {
         root: null,
+        rootMargin: '200px',
         threshold: 0,
       });
       observer.observe(ref.current);

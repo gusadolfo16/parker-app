@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
   const { photoIds } = await req.json();
   const userId = session.user.email; // Use email as the identifier
 
+  if (!photoIds || photoIds.length === 0) {
+    return NextResponse.json({ message: 'No photo IDs provided' }, { status: 400 });
+  }
+
   const result = await lockPhotos(photoIds, userId);
+  
   revalidateAllKeysAndPaths();
 
   return NextResponse.json({

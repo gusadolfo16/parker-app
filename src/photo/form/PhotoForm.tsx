@@ -50,6 +50,8 @@ import { didVisibilityChange } from '../visibility';
 import FieldsetVisibility from '../visibility/FieldsetVisibility';
 import PhotoColors from '../color/PhotoColors';
 import { generateColorDataFromString } from '../color/client';
+import ImageInput from '@/components/ImageInput';
+import { uploadHighResPhotoFromClient } from '@/platforms/storage';
 
 const THUMBNAIL_SIZE = 300;
 
@@ -85,6 +87,7 @@ export default function PhotoForm({
   const [formErrors, setFormErrors] =
     useState(getFormErrors(initialPhotoForm));
   const [formActionErrorMessage, setFormActionErrorMessage] = useState('');
+  const [isUploadingHighRes, setIsUploadingHighRes] = useState(false);
 
   const { invalidateSwr, shouldDebugImageFallbacks } = useAppState();
 
@@ -480,6 +483,43 @@ export default function PhotoForm({
                       key={key}
                       {...fieldProps}
                     />;
+                  case 'urlHighRes':
+                    return (
+                      <div key={key} className="space-y-2">
+                        <FieldsetWithStatus
+                          {...fieldProps}
+                          loading={isUploadingHighRes}
+                        />
+                        <div className="flex flex-col gap-2">
+                          <ImageInput
+                            disabled={isUploadingHighRes}
+                            onStart={() => setIsUploadingHighRes(true)}
+                            showButton={true}
+                            onBlobReady={async ({ blob, extension }) => {
+                              try {
+                                const url = await uploadHighResPhotoFromClient(
+                                  blob,
+                                  extension,
+                                );
+                                setFormData(data => ({
+                                  ...data,
+                                  urlHighRes: url,
+                                }));
+                              } catch (error) {
+                                console.error(error);
+                                setFormActionErrorMessage(
+                                  error instanceof Error
+                                    ? error.message
+                                    : 'Failed to upload high-res image',
+                                );
+                              } finally {
+                                setIsUploadingHighRes(false);
+                              }
+                            }}
+                          />
+                        </div>
+                      </div>
+                    );
                   default:
                     return <FieldsetWithStatus
                       key={key}

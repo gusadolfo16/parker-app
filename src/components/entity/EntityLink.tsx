@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentProps, ReactNode, RefObject, useCallback, useState } from 'react';
+import { ComponentProps, ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import LabeledIcon, { LabeledIconType } from '../primitives/LabeledIcon';
 import Badge from '../Badge';
@@ -14,7 +14,10 @@ import { SWR_KEYS } from '@/swr';
 import { getPhotosCachedAction } from '@/photo/actions';
 import { PhotoQueryOptions } from '@/photo/db';
 import { MAX_PHOTOS_TO_SHOW_PER_CATEGORY } from '@/image-response';
+import { IMAGE_WIDTH_MEDIUM } from '@/components/image';
+import { IMAGE_QUALITY } from '@/app/config';
 
+import useVisible from '@/utility/useVisible';
 import { useSharedHoverState } from '../shared-hover/state';
 
 export interface EntityLinkExternalProps {
@@ -74,6 +77,9 @@ export default function EntityLink({
 } & EntityLinkExternalProps) {
   const { mutate } = useSWRConfig();
   const [isLoading, setIsLoading] = useState(false);
+  const internalRef = useRef<HTMLDivElement>(null);
+  const effectiveRef = (ref as RefObject<HTMLDivElement | null>) || internalRef;
+  const hasPrefetched = useRef(false);
 
   const hasBadgeIcon = Boolean(iconBadgeStart || iconBadgeEnd);
 
@@ -206,9 +212,49 @@ export default function EntityLink({
     }
   }, [showHover, countOnHover, hoverPhotoQueryOptions, dismissSharedHover, ref]);
 
+  const onVisible = useCallback(() => {
+    if (
+      showHover &&
+      countOnHover &&
+      hoverPhotoQueryOptions &&
+      !hasPrefetched.current
+    ) {
+      hasPrefetched.current = true;
+      const fetcher = () => getPhotosCachedAction({
+        ...hoverPhotoQueryOptions,
+        limit: MAX_PHOTOS_TO_SHOW_PER_CATEGORY,
+      });
+      mutate(
+        `${SWR_KEYS.SHARED_HOVER}-${path}`,
+        fetcher().then((photos) => {
+          photos.slice(0, 6).forEach((photo) => {
+            const img = new Image();
+            const url = photo.url;
+            // Construct Next.js optimized image URL matched to ImageMedium
+            // width: IMAGE_WIDTH_MEDIUM (300)
+            // quality: IMAGE_QUALITY
+            img.src = `/_next/image?url=${encodeURIComponent(url)}&w=${IMAGE_WIDTH_MEDIUM}&q=${IMAGE_QUALITY}`;
+          });
+          return photos;
+        }),
+      );
+    }
+  }, [
+    showHover,
+    countOnHover,
+    hoverPhotoQueryOptions,
+    path,
+    mutate,
+  ]);
+
+  useVisible({
+    ref: effectiveRef,
+    onVisible,
+  });
+
   return (
     <div
-      ref={ref}
+      ref={effectiveRef}
       {...(showHover && countOnHover && hoverPhotoQueryOptions && {
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,

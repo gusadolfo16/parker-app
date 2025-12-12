@@ -10,7 +10,7 @@ import LabeledIcon from '@/components/primitives/LabeledIcon';
 import PhotoFilmIcon from '@/film/PhotoFilmIcon';
 import { useAppState } from '@/app/AppState';
 import { clsx } from 'clsx/lite';
-import { ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FaCameraIcon from '@/components/icons/FaCameraIcon';
 import IoImageSharpIcon from '@/components/icons/IoImageSharpIcon';
 import FaUserAltSlashIcon from '@/components/icons/FaUserAltSlashIcon';
@@ -72,37 +72,58 @@ export default function ComponentsPage() {
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<IoImageSharpIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<IoImageSharpIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
@@ -140,12 +161,18 @@ export default function ComponentsPage() {
               />
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
@@ -160,12 +187,18 @@ export default function ComponentsPage() {
               />
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
@@ -180,7 +213,10 @@ export default function ComponentsPage() {
               />
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>
@@ -195,7 +231,10 @@ export default function ComponentsPage() {
               />
             </div>
             <div>
-              <LabeledIcon icon={<FaUserAltSlashIcon />} debug={debugComponents}>
+              <LabeledIcon
+                icon={<FaUserAltSlashIcon />}
+                debug={debugComponents}
+              >
                 Image
               </LabeledIcon>
             </div>

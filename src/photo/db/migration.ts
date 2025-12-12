@@ -94,6 +94,13 @@ export const MIGRATIONS: Migration[] = [{
     ADD COLUMN IF NOT EXISTS locked_by VARCHAR(255),
     ADD COLUMN IF NOT EXISTS locked_at TIMESTAMP WITH TIME ZONE
   `,
+}, {
+  label: '09: High Res URL',
+  fields: ['url_high_res'],
+  run: () => sql`
+    ALTER TABLE photos
+    ADD COLUMN IF NOT EXISTS url_high_res TEXT
+  `,
 }];
 
 export const migrationForError = (e: any) =>

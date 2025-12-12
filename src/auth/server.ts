@@ -10,10 +10,19 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+import { sendWelcomeEmailAction } from '@/emails/actions';
+
 export const authOptions: NextAuthOptions = {
   adapter: PostgresAdapter(pool),
   session: {
     strategy: 'jwt',
+  },
+  events: {
+    createUser: async ({ user }) => {
+      if (user.email) {
+        await sendWelcomeEmailAction(user.email);
+      }
+    },
   },
   providers: [
     Credentials({
@@ -84,8 +93,6 @@ export const authOptions: NextAuthOptions = {
       }
 
       if (session.user) {
-        // When using database sessions (adapter), user is provided directly
-        // When using JWT sessions, we get data from token
         if (user) {
           (session.user as any).id = user.id;
           (session.user as any).email = user.email;

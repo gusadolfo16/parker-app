@@ -21,7 +21,7 @@ const KEYS_THAT_CAN_BE_PURGED_AND_REVALIDATED = [
 export type SWRKey = typeof SWR_KEYS[keyof typeof SWR_KEYS];
 
 export const canKeyBePurged = (key: string) =>
-  KEYS_THAT_CAN_BE_PURGED.some(k => key.startsWith(k));
+  KEYS_THAT_CAN_BE_PURGED.some(k => k && key.startsWith(k));
 
 export const canKeyBePurgedAndRevalidated = (key: string) =>
-  KEYS_THAT_CAN_BE_PURGED_AND_REVALIDATED.some(k => key.startsWith(k));
+  KEYS_THAT_CAN_BE_PURGED_AND_REVALIDATED.some(k => k && key.startsWith(k));
