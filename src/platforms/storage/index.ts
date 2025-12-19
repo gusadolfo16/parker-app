@@ -134,8 +134,6 @@ export const uploadFromClientViaPresignedUrl = async (
 
   const url = await response.text();
 
-  console.log('Uploading file to presigned URL:', url, 'Storage Type:', storageType || CURRENT_STORAGE);
-
   return fetch(url, { method: 'PUT', body: file })
     .then(() =>
       `${baseUrlForStorage(storageType || CURRENT_STORAGE)}/${key}`);
