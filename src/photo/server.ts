@@ -82,7 +82,18 @@ export const extractImageDataFromBlobPath = async (
       // Data for form
       parser.enableBinaryFields(false);
       exifData = parser.parse();
-      exifrData = await exifr.parse(fileBytes, { xmp: true });
+      // Parse with extensive options to ensure we capture all metadata primarily for XMP/IPTC
+      exifrData = await exifr.parse(fileBytes, {
+        tiff: true,
+        exif: true,
+        gps: true,
+        interop: true,
+        xmp: true,
+        iptc: true,
+        icc: true,
+        multiSegment: true,
+        mergeOutput: true, // Merge segments to ensure tags are accessible
+      });
 
       // Capture film simulation for Fujifilm cameras
       if (isExifForFujifilm(exifData)) {
@@ -116,7 +127,12 @@ export const extractImageDataFromBlobPath = async (
 
   if (error) { console.log(error); }
 
-  const colorFields = await getColorFieldsForPhotoForm(url);
+  const colorFields = await getColorFieldsForPhotoForm(
+    url,
+    undefined,
+    undefined,
+    fileBytes,
+  );
 
   return {
     blobId,
@@ -140,10 +156,15 @@ export const extractImageDataFromBlobPath = async (
   };
 };
 
+// Exported for internal use (e.g., color extraction)
+export const getImageBase64FromBuffer = async (image: ArrayBuffer) =>
+  generateBase64(image);
+
+
 const generateBase64 = async (
   image: ArrayBuffer,
   middleware?: (sharp: Sharp) => Sharp,
-) => 
+) =>
   (middleware ? middleware(sharp(image)) : sharp(image))
     .withMetadata()
     .toFormat('jpeg', { quality: 90 })
@@ -153,19 +174,19 @@ const generateBase64 = async (
 const resizeImage = async (
   image: ArrayBuffer,
   width = IMAGE_WIDTH_RESIZE,
-) => 
+) =>
   generateBase64(image, sharp => sharp
     .resize(width),
   );
 
-const blurImage = async (image: ArrayBuffer) => 
+const blurImage = async (image: ArrayBuffer) =>
   generateBase64(image, sharp => sharp
     .resize(IMAGE_WIDTH_BLUR)
     .modulate({ saturation: 1.15 })
     .blur(4),
   );
 
-export const getImageBase64FromUrl = async (url: string) => 
+export const getImageBase64FromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => generateBase64(buffer))
@@ -177,7 +198,7 @@ export const getImageBase64FromUrl = async (url: string) =>
 export const resizeImageFromUrl = async (
   url: string,
   width?: number,
-) => 
+) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => resizeImage(buffer, width))
@@ -186,7 +207,7 @@ export const resizeImageFromUrl = async (
       return '';
     });
 
-export const blurImageFromUrl = async (url: string) => 
+export const blurImageFromUrl = async (url: string) =>
   fetch(decodeURIComponent(url))
     .then(res => res.arrayBuffer())
     .then(buffer => blurImage(buffer))
@@ -224,7 +245,7 @@ export const removeGpsData = async (image: ArrayBuffer) =>
 
 export const convertFormDataToPhotoDbInsertAndLookupRecipeTitle =
   async (...args: Parameters<typeof convertFormDataToPhotoDbInsert>):
-  Promise<ReturnType<typeof convertFormDataToPhotoDbInsert>> => {
+    Promise<ReturnType<typeof convertFormDataToPhotoDbInsert>> => {
     const photo = convertFormDataToPhotoDbInsert(...args);
 
     if (photo.recipeData && !photo.recipeTitle && photo.film) {

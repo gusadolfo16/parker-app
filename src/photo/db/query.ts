@@ -133,8 +133,13 @@ const safelyQueryPhotos = async <T>(
       console.log('Creating photos table ...');
       await createPhotosTable();
       result = await callback();
-    } else if (/endpoint is in transition/i.test(e.message) ||
-               /Connection terminated unexpectedly/i.test(e.message)) {
+    } else if (
+      e.code === 'ECONNRESET' ||
+      /endpoint is in transition/i.test(e.message) ||
+      /Connection terminated unexpectedly/i.test(e.message) ||
+      /secure TLS connection/i.test(e.message) ||
+      /Client network socket disconnected/i.test(e.message)
+    ) {
       console.log(
         `SQL query error: ${e.message} (setting timeout for retry)`,
       );

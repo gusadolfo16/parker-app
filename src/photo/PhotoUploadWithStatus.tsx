@@ -131,9 +131,18 @@ export default function PhotoUploadWithStatus({
                       setUploadState?.({ isUploading: false });
                       router.refresh();
                     } else {
-                      startTransition(() => hasMultipleUploads
-                        ? router.push(PATH_ADMIN_UPLOADS)
-                        : router.push(pathForAdminUploadUrl(url)));
+                      startTransition(() => {
+                        const href = hasMultipleUploads
+                          ? PATH_ADMIN_UPLOADS
+                          : pathForAdminUploadUrl(url);
+                        router.push(href);
+                        // Fallback: if navigation doesn't happen within 4s, force hard reload
+                        setTimeout(() => {
+                          if (shouldResetUploadStateAfterPending.current) {
+                            window.location.href = href;
+                          }
+                        }, 4000);
+                      });
                     }
                   }
                 })

@@ -31,7 +31,7 @@ export default async function AdminPhotosPage() {
       sortBy: 'createdAt',
       limit: INFINITE_SCROLL_INITIAL_ADMIN_PHOTOS,
     }).catch(() => []),
-    getPhotosMetaCached({ hidden: 'include'})
+    getPhotosMetaCached({ hidden: 'include' })
       .then(({ count }: { count: number }) => count)
       .catch(() => 0),
     getPhotosInNeedOfUpdateCount(new Date().toISOString())
@@ -46,7 +46,7 @@ export default async function AdminPhotosPage() {
       photos,
       photosCount,
       photosCountNeedsSync,
-      shouldResize: !PRESERVE_ORIGINAL_UPLOADS,
+      shouldResize: false, // Force false to fix metadata tags and upload speed
       hasAiTextGeneration: AI_CONTENT_GENERATION_ENABLED,
       onLastUpload: async () => {
         'use server';

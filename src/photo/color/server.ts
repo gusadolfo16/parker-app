@@ -8,7 +8,10 @@ import { FastAverageColor } from 'fast-average-color';
 import { Oklch, PhotoColorData } from './client';
 import sharp from 'sharp';
 import { extractColors } from 'extract-colors';
-import { getImageBase64FromUrl } from '../server';
+import {
+  getImageBase64FromUrl,
+  getImageBase64FromBuffer,
+} from '../server';
 import { generateOpenAiImageQuery } from '@/platforms/openai';
 import { calculateColorSort } from './sort';
 
@@ -28,10 +31,14 @@ export const convertHexToOklch = (hex: string): Oklch => {
 };
 
 // Convert image url to byte array
-const getImageDataFromUrl = async (_url: string) => {
+const getImageDataFromUrl = async (
+  _url: string,
+  fileBytes?: ArrayBuffer,
+) => {
   const url = getNextImageUrlForManipulation(_url, IS_PREVIEW);
-  const imageBuffer = await fetch(decodeURIComponent(url))
-    .then(res => res.arrayBuffer());
+  const imageBuffer = fileBytes
+    ? Buffer.from(fileBytes)
+    : await fetch(decodeURIComponent(url)).then(res => res.arrayBuffer());
   const image = sharp(imageBuffer);
   const { width, height } = await image.metadata();
   const buffer = await image.ensureAlpha().raw().toBuffer();
@@ -43,16 +50,22 @@ const getImageDataFromUrl = async (_url: string) => {
 };
 
 // algorithm library: fast-average-color
-const getAverageColorFromImageUrl = async (url: string) => {
-  const { data } = await getImageDataFromUrl(url);
+const getAverageColorFromImageUrl = async (
+  url: string,
+  fileBytes?: ArrayBuffer,
+) => {
+  const { data } = await getImageDataFromUrl(url, fileBytes);
   const fac = new FastAverageColor();
   const color = fac.prepareResult(fac.getColorFromArray4(data));
   return convertHexToOklch(color.hex);
 };
 
 // algorithm library: extract-colors
-const getExtractedColorsFromImageUrl = async (url: string) => {
-  const data = await getImageDataFromUrl(url);
+const getExtractedColorsFromImageUrl = async (
+  url: string,
+  fileBytes?: ArrayBuffer,
+) => {
+  const data = await getImageDataFromUrl(url, fileBytes);
   return extractColors(data).then(colors =>
     colors.map(({ hex }) => convertHexToOklch(hex)));
 };
@@ -60,12 +73,13 @@ const getExtractedColorsFromImageUrl = async (url: string) => {
 const getColorDataFromImageUrl = async (
   url: string,
   isBatch?: boolean,
+  fileBytes?: ArrayBuffer,
 ): Promise<PhotoColorData> => {
   const ai = AI_CONTENT_GENERATION_ENABLED
-    ? await getColorFromAI(url, isBatch)
+    ? await getColorFromAI(url, isBatch, fileBytes)
     : undefined;
-  const average = await getAverageColorFromImageUrl(url);
-  const colors = await getExtractedColorsFromImageUrl(url);
+  const average = await getAverageColorFromImageUrl(url, fileBytes);
+  const colors = await getExtractedColorsFromImageUrl(url, fileBytes);
   return {
     ...ai && { ai },
     average,
@@ -77,10 +91,11 @@ export const getColorFieldsForImageUrl = async (
   url: string,
   _colorData?: PhotoColorData,
   isBatch?: boolean,
+  fileBytes?: ArrayBuffer,
 ) => {
   try {
     const colorData = _colorData ??
-      await getColorDataFromImageUrl(url, isBatch);
+      await getColorDataFromImageUrl(url, isBatch, fileBytes);
     return {
       colorData,
       colorSort: calculateColorSort(colorData),
@@ -120,9 +135,12 @@ export const getColorFieldsForPhotoForm = async (
 export const getColorFromAI = async (
   _url: string,
   useBatch?: boolean,
+  fileBytes?: ArrayBuffer,
 ) => {
   const url = getNextImageUrlForManipulation(_url, IS_PREVIEW);
-  const image = await getImageBase64FromUrl(url);
+  const image = fileBytes
+    ? await getImageBase64FromBuffer(fileBytes)
+    : await getImageBase64FromUrl(url);
   const hexColor = await generateOpenAiImageQuery(image, `
     Does this image have a primary subject color?
     If yes, what is the approximate hex color of the subject.

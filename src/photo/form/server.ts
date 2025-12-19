@@ -64,6 +64,13 @@ export const convertExifToFormData = (
     },
     ...title && { title },
     ...caption && { caption },
-    ...Array.isArray(tags) && { tags: tags.join(', ') },
+    ...((Array.isArray(tags) || Array.isArray(dataExifr?.keywords)) && {
+      tags: [
+        ...new Set([
+          ...(Array.isArray(tags) ? tags : []),
+          ...(Array.isArray(dataExifr?.keywords) ? dataExifr?.keywords : []),
+        ]),
+      ].join(', '),
+    }),
   };
 };
