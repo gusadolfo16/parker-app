@@ -134,6 +134,8 @@ export const uploadFromClientViaPresignedUrl = async (
 
   const url = await response.text();
 
+  console.log('Uploading file to presigned URL:', url, 'Storage Type:', storageType || CURRENT_STORAGE);
+
   return fetch(url, { method: 'PUT', body: file })
     .then(() =>
       `${baseUrlForStorage(storageType || CURRENT_STORAGE)}/${key}`);
@@ -146,8 +148,8 @@ export const uploadPhotoFromClient = async (
   CURRENT_STORAGE === 'cloudflare-r2' ||
   CURRENT_STORAGE === 'aws-s3'
 )
-  ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
-  : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
+    ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
+    : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
 
 export const uploadHighResPhotoFromClient = async (
   file: File | Blob,
