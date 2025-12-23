@@ -67,14 +67,24 @@ export const extractImageDataFromBlobPath = async (
   let shouldStripGpsData = false;
   let error: string | undefined;
 
-  const fileBytes = blobPath
-    ? await fetch(url, { cache: 'no-store' }).then(res => res.arrayBuffer())
-      .catch(e => {
-        error = `Error fetching image from ${url}: "${e.message}"`;
-        return undefined;
-      })
-    : undefined;
+  let fileBytes: ArrayBuffer | undefined;
 
+  if (blobPath) {
+    let retries = 0;
+    while (!fileBytes && retries < 3) {
+      if (retries > 0) {
+        console.log(`Retrying fetch for ${url} (attempt ${retries + 1})`);
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      fileBytes = await fetch(url, { cache: 'no-store' })
+        .then(res => res.arrayBuffer())
+        .catch(e => {
+          error = `Error fetching image from ${url}: "${e.message}"`;
+          return undefined;
+        });
+      retries++;
+    }
+  }
   try {
     if (fileBytes) {
       const parser = ExifParserFactory.create(Buffer.from(fileBytes));
