@@ -27,11 +27,11 @@ const getPhotosNearIdCachedCached = cache(async (photoId: string) => {
       photosGrid: [],
       indexNumber: 0,
     }
-    :getPhotosNearIdCached(
+    : getPhotosNearIdCached(
       photoId, {
-        limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
-        excludeFromFeeds: true,
-      },
+      limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
+      excludeFromFeeds: true,
+    },
     );
 });
 
@@ -43,7 +43,7 @@ interface PhotoProps {
 
 export async function generateMetadata({
   params,
-}:PhotoProps): Promise<Metadata> {
+}: PhotoProps): Promise<Metadata> {
   const { photoId } = await params;
   const { photo } = await getPhotosNearIdCachedCached(photoId);
 
@@ -81,6 +81,13 @@ export default async function PhotoPage({
     await getPhotosNearIdCachedCached(photoId);
 
   if (!photo) { redirect(PATH_ROOT); }
+
+  // Debug logging for image URL investigation
+  console.log('[PhotoPage] Photo ID:', photoId);
+  console.log('[PhotoPage] Photo URL:', photo.url);
+  console.log('[PhotoPage] Photos count:', photos.length);
+  console.log('[PhotoPage] PhotosGrid count:', photosGrid?.length);
+  console.log('[PhotoPage] Sample photo URLs:', photos.slice(0, 3).map(p => p.url));
 
   return (
     <PhotoDetailPage {...{ photo, photos, photosGrid }} />

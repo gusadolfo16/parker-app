@@ -605,15 +605,38 @@ export const getPhotosNearId = async (
   options: PhotoQueryOptions,
 ) => {
   const { limit = RELATED_GRID_PHOTOS_TO_SHOW } = options;
-  const photos = await getPhotos({
+
+  // First, get the current photo to find its position
+  const currentPhoto = await getPhoto(id);
+  if (!currentPhoto) {
+    return { photos: [], indexNumber: -1 };
+  }
+
+  // Get photos with the same filters, but fetch more to ensure we have enough
+  const allPhotos = await getPhotos({
     ...options,
-    limit: limit + 2,
+    limit: limit + 100, // Fetch extra to ensure we find the photo
   });
-  const indexNumber = photos.findIndex(photo => photo.id === id);
-  return {
-    photos,
-    indexNumber,
-  };
+
+  // Find the index of the current photo
+  const currentIndex = allPhotos.findIndex(p => p.id === id);
+
+  if (currentIndex === -1) {
+    // Current photo not found in filtered results
+    // This means it doesn't match the filters (e.g., it's hidden or excluded from feeds)
+    return { photos: [currentPhoto], indexNumber: 0 };
+  }
+
+  // Calculate the range to show around the current photo
+  const halfLimit = Math.floor(limit / 2);
+  const startIndex = Math.max(0, currentIndex - halfLimit);
+  const endIndex = Math.min(allPhotos.length, startIndex + limit + 2);
+
+  // Extract the photos around the current photo
+  const photos = allPhotos.slice(startIndex, endIndex);
+  const indexNumber = currentIndex - startIndex;
+
+  return { photos, indexNumber };
 };
 
 export const getPhotosInNeedOfUpdate = async (
