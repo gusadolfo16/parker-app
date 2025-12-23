@@ -13,7 +13,7 @@ const HOSTNAME_CLOUDFLARE_R2 =
 
 const HOSTNAME_AWS_S3 =
   process.env.NEXT_PUBLIC_AWS_S3_BUCKET &&
-  process.env.NEXT_PUBLIC_AWS_S3_REGION
+    process.env.NEXT_PUBLIC_AWS_S3_REGION
     // eslint-disable-next-line max-len
     ? `${process.env.NEXT_PUBLIC_AWS_S3_BUCKET}.s3.${process.env.NEXT_PUBLIC_AWS_S3_REGION}.amazonaws.com`
     : undefined;
@@ -24,12 +24,12 @@ const removeUrlProtocol = (url) => {
 };
 
 const generateRemotePattern = (hostname) =>
-  ({
-    protocol: 'https',
-    hostname: removeUrlProtocol(hostname),
-    port: '',
-    pathname: '/**',
-  });
+({
+  protocol: 'https',
+  hostname: removeUrlProtocol(hostname),
+  port: '',
+  pathname: '/**',
+});
 
 const remotePatterns = [];
 
@@ -49,7 +49,8 @@ const LOCALE_DYNAMIC = `i18n/locales/${LOCALE}`;
 
 const nextConfig = {
   images: {
-    imageSizes: [200],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 200, 256, 384],
     remotePatterns,
     minimumCacheTTL: 31536000,
   },
