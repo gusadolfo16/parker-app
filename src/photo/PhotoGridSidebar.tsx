@@ -40,6 +40,8 @@ import IconYear from '@/components/icons/IconYear';
 import PhotoYear from '@/years/PhotoYear';
 import { chunkArray } from '@/utility/array';
 import PhotoRecents from '@/recents/PhotoRecents';
+import { PATH_ARTIST_STATEMENT, PATH_USER_GUIDE } from '@/app/path';
+import Link from 'next/link';
 
 const APPROXIMATE_ITEM_HEIGHT = 40;
 const ABOUT_HEIGHT_OFFSET = 24;
@@ -62,7 +64,7 @@ export default function PhotoGridSidebar({
       tags: limitTagsByCount(_categories.tags, 2),
     }
     : _categories
-  , [_categories]);
+    , [_categories]);
 
   const {
     recents,
@@ -102,7 +104,7 @@ export default function PhotoGridSidebar({
 
   const tagsIncludingHidden = useMemo(() =>
     addPrivateToTags(tags, photosCountHidden)
-  , [tags, photosCountHidden]);
+    , [tags, photosCountHidden]);
 
   const recentsContent = recents.length > 0
     ? <HeaderList
@@ -326,6 +328,24 @@ export default function PhotoGridSidebar({
         }
       })}
       {photoStatsContent}
+      <HeaderList
+        items={[
+          <Link
+            key="artist-statement"
+            href={PATH_ARTIST_STATEMENT}
+            className="text-dim hover:text-black dark:hover:text-white"
+          >
+            {appText.nav.artistStatement}
+          </Link>,
+          <Link
+            key="user-guide"
+            href={PATH_USER_GUIDE}
+            className="text-dim hover:text-black dark:hover:text-white"
+          >
+            {appText.nav.userGuide}
+          </Link>,
+        ]}
+      />
     </div>
   );
 }

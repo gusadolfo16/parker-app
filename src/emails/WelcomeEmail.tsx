@@ -31,18 +31,18 @@ export default function WelcomeEmail() {
                 src={`${baseUrl}/email-header.jpg`} // Assuming the user moves this to public/
                 width="100%"
                 height="auto"
-                alt="Proyecto Intervenido Header"
+                alt="Proyecto Polifonía Visual Header"
                 className="rounded-t-lg mx-auto"
               />
             </Section>
             <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
-              Bienvenido a INTERVENIDO
+              Bienvenido a POLIFONÍA VISUAL
             </Heading>
             <Text className="text-black text-[14px] leading-[24px]">
               Hola,
             </Text>
             <Text className="text-black text-[14px] leading-[24px]">
-              ¡Gracias por unirte a INTERVENIDO! Este proyecto está diseñado para ser una fuente de inspiración y un lienzo digital. Aquí podrás explorar fotografías y seleccionar aquellas que te provoquen a crear, ya sea escribiendo, dibujando o pintando digitalmente sobre ellas.
+              ¡Gracias por unirte a POLIFONÍA VISUAL! Este proyecto está diseñado para ser una fuente de inspiración y un lienzo digital. Aquí podrás explorar fotografías y seleccionar aquellas que te provoquen a crear, ya sea escribiendo, dibujando o pintando digitalmente sobre ellas.
             </Text>
             <Section className="text-center mt-[32px] mb-[32px]">
               <Text className="text-black text-[16px] font-semibold">

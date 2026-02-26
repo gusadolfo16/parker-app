@@ -29,6 +29,8 @@ import { useSelection } from '@/selection/SelectionContext';
 import { useSession, signOut } from 'next-auth/react';
 import AdminAppMenu from '@/admin/AdminAppMenu';
 import { toast } from 'sonner';
+import { useLanguage } from '@/i18n/state/LanguageContext';
+import { useAppText } from '@/i18n/state/client';
 
 
 const NAV_HEIGHT_CLASS = NAV_CAPTION
@@ -65,6 +67,9 @@ export default function NavClient({
     confirmSelection,
     clearSelection,
   } = useSelection();
+
+  const { locale, setLocale } = useLanguage();
+  const appText = useAppText();
 
   const {
     classNameStickyContainer,
@@ -202,6 +207,28 @@ export default function NavClient({
                   )}>
                     {navCaption}
                   </div>}
+              </div>
+              {/* Language Toggle */}
+              <div className="ml-3 sm:ml-4">
+                <button
+                  onClick={() => setLocale(locale === 'es-ar' ? 'en-us' : 'es-ar')}
+                  className={clsx(
+                    'font-mono link h-4 active:text-medium',
+                    'disabled:bg-transparent! hover:text-dim',
+                    'inline-flex items-center gap-1.5 self-start',
+                    'whitespace-nowrap focus:outline-hidden text-medium',
+                  )}
+                  title={appText.nav.language}
+                >
+                  <span className="hidden sm:inline">
+                    {locale === 'es-ar'
+                      ? appText.nav.languageEn
+                      : appText.nav.languageEs}
+                  </span>
+                  <span className="sm:hidden">
+                    {locale === 'es-ar' ? 'EN' : 'ES'}
+                  </span>
+                </button>
               </div>
               {/* Sign-in/Sign-out Button */}
               {!isUserSignedIn ? (

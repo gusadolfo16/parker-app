@@ -17,8 +17,8 @@ export const SHOULD_PREFETCH_ALL_LINKS: boolean | undefined = undefined;
 
 // TEMPLATE META
 
-export const TEMPLATE_TITLE = 'Intervenido';
-export const TEMPLATE_DESCRIPTION = 'Proyecto para que intervengan mis fotos';
+export const TEMPLATE_TITLE = 'Polifonía Visual';
+export const TEMPLATE_DESCRIPTION = 'Proyecto de fotografía intervenida – Polifonía Visual';
 
 // SOURCE CODE
 

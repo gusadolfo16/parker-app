@@ -101,13 +101,20 @@ export const MIGRATIONS: Migration[] = [{
     ALTER TABLE photos
     ADD COLUMN IF NOT EXISTS url_high_res TEXT
   `,
+}, {
+  label: '10: User Contract Signature',
+  fields: ['contract_signed'],
+  run: () => sql`
+    ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS contract_signed BOOLEAN DEFAULT FALSE
+  `,
 }];
 
 export const migrationForError = (e: any) =>
   MIGRATIONS.find(migration =>
-    migration.fields.some(field =>(
+    migration.fields.some(field => (
       // eslint-disable-next-line max-len
-      new RegExp(`column "${field}" of relation "photos" does not exist`, 'i').test(e.message) ||
+      new RegExp(`column "${field}" of relation "(photos|users)" does not exist`, 'i').test(e.message) ||
       new RegExp(`column "${field}" does not exist`, 'i').test(e.message)
     )),
   );

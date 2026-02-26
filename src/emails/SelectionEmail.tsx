@@ -44,7 +44,7 @@ export default function SelectionEmail({ photos = [] }: SelectionEmailProps) {
             <Text className="text-black text-[14px] leading-[24px]">
               Aquí tienes los enlaces para descargar las versiones en alta resolución de las fotos que seleccionaste.
             </Text>
-            
+
             <Section className="mt-4">
               {photos.map((photo) => (
                 <div key={photo.id} className="mb-6 p-4 border rounded-lg border-gray-200">
@@ -82,7 +82,7 @@ export default function SelectionEmail({ photos = [] }: SelectionEmailProps) {
 
             <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
             <Text className="text-[#666666] text-[12px] leading-[24px]">
-              Gracias por participar en Intervenido.
+              Gracias por participar en Polifonía Visual.
             </Text>
           </Container>
         </Body>

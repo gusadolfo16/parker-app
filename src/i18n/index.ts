@@ -14,7 +14,17 @@ export type I18N = typeof EN_US;
  * 4. Add translation/credit to `README.md` Supported Languages
  */
 
+const LOCALE_TEXT_IMPORTS: Record<string, () => Promise<{ TEXT: I18N }>> = {
+  'en-us': () => import('./locales/en-us'),
+  'es-ar': () => import('./locales/es-ar'),
+};
+
 export const getTextForLocale = async (locale: string): Promise<I18N> => {
+  const importFn = LOCALE_TEXT_IMPORTS[locale];
+  if (importFn) {
+    const module = await importFn();
+    return module.TEXT;
+  }
   return EN_US;
 };
 

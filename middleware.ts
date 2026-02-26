@@ -41,7 +41,9 @@ export default withAuth(middleware, {
       const pathname = req.nextUrl.pathname;
       return !!token
         || pathname.startsWith('/t/')
-        || pathname.startsWith('/photos/');
+        || pathname.startsWith('/photos/')
+        || pathname.startsWith('/artist-statement')
+        || pathname.startsWith('/user-guide');
     },
   },
 });
@@ -70,5 +72,5 @@ export const config = {
   // - /template-image-tight
   // - /template-url
   // eslint-disable-next-line max-len
-  matcher: ['/((?!api|api/auth|_next/static|_next/image|favicon.ico|favicons|sign-in|grid|full|p|tag|shot-on|film|lens|focal|recipe|year|recents|home-image|template-image|template-image-tight|template-url).+)'],
+  matcher: ['/((?!api|api/auth|_next/static|_next/image|favicon.ico|favicons|sign-in|grid|full|p|tag|shot-on|film|lens|focal|recipe|year|recents|home-image|template-image|template-image-tight|template-url|artist-statement|user-guide).+)'],
 };

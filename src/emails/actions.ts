@@ -11,12 +11,12 @@ const FROM_EMAIL = process.env.NEXT_PUBLIC_RESEND_FROM_EMAIL || 'onboarding@rese
 
 export async function sendWelcomeEmailAction(email: string) {
   if (!email) return;
-  
+
   try {
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
-      subject: 'Bienvenido a Intervenido',
+      subject: 'Bienvenido a Polifonía Visual',
       react: WelcomeEmail(),
     });
 
@@ -34,7 +34,7 @@ export async function sendWelcomeEmailAction(email: string) {
 
 export async function sendSelectionEmailAction() {
   const session = await getServerSession();
-  
+
   if (!session?.user?.email) { // Ensure email is available for filtering
     throw new Error('Unauthorized');
   }
@@ -62,7 +62,7 @@ export async function sendSelectionEmailAction() {
     const { data, error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: session.user.email,
-      subject: 'Tus fotos seleccionadas - Intervenido',
+      subject: 'Tus fotos seleccionadas - Polifonía Visual',
       react: SelectionEmail({ photos: photosForEmail }),
     });
 
