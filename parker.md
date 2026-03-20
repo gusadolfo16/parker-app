@@ -1777,7 +1777,7 @@ Se solucionó un error que rompía el build (`Event handlers cannot be passed to
 
 **Paso 67.5: Configuración de Título Fijo en Vercel**
 
-Se forzó el título del sitio a "Intervenido".
+Se forzó el título del sitio a "Polifonía Visual".
 
 **Detalles de la acción:**
 - Se modificó `src/app/config.ts`.
@@ -1837,9 +1837,9 @@ Se instalaron las bibliotecas necesarias y se crearon las plantillas y acciones 
 - Se creó `src/emails/WelcomeEmail.tsx` con un diseño y texto específicos, y una referencia a `email-header.jpg` en la carpeta `public/`.
 - Se creó `src/emails/SelectionEmail.tsx` para listar y enlazar fotos de alta resolución.
 - Se creó `src/emails/actions.ts` con `sendWelcomeEmailAction` y `sendSelectionEmailAction`.
-- Se cambió el asunto del correo de bienvenida a "Bienvenido a Intervenido".
-- Se cambió el asunto del correo de selección a "Tus fotos seleccionadas - Intervenido".
-- Se cambió el mensaje final en el correo de selección a "Gracias por participar en Intervenido."
+- Se cambió el asunto del correo de bienvenida a "Bienvenido a Polifonía Visual".
+- Se cambió el asunto del correo de selección a "Tus fotos seleccionadas - Polifonía Visual".
+- Se cambió el mensaje final en el correo de selección a "Gracias por participar en Polifonía Visual."
 
 **Paso 68.7: Integración del Correo de Bienvenida en Autenticación**
 

@@ -96,12 +96,36 @@ export default function PhotoSidebar({
 
   return (
     <div className="p-4 space-y-6">
-      {renderCategoryLinks(appText.category.tagPlural, <IconTag />, tagLinks)}
-      {renderCategoryLinks(appText.category.cameraPlural, <IconCamera />, cameraLinks)}
-      {renderCategoryLinks(appText.category.lensPlural, <IconCamera />, lensLinks)}
-      {renderCategoryLinks(appText.category.filmPlural, <FiFilm />, filmLinks)}
-      {renderCategoryLinks(appText.category.focalLengthPlural, <FiAperture />, focalLengthLinks)}
-      {renderCategoryLinks(appText.category.yearPlural, <FiCalendar />, yearLinks)}
+      {renderCategoryLinks(
+        appText.category.tagPlural,
+        <IconTag />,
+        tagLinks,
+      )}
+      {renderCategoryLinks(
+        appText.category.cameraPlural,
+        <IconCamera />,
+        cameraLinks,
+      )}
+      {renderCategoryLinks(
+        appText.category.lensPlural,
+        <IconCamera />,
+        lensLinks,
+      )}
+      {renderCategoryLinks(
+        appText.category.filmPlural,
+        <FiFilm />,
+        filmLinks,
+      )}
+      {renderCategoryLinks(
+        appText.category.focalLengthPlural,
+        <FiAperture />,
+        focalLengthLinks,
+      )}
+      {renderCategoryLinks(
+        appText.category.yearPlural,
+        <FiCalendar />,
+        yearLinks,
+      )}
     </div>
   );
 }

@@ -18,10 +18,22 @@ import { Tags } from '@/tag';
 import { Films } from '@/film';
 import {
   ADMIN_SQL_DEBUG_ENABLED,
-  AI_TEXT_AUTO_GENERATED_FIELDS,
-  AI_CONTENT_GENERATION_ENABLED,
-  COLOR_SORT_ENABLED,
 } from '@/app/config';
+
+const FORM_METADATA_KEYS_TO_EXCLUDE = [
+  'id',
+  'blurData',
+  'url',
+  'extension',
+  'aspectRatio',
+  'make',
+  'model',
+  'takenAt',
+  'takenAtNaive',
+  'updatedAt',
+  'createdAt',
+];
+
 import {
   PhotoQueryOptions,
   getOrderByFromOptions,
@@ -33,10 +45,8 @@ import { Lenses, createLensKey } from '@/lens';
 import { migrationForError } from './migration';
 import {
   UPDATE_QUERY_LIMIT,
-  UPDATED_BEFORE_01,
-  UPDATED_BEFORE_02,
 } from '../update';
-import { MAKE_FUJIFILM } from '@/platforms/fujifilm';
+
 import { Recipes } from '@/recipe';
 import { Years } from '@/years';
 import { PhotoColorData } from '../color/client';
@@ -352,8 +362,8 @@ export const deletePhoto = (id: string) =>
 export const getPhotosMostRecentUpdate = async () =>
   safelyQueryPhotos(() => sql`
     SELECT updated_at FROM photos ORDER BY updated_at DESC LIMIT 1
-  `.then(({ rows }) => rows[0] ? rows[0].updated_at as Date : undefined)
-    , 'getPhotosMostRecentUpdate');
+  `.then(({ rows }) => rows[0] ? rows[0].updated_at as Date : undefined),
+  'getPhotosMostRecentUpdate');
 
 export const getUniqueCameras = async () =>
   safelyQueryPhotos(() => sql`
@@ -373,8 +383,8 @@ export const getUniqueCameras = async () =>
     camera: { make, model },
     count: parseInt(count, 10),
     lastModified: last_modified as Date,
-  })))
-    , 'getUniqueCameras');
+  }))),
+  'getUniqueCameras');
 
 export const getUniqueLenses = async () =>
   safelyQueryPhotos(() => sql`
@@ -393,8 +403,8 @@ export const getUniqueLenses = async () =>
       lens: { make, model },
       count: parseInt(count, 10),
       lastModified: last_modified as Date,
-    })))
-    , 'getUniqueLenses');
+    }))),
+  'getUniqueLenses');
 
 export const getUniqueTags = async () =>
   safelyQueryPhotos(() => sql`
@@ -409,8 +419,8 @@ export const getUniqueTags = async () =>
     tag,
     count: parseInt(count, 10),
     lastModified: last_modified as Date,
-  })))
-    , 'getUniqueTags');
+  }))),
+  'getUniqueTags');
 
 export const getUniqueRecipes = async () =>
   safelyQueryPhotos(() => sql`
@@ -426,8 +436,8 @@ export const getUniqueRecipes = async () =>
       recipe: recipe_title,
       count: parseInt(count, 10),
       lastModified: last_modified as Date,
-    })))
-    , 'getUniqueRecipes');
+    }))),
+  'getUniqueRecipes');
 
 export const getUniqueYears = async () =>
   safelyQueryPhotos(() => sql`
@@ -457,8 +467,8 @@ export const getRecipeTitleForData = async (
     AND film=${film}
     LIMIT 1
   `
-    .then(({ rows }) => rows[0]?.recipe_title as string | undefined)
-    , 'getRecipeTitleForData');
+  .then(({ rows }) => rows[0]?.recipe_title as string | undefined),
+  'getRecipeTitleForData');
 
 export const getPhotosNeedingRecipeTitleCount = async (
   data: string,
@@ -552,9 +562,9 @@ export const getPhotos = async (options: PhotoQueryOptions = {}) =>
     return query(sql.join(' '), values)
       .then(({ rows }) => rows.map(row => parsePhotoFromDb(row as PhotoDb)));
   },
-    'getPhotos',
-    // Seemingly necessary to pass `options` for expected cache behavior
-    options,
+  'getPhotos',
+  // Seemingly necessary to pass `options` for expected cache behavior
+  options,
   );
 
 export const getPhotosMeta = async (options: PhotoQueryOptions = {}) =>
@@ -588,8 +598,8 @@ export const getPhotosMeta = async (options: PhotoQueryOptions = {}) =>
         };
       });
   },
-    'getPhotosMeta',
-    options,
+  'getPhotosMeta',
+  options,
   );
 
 export const getPhoto = async (id: string): Promise<Photo | undefined> =>

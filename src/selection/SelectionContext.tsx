@@ -27,7 +27,9 @@ const SelectionContext = createContext<SelectionContextType | undefined>(
   undefined,
 );
 
-export const clearAndUnlockSelection = async (photoIds: string[]): Promise<boolean> => {
+export const clearAndUnlockSelection = async (
+  photoIds: string[],
+): Promise<boolean> => {
   if (photoIds.length === 0) {
     toast.error('No photos to unlock.');
     return false;
@@ -165,7 +167,8 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
 
           const count = data.alreadyLocked.length;
           toast.warning(
-            `${count} photo${count > 1 ? 's' : ''} already selected by another user and removed from your selection.`,
+            `${count} photo${count > 1 ? 's' : ''} already selected by ` +
+            'another user and removed from your selection.',
             { duration: 5000 },
           );
         }
@@ -200,7 +203,8 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
         togglePhotoSelection,
         clearSelection,
         confirmSelection,
-        clearAndUnlockSelection: () => clearAndUnlockSelection(selectedPhotos.map(p => p.id)),
+        clearAndUnlockSelection: () => 
+          clearAndUnlockSelection(selectedPhotos.map(p => p.id)),
       }}
     >
       {children}

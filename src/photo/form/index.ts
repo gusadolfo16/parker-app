@@ -368,7 +368,8 @@ export const convertFormDataToPhotoDbInsert = (
       : undefined,
     excludeFromFeeds: photoForm.excludeFromFeeds === 'true',
     hidden: photoForm.hidden === 'true',
-    lockedAt: photoForm.lockedAt ? new Date(photoForm.lockedAt) : undefined, // Convert string to Date
+    // Convert string to Date
+    lockedAt: photoForm.lockedAt ? new Date(photoForm.lockedAt) : undefined,
     ...generateTakenAtFields(photoForm),
   };
 };

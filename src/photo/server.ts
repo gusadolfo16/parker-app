@@ -92,7 +92,8 @@ export const extractImageDataFromBlobPath = async (
       // Data for form
       parser.enableBinaryFields(false);
       exifData = parser.parse();
-      // Parse with extensive options to ensure we capture all metadata primarily for XMP/IPTC
+      // Parse with extensive options to ensure we capture all 
+      // metadata primarily for XMP/IPTC
       exifrData = await exifr.parse(fileBytes, {
         tiff: true,
         exif: true,
@@ -255,7 +256,7 @@ export const removeGpsData = async (image: ArrayBuffer) =>
 
 export const convertFormDataToPhotoDbInsertAndLookupRecipeTitle =
   async (...args: Parameters<typeof convertFormDataToPhotoDbInsert>):
-    Promise<ReturnType<typeof convertFormDataToPhotoDbInsert>> => {
+  Promise<ReturnType<typeof convertFormDataToPhotoDbInsert>> => {
     const photo = convertFormDataToPhotoDbInsert(...args);
 
     if (photo.recipeData && !photo.recipeTitle && photo.film) {

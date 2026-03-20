@@ -136,7 +136,8 @@ export default function PhotoUploadWithStatus({
                           ? PATH_ADMIN_UPLOADS
                           : pathForAdminUploadUrl(url);
                         router.push(href);
-                        // Fallback: if navigation doesn't happen within 4s, force hard reload
+                        // Fallback: if navigation doesn't happen within 4s, 
+                        // force hard reload
                         setTimeout(() => {
                           if (shouldResetUploadStateAfterPending.current) {
                             window.location.href = href;

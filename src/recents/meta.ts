@@ -1,4 +1,4 @@
-import { descriptionForPhotoSet, Photo, PhotoDateRange } from '@/photo';
+import { Photo, PhotoDateRange } from '@/photo';
 import { AppTextState } from '@/i18n/state';
 import {
   absolutePathForRecents,
@@ -7,10 +7,8 @@ import {
   from '@/app/path';
 
 export const generateMetaForRecents = (
-  photos: Photo[],
+  _photos: Photo[],
   appText: AppTextState,
-  count?: number,
-  _dateRange?: PhotoDateRange,
 ) => {
   const title = appText.category.recentTitle;
   // const description = descriptionForPhotoSet(

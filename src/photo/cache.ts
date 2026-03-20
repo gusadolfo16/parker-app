@@ -181,7 +181,6 @@ export const getPhotosNearIdCached = (
 )(...args).then(({ photos, indexNumber }) => {
   const [photoId, { limit }] = args;
   const photo = photos.find(({ id }) => id === photoId);
-  const isPhotoFirst = photos.findIndex(p => p.id === photoId) === 0;
   return {
     photo: photo ? parseCachedPhotoDates(photo) : undefined,
     photos: parseCachedPhotosDates(photos),

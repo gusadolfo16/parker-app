@@ -124,12 +124,16 @@ export const uploadFromClientViaPresignedUrl = async (
     : `${fileName}.${extension}`;
 
   const response = await fetch(
-    `${PATH_API_PRESIGNED_URL}/${key}${storageType ? `?storage=${storageType}` : ''}`
+    `${PATH_API_PRESIGNED_URL}/${key}${
+      storageType ? `?storage=${storageType}` : ''
+    }`,
   );
 
   if (!response.ok) {
     const errorText = await response.text();
-    throw new Error(`Failed to get presigned URL: ${errorText || response.statusText}`);
+    throw new Error(
+      `Failed to get presigned URL: ${errorText || response.statusText}`,
+    );
   }
 
   const url = await response.text();
@@ -146,8 +150,8 @@ export const uploadPhotoFromClient = async (
   CURRENT_STORAGE === 'cloudflare-r2' ||
   CURRENT_STORAGE === 'aws-s3'
 )
-    ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
-    : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
+  ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
+  : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
 
 export const uploadHighResPhotoFromClient = async (
   file: File | Blob,
