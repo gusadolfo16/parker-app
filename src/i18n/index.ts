@@ -22,8 +22,8 @@ const LOCALE_TEXT_IMPORTS: Record<string, () => Promise<{ TEXT: I18N }>> = {
 export const getTextForLocale = async (locale: string): Promise<I18N> => {
   const importFn = LOCALE_TEXT_IMPORTS[locale];
   if (importFn) {
-    const module = await importFn();
-    return module.TEXT;
+    const moduleImport = await importFn();
+    return moduleImport.TEXT;
   }
   return EN_US;
 };

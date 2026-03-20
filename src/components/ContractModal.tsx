@@ -73,16 +73,16 @@ export default function ContractModal({
 
                 <div className="space-y-4">
                     <p>
-                        <span className="font-bold">1. OBJETO:</span> El ARTISTA realiza una intervención artística (dibujo, pintura, escritura u otra técnica) sobre una fotografía original del EDITOR titulada "[Nombre de la Foto]". La unión de ambas se denominará en adelante la OBRA FINAL.
+                        <span className="font-bold">1. OBJETO:</span> El ARTISTA realiza una intervención artística (dibujo, pintura, escritura u otra técnica) sobre una fotografía original del EDITOR titulada &quot;[Nombre de la Foto]&quot;. La unión de ambas se denominará en adelante la OBRA FINAL.
                     </p>
                     <p>
-                        <span className="font-bold">2. CESIÓN DE DERECHOS:</span> El ARTISTA cede al EDITOR de manera exclusiva, total y perpetua, los derechos de reproducción, distribución, venta y comunicación pública sobre su intervención incluida en la OBRA FINAL. Esta cesión habilita al EDITOR a comercializar la obra dentro del proyecto del fotolibro actualmente titulado "Polifonía Visual" y cualquier material derivado o promocional.
+                        <span className="font-bold">2. CESIÓN DE DERECHOS:</span> El ARTISTA cede al EDITOR de manera exclusiva, total y perpetua, los derechos de reproducción, distribución, venta y comunicación pública sobre su intervención incluida en la OBRA FINAL. Esta cesión habilita al EDITOR a comercializar la obra dentro del proyecto del fotolibro actualmente titulado &quot;Polifonía Visual&quot; y cualquier material derivado o promocional.
                     </p>
                     <p>
                         <span className="font-bold">3. CARÁCTER DE LA CESIÓN Y GANANCIAS:</span> Las partes acuerdan que la presente cesión se realiza a título gratuito. El ARTISTA acepta que el 100% de los ingresos generados por la venta del fotolibro y productos derivados pertenecerán exclusivamente al EDITOR. El ARTISTA renuncia expresamente a reclamar regalías, porcentajes o cualquier otra contraprestación económica presente o futura.
                     </p>
                     <p>
-                        <span className="font-bold">4. RECONOCIMIENTO DE AUTORÍA (DERECHOS MORALES):</span> El EDITOR se obliga a mencionar la autoría del ARTISTA en cada reproducción de la obra dentro del libro y en créditos generales, respetando la fórmula: "Fotografía: Gustavo Sanchez / Intervención: {artistName}".
+                        <span className="font-bold">4. RECONOCIMIENTO DE AUTORÍA (DERECHOS MORALES):</span> El EDITOR se obliga a mencionar la autoría del ARTISTA en cada reproducción de la obra dentro del libro y en créditos generales, respetando la fórmula: &quot;Fotografía: Gustavo Sanchez / Intervención: {artistName}&quot;.
                     </p>
                     <p>
                         <span className="font-bold">5. LEY APLICABLE:</span> El presente se rige por la Ley 11.723 de Propiedad Intelectual de la República Argentina. Cualquier controversia será sometida a los Tribunales Ordinarios de la Ciudad Autónoma de Buenos Aires.
