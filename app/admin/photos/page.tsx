@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getStoragePhotoUrlsNoStore } from '@/platforms/storage/cache';
 import { getPhotos, getPhotosInNeedOfUpdateCount } from '@/photo/db/query';
 import { getPhotosMetaCached } from '@/photo/cache';

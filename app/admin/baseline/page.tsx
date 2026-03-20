@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import PhotoCamera from '@/camera/PhotoCamera';
 import Badge from '@/components/Badge';
 import DivDebugBaselineGrid from '@/components/DivDebugBaselineGrid';

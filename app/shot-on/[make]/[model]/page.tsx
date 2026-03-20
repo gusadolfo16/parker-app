@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Metadata } from 'next/types';
 import { CameraProps, formatCameraParams } from '@/camera';
 import { generateMetaForCamera } from '@/camera/meta';

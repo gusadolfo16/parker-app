@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable max-len, @stylistic/indent */
 export { es as default } from 'date-fns/locale/es';
 
 export const TEXT = {
@@ -156,8 +156,7 @@ export const TEXT = {
     setupIncomplete: 'Completar configuración',
     setupSignIn: 'Inicia sesión para subir fotos',
     setupFirstPhoto: 'Agrega tu primera foto',
-    // eslint-disable-next-line max-len
-    setupConfig: 'Cambia el nombre del sitio y otras configuraciones editando las variables de entorno referenciadas en',
+        setupConfig: 'Cambia el nombre del sitio y otras configuraciones editando las variables de entorno referenciadas en',
   },
   misc: {
     loading: 'Cargando ...',

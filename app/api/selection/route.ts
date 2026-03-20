@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from '@/auth/server';
 import { lockPhotos, unlockPhotos } from '@/photo/db/query';

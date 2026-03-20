@@ -1,6 +1,7 @@
 'use client';
 
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 import { useSelection } from '@/selection/SelectionContext';
 import { useSession } from 'next-auth/react';

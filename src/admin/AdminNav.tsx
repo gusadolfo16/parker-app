@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getStorageUploadUrlsNoStore } from '@/platforms/storage/cache';
 import {
   getPhotosMetaCached,

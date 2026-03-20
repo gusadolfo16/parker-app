@@ -1,6 +1,7 @@
 'use client';
 
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { getExifDataAction } from '@/photo/actions';

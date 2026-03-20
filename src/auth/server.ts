@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import NextAuth, { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';

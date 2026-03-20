@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { useAppText } from '@/i18n/state/client';
 import { TbChecklist } from 'react-icons/tb';

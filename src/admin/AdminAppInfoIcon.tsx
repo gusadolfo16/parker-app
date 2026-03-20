@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { clsx } from 'clsx/lite';
 import { LuCog } from 'react-icons/lu';
 import LuCogIcon from '@/components/icons/LuCogIcon';

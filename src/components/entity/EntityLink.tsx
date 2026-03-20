@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable no-duplicate-imports, react-hooks/exhaustive-deps */
+
 /* eslint-disable max-len */
 
 import { ComponentProps, ReactNode, RefObject, useCallback, useRef, useState } from 'react';

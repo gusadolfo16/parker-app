@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, no-duplicate-imports */
 /* eslint-disable max-len */
 import IconSort from '@/components/icons/IconSort';
 import { BiData } from 'react-icons/bi';

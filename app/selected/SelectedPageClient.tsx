@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { useSelection, clearAndUnlockSelection } from '@/selection/SelectionContext';
 import PhotoGrid from '@/photo/PhotoGrid';
 import { useSession } from 'next-auth/react';

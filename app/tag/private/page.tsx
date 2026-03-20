@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import AnimateItems from '@/components/AnimateItems';
 import Note from '@/components/Note';
 import AppGrid from '@/components/AppGrid';

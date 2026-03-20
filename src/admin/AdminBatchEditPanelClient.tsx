@@ -1,6 +1,7 @@
 'use client';
 
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 import { useAppState } from '@/app/AppState';
 import { useSelection } from '@/selection/SelectionContext';

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   RELATED_GRID_PHOTOS_TO_SHOW,
   descriptionForPhoto,

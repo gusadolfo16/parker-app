@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import AppGrid from '@/components/AppGrid';
 import { useAppText } from '@/i18n/state/client';
 

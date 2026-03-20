@@ -1,6 +1,8 @@
 'use client';
 
 /* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 import ErrorNote from '@/components/ErrorNote';
 import FieldsetWithStatus from '@/components/FieldsetWithStatus';
@@ -186,7 +188,6 @@ export default function AdminBatchUploadActions({
                 : <IconAddUpload />
               }
               onClick={async () => {
-                // eslint-disable-next-line max-len
                 if (confirm(`Are you sure you want to add all ${uploadUrls.length} uploads?`)) {
                   setIsAdding(true);
                   setUrlAddStatuses(current => current.map((url, index) => ({

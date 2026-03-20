@@ -1,6 +1,8 @@
 'use client';
 
 /* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 import {
   ComponentProps,
@@ -236,7 +238,6 @@ export default function AdminAppConfigurationClient({
                 Vercel Postgres:
                 {' '}
                 <AdminLink
-                  // eslint-disable-next-line max-len
                   href="https://vercel.com/docs/storage/vercel-postgres/quickstart#create-a-postgres-database"
                   externalIcon
                 >
@@ -259,7 +260,6 @@ export default function AdminAppConfigurationClient({
                 : !hasStorageProvider
                   ? 'Setup storage (one of the following)'
                   : hasMultipleStorageProviders
-                    // eslint-disable-next-line max-len
                     ? `Setup storage (new uploads go to: ${labelForStorage(currentStorage)})`
                     : 'Setup storage'}
             status={hasStorageProvider}
@@ -275,7 +275,6 @@ export default function AdminAppConfigurationClient({
                   {labelForStorage('vercel-blob')}:
                   {' '}
                   <AdminLink
-                    // eslint-disable-next-line max-len
                     href="https://vercel.com/docs/storage/vercel-blob/quickstart#create-a-blob-store"
                     externalIcon
                   >
@@ -291,7 +290,6 @@ export default function AdminAppConfigurationClient({
                   {labelForStorage('cloudflare-r2')}:
                   {' '}
                   <AdminLink
-                    // eslint-disable-next-line max-len
                     href="https://github.com/sambecker/exif-photo-blog#cloudflare-r2"
                     externalIcon
                   >
@@ -354,7 +352,6 @@ export default function AdminAppConfigurationClient({
             (check README for
             {' '}
             <AdminLink
-              // eslint-disable-next-line max-len
               href="https://github.com/sambecker/exif-photo-blog?tab=readme-ov-file#supported-languages"
             >
               supported languages
@@ -514,7 +511,6 @@ export default function AdminAppConfigurationClient({
                 'NEXT_PUBLIC_STATICALLY_OPTIMIZE_PHOTO_CATEGORIES',
               )}
               {renderSubStatusWithEnvVar(
-                // eslint-disable-next-line max-len
                 arePhotoCategoryOgImagesStaticallyOptimized ? 'checked' : 'optional',
                 'NEXT_PUBLIC_STATICALLY_OPTIMIZE_PHOTO_CATEGORY_OG_IMAGES',
               )}

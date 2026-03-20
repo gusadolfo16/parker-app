@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import AppGrid from '@/components/AppGrid';
 import PhotoGridSidebar from '@/photo/PhotoGridSidebar';
 import { getPhotosMetaCached } from '@/photo/cache';

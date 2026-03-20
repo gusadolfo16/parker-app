@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { clsx } from 'clsx/lite';
 import { UrlAddStatus } from './AdminUploadsClient';
 import Spinner from '@/components/Spinner';
