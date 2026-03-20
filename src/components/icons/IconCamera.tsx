@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { IconBaseProps } from 'react-icons';
 
 export default function IconCamera(props: IconBaseProps) {

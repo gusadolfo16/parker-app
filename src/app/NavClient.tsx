@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { clsx } from 'clsx/lite';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';

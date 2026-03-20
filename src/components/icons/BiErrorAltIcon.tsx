@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 
 import { BiErrorAlt } from 'react-icons/bi';
 

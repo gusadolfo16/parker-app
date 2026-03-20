@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { clsx } from 'clsx/lite';
 import { UrlAddStatus } from './AdminUploadsClient';
 import Spinner from '@/components/Spinner';

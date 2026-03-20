@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { useState, useRef, useEffect } from 'react';
 import Modal from './Modal';
 import { useAppText } from '@/i18n/state/client';

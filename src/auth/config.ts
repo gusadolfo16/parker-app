@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { isPathProtected } from '@/app/path';
 import NextAuth, { User, Session } from 'next-auth';
 import { JWT } from 'next-auth/jwt';

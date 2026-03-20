@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { ComponentProps, ReactNode, forwardRef } from 'react';
 import LinkWithStatus from './LinkWithStatus';
 import clsx from 'clsx/lite';

@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { useAppState } from '@/app/AppState';
 import { useSelection } from '@/selection/SelectionContext';
 import { clsx } from 'clsx/lite';

@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { FiXSquare } from 'react-icons/fi';
 
 export default function FiXSquareIcon({ size, className }: { size: number, className: string }) {

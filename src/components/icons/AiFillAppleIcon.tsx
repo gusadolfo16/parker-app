@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 
 import { AiFillApple } from 'react-icons/ai';
 

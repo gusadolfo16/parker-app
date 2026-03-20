@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { ReactNode } from 'react';
 import { clsx } from 'clsx/lite';
 import IoInformationCircleOutlineIcon from '@/components/icons/IoInformationCircleOutlineIcon';

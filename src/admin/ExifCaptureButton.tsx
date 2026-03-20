@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { getExifDataAction } from '@/photo/actions';
 import { PhotoFormData } from '@/photo/form';

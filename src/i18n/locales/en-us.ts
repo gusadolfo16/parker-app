@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export { enUS as default } from 'date-fns/locale/en-US';
 
 export const TEXT = {

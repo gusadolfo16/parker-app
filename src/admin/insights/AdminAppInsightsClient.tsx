@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import ScoreCard from '@/components/ScoreCard';
 import ScoreCardRow from '@/components/ScoreCardRow';
 import { dateRangeForPhotos } from '@/photo';

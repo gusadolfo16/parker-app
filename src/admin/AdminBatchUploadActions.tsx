@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import ErrorNote from '@/components/ErrorNote';
 import FieldsetWithStatus from '@/components/FieldsetWithStatus';
 import Container from '@/components/Container';

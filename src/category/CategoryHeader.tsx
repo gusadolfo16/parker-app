@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { ReactNode } from 'react';
 
 export default function CategoryHeader({

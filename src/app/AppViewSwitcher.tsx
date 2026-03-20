@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import Switcher from '@/components/switcher/Switcher';
 import SwitcherItem from '@/components/switcher/SwitcherItem';
 import IconGrid from '@/components/icons/IconGrid';

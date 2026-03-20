@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelection } from '@/selection/SelectionContext';
 import { useSession } from 'next-auth/react';

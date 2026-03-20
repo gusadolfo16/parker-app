@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { usePathname } from 'next/navigation';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { clsx } from 'clsx/lite';

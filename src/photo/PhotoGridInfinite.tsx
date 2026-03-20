@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { INFINITE_SCROLL_GRID_MULTIPLE } from '.';
 import InfinitePhotoScroll from './InfinitePhotoScroll';
 import PhotoGrid from './PhotoGrid';

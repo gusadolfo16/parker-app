@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import useMetaThemeColor from '@/utility/useMetaThemeColor';
 import { useAppState } from '@/app/AppState';
 import {

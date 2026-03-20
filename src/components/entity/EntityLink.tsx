@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { ComponentProps, ReactNode, RefObject, useCallback, useRef, useState } from 'react';
 import { useSWRConfig } from 'swr';
 import LabeledIcon, { LabeledIconType } from '../primitives/LabeledIcon';

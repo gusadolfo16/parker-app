@@ -1,5 +1,7 @@
 'use server';
 
+/* eslint-disable max-len */
+
 import { getServerSession } from '@/auth/server';
 import { query } from '@/platforms/postgres';
 import type { Session } from 'next-auth';

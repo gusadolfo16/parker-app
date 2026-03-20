@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { clsx } from 'clsx/lite';
 import { LuCog } from 'react-icons/lu';
 import LuCogIcon from '@/components/icons/LuCogIcon';

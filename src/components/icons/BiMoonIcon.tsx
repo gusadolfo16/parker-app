@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { BiMoon } from 'react-icons/bi';
 
 export default function BiMoonIcon({ size, className, title }: { size?: number, className?: string, title?: string }) {

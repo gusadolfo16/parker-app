@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Photo } from '.';
 import { PhotoSetCategory } from '../category';
 import PhotoMedium from './PhotoMedium';

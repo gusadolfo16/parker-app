@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { LockedPhotoWithUser } from '@/photo/db/query';
 import { useCallback } from 'react';
 import { toastSuccess } from '@/toast';

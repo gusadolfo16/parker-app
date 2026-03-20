@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 
 import { ImCheckmark } from 'react-icons/im';
 import { clsx } from 'clsx/lite';

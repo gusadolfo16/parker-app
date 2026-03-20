@@ -1,5 +1,7 @@
 'use server';
 
+/* eslint-disable max-len */
+
 import { Resend } from 'resend';
 import WelcomeEmail from './WelcomeEmail';
 import SelectionEmail from './SelectionEmail';

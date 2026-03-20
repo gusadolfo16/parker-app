@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { useSelection } from '@/selection/SelectionContext';
 import { useSession } from 'next-auth/react';
 import PhotoGridPage from '@/photo/PhotoGridPage';

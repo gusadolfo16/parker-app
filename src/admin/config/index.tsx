@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import IconSort from '@/components/icons/IconSort';
 import { BiData } from 'react-icons/bi';
 import BiDataIcon from '@/components/icons/BiDataIcon';

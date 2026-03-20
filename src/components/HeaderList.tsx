@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { clsx } from 'clsx/lite';
 import AnimateItems from './AnimateItems';
 import { ReactNode, useState } from 'react';

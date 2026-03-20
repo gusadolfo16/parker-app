@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { HiOutlinePhotograph } from 'react-icons/hi';
 
 export default function HiOutlinePhotographIcon({ size, className }: { size: number, className: string }) {

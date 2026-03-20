@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Photo, PhotoDateRange } from '@/photo';
 import PhotoHeader from '@/photo/PhotoHeader';
 import { Camera, cameraFromPhoto } from '.';

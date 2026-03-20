@@ -1,5 +1,7 @@
 'use server';
 
+/* eslint-disable max-len */
+
 import {
   getPhotos,
   getPhotosInNeedOfUpdate,

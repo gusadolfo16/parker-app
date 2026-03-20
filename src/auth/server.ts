@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 import NextAuth, { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';

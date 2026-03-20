@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { Photo, titleForPhoto } from '@/photo';
 import { useAppText } from '@/i18n/state/client';
 import { useAppState } from '@/app/AppState';

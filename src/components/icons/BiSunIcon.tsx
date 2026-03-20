@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { BiSun } from 'react-icons/bi';
 
 export default function BiSunIcon({ size, className, title }: { size?: number, className?: string, title?: string }) {

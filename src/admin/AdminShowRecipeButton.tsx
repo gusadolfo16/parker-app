@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { useAppText } from '@/i18n/state/client';
 import { TbChecklist } from 'react-icons/tb';

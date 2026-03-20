@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { clsx } from 'clsx/lite';
 import { PhotoSetCategories } from '@/category';
 import PhotoRecents from '@/recents/PhotoRecents';

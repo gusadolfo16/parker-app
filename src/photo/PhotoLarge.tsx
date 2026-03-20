@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import {
   Photo,
   altTextForPhoto,

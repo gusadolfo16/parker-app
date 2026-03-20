@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { IoClose } from 'react-icons/io5';
 
 export default function IoCloseIcon({ size, className, title }: { size?: number, className?: string, title?: string }) {

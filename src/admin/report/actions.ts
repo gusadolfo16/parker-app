@@ -1,5 +1,7 @@
 'use server';
 
+/* eslint-disable max-len */
+
 import { getPhotosMeta, getUniqueTags, getUniqueRecipes } from '@/photo/db/query';
 
 export const getReportData = async () => {

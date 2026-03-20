@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { LuCog } from 'react-icons/lu';
 
 export default function LuCogIcon({ size, className, 'aria-label': ariaLabel }: { size: number, className: string, 'aria-label': string }) {

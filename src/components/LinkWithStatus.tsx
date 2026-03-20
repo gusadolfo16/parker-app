@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable max-len */
+
 import { ComponentProps, ReactNode, useState, forwardRef } from 'react';
 import Link from 'next/link';
 import LinkWithStatusChild from './primitives/LinkWithStatusChild';

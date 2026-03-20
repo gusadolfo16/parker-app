@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { CgClose } from 'react-icons/cg';
 
 export default function CgCloseIcon({ size, className, title }: { size?: number, className?: string, title?: string }) {
