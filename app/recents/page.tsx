@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     images,
-  } = generateMetaForRecents(photos, appText, count, dateRange);
+  } = generateMetaForRecents(photos, appText);
 
   return {
     title,
