@@ -136,7 +136,10 @@ export const revalidateAdminPaths = () => {
 
 export const revalidateAllKeysAndPaths = () => {
   revalidateAllKeys();
-  PATHS_TO_CACHE.forEach(path => revalidatePath(path, 'layout'));
+  revalidatePath(PATH_ROOT, 'page');
+  revalidatePath(PATH_GRID, 'page');
+  revalidatePath(PATH_FULL, 'page');
+  revalidatePath(PATH_ADMIN, 'layout');
 };
 
 export const revalidatePhoto = (photoId: string) => {
@@ -150,17 +153,10 @@ export const revalidatePhoto = (photoId: string) => {
   revalidateFocalLengthsKey();
   revalidateYearsKey();
   // Paths
-  revalidatePath(pathForPhoto({ photo: photoId }), 'layout');
-  revalidatePath(PATH_ROOT, 'layout');
-  revalidatePath(PATH_GRID, 'layout');
-  revalidatePath(PATH_FULL, 'layout');
-  revalidatePath(PREFIX_TAG, 'layout');
-  revalidatePath(PREFIX_CAMERA, 'layout');
-  revalidatePath(PREFIX_LENS, 'layout');
-  revalidatePath(PREFIX_FILM, 'layout');
-  revalidatePath(PREFIX_RECIPE, 'layout');
-  revalidatePath(PREFIX_FOCAL_LENGTH, 'layout');
-  revalidatePath(PREFIX_YEAR, 'layout');
+  revalidatePath(pathForPhoto({ photo: photoId }), 'page');
+  revalidatePath(PATH_ROOT, 'page');
+  revalidatePath(PATH_GRID, 'page');
+  revalidatePath(PATH_FULL, 'page');
   revalidatePath(PATH_ADMIN, 'layout');
 };
 
