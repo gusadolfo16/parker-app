@@ -7,7 +7,6 @@ import {
   Preview,
   Section,
   Text,
-  Link,
   Hr,
   Tailwind,
   Row,
@@ -16,10 +15,6 @@ import {
   Button,
 } from '@react-email/components';
 import * as React from 'react';
-
-const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
-  ? `https://${process.env.NEXT_PUBLIC_DOMAIN}`
-  : 'http://localhost:3000';
 
 interface SelectionEmailProps {
   photos: {

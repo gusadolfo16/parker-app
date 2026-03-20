@@ -15,7 +15,7 @@ export default function LinkWithStatusChild({
   onLoad?: () => void
   flickerThreshold?: number
 }) {
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
 
   const startLoadingTimeout = useRef<NodeJS.Timeout | null>(null);
   const stopLoadingTimeout = useRef<NodeJS.Timeout | null>(null);

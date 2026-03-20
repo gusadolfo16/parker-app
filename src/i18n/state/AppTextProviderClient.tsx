@@ -5,7 +5,6 @@ import { AppTextContext } from './client';
 import { I18N } from '..';
 import { generateAppTextState } from '.';
 import { LanguageProvider, useLanguage } from './LanguageContext';
-import { TEXT as EN_US } from '../locales/en-us';
 
 // Inner component that reads locale and swaps text
 function AppTextConsumer({

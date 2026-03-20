@@ -32,7 +32,7 @@ export default function PhotoGridPageClient({
   const viewPortHeight = useViewportHeight();
   const containerHeight = useMemo(() =>
     viewPortHeight - (ref.current?.getBoundingClientRect().y ?? 0),
-    [viewPortHeight]);
+  [viewPortHeight]);
 
   return (
     <PhotoGridContainer

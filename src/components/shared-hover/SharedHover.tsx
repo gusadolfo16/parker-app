@@ -43,7 +43,7 @@ export default function SharedHover({
     if (isHovering) {
       renderHover?.(content);
     }
-  }, [isHovering, renderHover]);
+  }, [isHovering, renderHover, content]);
 
   return (
     <div

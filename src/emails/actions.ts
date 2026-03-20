@@ -3,7 +3,7 @@
 import { Resend } from 'resend';
 import WelcomeEmail from './WelcomeEmail';
 import SelectionEmail from './SelectionEmail';
-import { getLockedPhotos, getPhoto, getPhotos } from '@/photo/db/query';
+import { getLockedPhotos } from '@/photo/db/query';
 import { getServerSession } from '@/auth/server';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -59,7 +59,7 @@ export async function sendSelectionEmailAction() {
   }));
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: session.user.email,
       subject: 'Tus fotos seleccionadas - Polifonía Visual',

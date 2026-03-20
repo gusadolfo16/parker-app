@@ -203,8 +203,8 @@ export default function PhotoLarge({
       isLocked && 'border-4 border-red-800',
       'select-none',
     )}
-      style={{ WebkitTouchCallout: 'none' }}
-      onContextMenu={(e) => e.preventDefault()}
+    style={{ WebkitTouchCallout: 'none' }}
+    onContextMenu={(e) => e.preventDefault()}
     >
       <ZoomControls
         ref={refZoomControls}

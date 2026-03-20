@@ -29,9 +29,9 @@ const getPhotosNearIdCachedCached = cache(async (photoId: string) => {
     }
     : getPhotosNearIdCached(
       photoId, {
-      limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
-      excludeFromFeeds: true,
-    },
+        limit: RELATED_GRID_PHOTOS_TO_SHOW + 2,
+        excludeFromFeeds: true,
+      },
     );
 });
 

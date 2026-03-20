@@ -133,7 +133,7 @@ export default function NavClient({
                         className="px-3"
                         width="auto"
                         noPadding
-                        icon={<span>Confirm</span>}
+                        icon={<span>{appText.selected.confirm}</span>}
                         onClick={async () => {
                           const success = await confirmSelection();
                           if (success) {
@@ -142,20 +142,20 @@ export default function NavClient({
                           }
                         }}
                         tooltip={{
-                          content: 'Confirm Selection',
+                          content: appText.selected.confirmTooltip,
                         }}
                       />
                       <SwitcherItem
                         className="px-3"
                         width="auto"
                         noPadding
-                        icon={<span>Cancel</span>}
+                        icon={<span>{appText.selected.cancel}</span>}
                         onClick={() => {
                           clearSelection();
                           router.refresh();
                         }}
                         tooltip={{
-                          content: 'Cancel Selection',
+                          content: appText.selected.cancelTooltip,
                         }}
                       />
                     </Switcher>
@@ -168,10 +168,10 @@ export default function NavClient({
                         className="px-3"
                         width="auto"
                         noPadding
-                        icon={<span>Select</span>}
+                        icon={<span>{appText.selected.select}</span>}
                         onClick={() => toggleSelectionMode()}
                         tooltip={{
-                          content: 'Select Photos',
+                          content: appText.selected.selectTooltip,
                         }}
                       />
                     </Switcher>
@@ -181,11 +181,11 @@ export default function NavClient({
                 {!selectionMode && selectedPhotos.length > 0 && status === 'authenticated' && (
                   <Switcher type="borderless" className="hidden sm:flex">
                     <SwitcherItem
-                      icon={<span className="whitespace-nowrap">Selected ({selectedPhotos.length})</span>}
+                      icon={<span className="whitespace-nowrap">{appText.selected.selectedItem} ({selectedPhotos.length})</span>}
                       href={PATH_SELECTED}
-                      onClick={() => toast.info('Redirecting to selected photos...')}
+                      onClick={() => toast.info(appText.selected.redirecting)}
                       tooltip={{
-                        content: 'View Selections',
+                        content: appText.selected.viewSelections,
                       }}
                       width="narrow"
                     />
@@ -242,7 +242,7 @@ export default function NavClient({
                       'whitespace-nowrap focus:outline-hidden text-medium',
                     )}
                   >
-                    <span className="hidden sm:inline">Sign In</span>
+                    <span className="hidden sm:inline">{appText.auth.signIn}</span>
                     <span className="sm:hidden">-</span>
                   </Link>
                 </div>
@@ -257,7 +257,7 @@ export default function NavClient({
                       'whitespace-nowrap focus:outline-hidden text-medium',
                     )}
                   >
-                    <span className="hidden sm:inline">Sign Out</span>
+                    <span className="hidden sm:inline">{appText.auth.signOut}</span>
                     <span className="sm:hidden">-</span>
                   </button>
                 </div>

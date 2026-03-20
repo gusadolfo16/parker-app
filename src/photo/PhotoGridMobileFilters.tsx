@@ -13,7 +13,7 @@ import PhotoFocalLength from '@/focal/PhotoFocalLength';
 import PhotoFavs from '@/tag/PhotoFavs';
 import PhotoPrivate from '@/tag/PhotoPrivate';
 import { TAG_FAVS, TAG_PRIVATE, addPrivateToTags, limitTagsByCount } from '@/tag';
-import { HIDE_TAGS_WITH_ONE_PHOTO, SHOW_CATEGORY_IMAGE_HOVERS } from '@/app/config';
+import { HIDE_TAGS_WITH_ONE_PHOTO } from '@/app/config';
 import { useMemo } from 'react';
 import { useAppState } from '@/app/AppState';
 

@@ -43,14 +43,14 @@ export async function GET(
     } else {
       return new Response(
         'Storage provider not configured for presigned URL',
-        { status: 500 }
+        { status: 500 },
       );
     }
 
     if (!client || !putCommand) {
       return new Response(
         'Failed to initialize storage client or command',
-        { status: 500 }
+        { status: 500 },
       );
     }
 

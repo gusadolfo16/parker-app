@@ -20,19 +20,7 @@ import {
   ADMIN_SQL_DEBUG_ENABLED,
 } from '@/app/config';
 
-const FORM_METADATA_KEYS_TO_EXCLUDE = [
-  'id',
-  'blurData',
-  'url',
-  'extension',
-  'aspectRatio',
-  'make',
-  'model',
-  'takenAt',
-  'takenAtNaive',
-  'updatedAt',
-  'createdAt',
-];
+
 
 import {
   PhotoQueryOptions,
@@ -377,13 +365,13 @@ export const getUniqueCameras = async () =>
     GROUP BY make, model
     ORDER BY camera ASC
   `.then(({ rows }): Cameras => rows.map(({
-    make, model, count, last_modified,
-  }) => ({
-    cameraKey: createCameraKey({ make, model }),
-    camera: { make, model },
-    count: parseInt(count, 10),
-    lastModified: last_modified as Date,
-  }))),
+      make, model, count, last_modified,
+    }) => ({
+      cameraKey: createCameraKey({ make, model }),
+      camera: { make, model },
+      count: parseInt(count, 10),
+      lastModified: last_modified as Date,
+    }))),
   'getUniqueCameras');
 
 export const getUniqueLenses = async () =>
@@ -398,12 +386,12 @@ export const getUniqueLenses = async () =>
     GROUP BY lens_make, lens_model
     ORDER BY lens ASC
   `.then(({ rows }): Lenses => rows
-    .map(({ lens_make: make, lens_model: model, count, last_modified }) => ({
-      lensKey: createLensKey({ make, model }),
-      lens: { make, model },
-      count: parseInt(count, 10),
-      lastModified: last_modified as Date,
-    }))),
+      .map(({ lens_make: make, lens_model: model, count, last_modified }) => ({
+        lensKey: createLensKey({ make, model }),
+        lens: { make, model },
+        count: parseInt(count, 10),
+        lastModified: last_modified as Date,
+      }))),
   'getUniqueLenses');
 
 export const getUniqueTags = async () =>
@@ -416,10 +404,10 @@ export const getUniqueTags = async () =>
     GROUP BY tag
     ORDER BY tag ASC
   `.then(({ rows }): Tags => rows.map(({ tag, count, last_modified }) => ({
-    tag,
-    count: parseInt(count, 10),
-    lastModified: last_modified as Date,
-  }))),
+      tag,
+      count: parseInt(count, 10),
+      lastModified: last_modified as Date,
+    }))),
   'getUniqueTags');
 
 export const getUniqueRecipes = async () =>
@@ -432,11 +420,11 @@ export const getUniqueRecipes = async () =>
     GROUP BY recipe_title
     ORDER BY recipe_title ASC
   `.then(({ rows }): Recipes => rows
-    .map(({ recipe_title, count, last_modified }) => ({
-      recipe: recipe_title,
-      count: parseInt(count, 10),
-      lastModified: last_modified as Date,
-    }))),
+      .map(({ recipe_title, count, last_modified }) => ({
+        recipe: recipe_title,
+        count: parseInt(count, 10),
+        lastModified: last_modified as Date,
+      }))),
   'getUniqueRecipes');
 
 export const getUniqueYears = async () =>
@@ -450,10 +438,10 @@ export const getUniqueYears = async () =>
     GROUP BY year
     ORDER BY year DESC
   `.then(({ rows }): Years => rows.map(({ year, count, last_modified }) => ({
-    year,
-    count: parseInt(count, 10),
-    lastModified: last_modified as Date,
-  }))), 'getUniqueYears');
+      year,
+      count: parseInt(count, 10),
+      lastModified: last_modified as Date,
+    }))), 'getUniqueYears');
 
 export const getRecipeTitleForData = async (
   data: string | object,
@@ -467,7 +455,7 @@ export const getRecipeTitleForData = async (
     AND film=${film}
     LIMIT 1
   `
-  .then(({ rows }) => rows[0]?.recipe_title as string | undefined),
+    .then(({ rows }) => rows[0]?.recipe_title as string | undefined),
   'getRecipeTitleForData');
 
 export const getPhotosNeedingRecipeTitleCount = async (
@@ -483,7 +471,7 @@ export const getPhotosNeedingRecipeTitleCount = async (
     AND film=${film}
     AND id <> ${photoIdToExclude}
   `.then(({ rows }) => parseInt(rows[0].count, 10))
-    , 'getPhotosNeedingRecipeTitleCount');
+  , 'getPhotosNeedingRecipeTitleCount');
 
 export const updateAllMatchingRecipeTitles = (
   title: string,
@@ -508,12 +496,12 @@ export const getUniqueFilms = async () =>
     GROUP BY film
     ORDER BY film ASC
   `.then(({ rows }): Films => rows
-    .map(({ film, count, last_modified }) => ({
-      film,
-      count: parseInt(count, 10),
-      lastModified: last_modified as Date,
-    })))
-    , 'getUniqueFilms');
+      .map(({ film, count, last_modified }) => ({
+        film,
+        count: parseInt(count, 10),
+        lastModified: last_modified as Date,
+      })))
+  , 'getUniqueFilms');
 
 export const getUniqueFocalLengths = async () =>
   safelyQueryPhotos(() => sql`
@@ -525,12 +513,12 @@ export const getUniqueFocalLengths = async () =>
     GROUP BY focal_length
     ORDER BY focal_length ASC
   `.then(({ rows }): FocalLengths => rows
-    .map(({ focal_length, count, last_modified }) => ({
-      focal: parseInt(focal_length, 10),
-      count: parseInt(count, 10),
-      lastModified: last_modified as Date,
-    })))
-    , 'getUniqueFocalLengths');
+      .map(({ focal_length, count, last_modified }) => ({
+        focal: parseInt(focal_length, 10),
+        count: parseInt(count, 10),
+        lastModified: last_modified as Date,
+      })))
+  , 'getUniqueFocalLengths');
 
 export const getPhotos = async (options: PhotoQueryOptions = {}) =>
   safelyQueryPhotos(async () => {
@@ -660,7 +648,7 @@ export const getPhotosInNeedOfUpdate = async (
     ORDER BY updated_at ASC
     LIMIT ${limit}
   `.then(({ rows }) => rows.map(row => parsePhotoFromDb(row as PhotoDb)))
-    , 'getPhotosInNeedOfUpdate');
+  , 'getPhotosInNeedOfUpdate');
 
 export const getPhotoIdsAndUpdatedAt = async () =>
   safelyQueryPhotos(() => sql`
@@ -668,10 +656,10 @@ export const getPhotoIdsAndUpdatedAt = async () =>
     FROM photos
     ORDER BY taken_at DESC
   `.then(({ rows }) => rows.map(row => ({
-    id: row.id,
-    updatedAt: row.updated_at,
-  })))
-    , 'getPhotoIdsAndUpdatedAt');
+      id: row.id,
+      updatedAt: row.updated_at,
+    })))
+  , 'getPhotoIdsAndUpdatedAt');
 
 export const getPublicPhotoIds = async () =>
   safelyQueryPhotos(() => sql`
@@ -680,7 +668,7 @@ export const getPublicPhotoIds = async () =>
     WHERE hidden IS NOT TRUE
     ORDER BY taken_at DESC
   `.then(({ rows }) => rows.map(row => row.id))
-    , 'getPublicPhotoIds');
+  , 'getPublicPhotoIds');
 
 export const getColorDataForPhotos = async (photoIds: string[]) =>
   safelyQueryPhotos(() => query(
@@ -691,7 +679,7 @@ export const getColorDataForPhotos = async (photoIds: string[]) =>
     url: row.url, // Added url
     colorData: row.color_data,
   })))
-    , 'getColorDataForPhotos');
+  , 'getColorDataForPhotos');
 
 export const updateColorDataForPhoto = async (
   id: string,
@@ -712,7 +700,7 @@ export const getPhotosInNeedOfUpdateCount = async (
   FROM photos
   WHERE updated_at < ${updatedBefore}
 `.then(({ rows }) => parseInt(rows[0].count, 10))
-  , 'getPhotosInNeedOfUpdateCount');
+, 'getPhotosInNeedOfUpdateCount');
 
 export const lockPhotos = async (
   photoIds: string[],

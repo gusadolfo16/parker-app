@@ -1,5 +1,5 @@
 import clsx from 'clsx/lite';
-import { ReactNode, RefObject, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { ReactNode, useRef, forwardRef, useImperativeHandle } from 'react';
 import { createPortal } from 'react-dom';
 import useImageZoomControls from './useImageZoomControls';
 import { RiCollapseDiagonalLine, RiExpandDiagonalLine } from 'react-icons/ri';

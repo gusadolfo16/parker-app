@@ -1,4 +1,4 @@
-import { Photo, PhotoDateRange } from '@/photo';
+import { Photo } from '@/photo';
 import { AppTextState } from '@/i18n/state';
 import {
   absolutePathForRecents,
