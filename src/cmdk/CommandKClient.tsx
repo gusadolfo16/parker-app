@@ -695,8 +695,7 @@ export default function CommandKClient({
       label: appText.auth.signOut,
       action: async () => {
         if (window.confirm('Are you sure you want to sign out?')) {
-          const result = await signOut({ callbackUrl: PATH_ROOT });
-          console.log('Sign out result:', result);
+          clearAuthStateAndRedirectIfNecessary?.();
           setIsOpen?.(false);
         }
       },

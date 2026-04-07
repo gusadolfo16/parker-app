@@ -62,6 +62,7 @@ export default function NavClient({
     isUserSignedIn,
     isUserAdmin,
     isCheckingAuth,
+    clearAuthStateAndRedirectIfNecessary,
   } = useAppState();
 
   const {
@@ -253,7 +254,7 @@ export default function NavClient({
               ) : (
                 <div className="ml-3 sm:ml-4">
                   <button
-                    onClick={() => signOut({ callbackUrl: '/' })}
+                    onClick={() => clearAuthStateAndRedirectIfNecessary?.()}
                     className={clsx(
                       'font-mono link h-4 active:text-medium',
                       'disabled:bg-transparent! hover:text-dim',

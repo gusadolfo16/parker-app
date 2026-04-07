@@ -200,14 +200,17 @@ export default function AppStateProvider({
   , []);
 
   const clearAuthStateAndRedirectIfNecessary = useCallback(() => {
+    setUserEmail(undefined);
+    setUserEmailEager(undefined);
+    clearAuthEmailCookie();
+    invalidateSwr(SWR_KEYS.GET_AUTH, true);
+    invalidateSwr(SWR_KEYS.GET_ADMIN_DATA, true);
     signOut({ redirect: false }).then(() => {
-      setUserEmail(undefined);
-      setUserEmailEager(undefined);
-      clearAuthEmailCookie();
+      router.refresh();
       router.push(PATH_ROOT);
       toastSuccess('Signed out');
     });
-  }, [router]);
+  }, [router, invalidateSwr]);
 
   // Returns false when upload is cancelled
   const startUpload = useCallback(() => new Promise<boolean>(resolve => {
