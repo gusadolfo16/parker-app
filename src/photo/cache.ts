@@ -134,13 +134,21 @@ export const revalidateAdminPaths = () => {
   PATHS_ADMIN.forEach(path => revalidatePath(path));
 };
 
+// Revalida solo los cache tags sin regenerar rutas estáticas.
+// Usar en acciones frecuentes (ej. lockPhotos) para evitar ISR writes masivos.
+export const revalidateAllKeysOnly = () => {
+  revalidateAllKeys();
+};
+
+// Revalida tags + paths públicos (sin rutas admin).
+// Usar en acciones admin poco frecuentes (subir/borrar fotos).
 export const revalidateAllKeysAndPaths = () => {
   revalidateAllKeys();
   PATHS_TO_CACHE.forEach(path => revalidatePath(path, 'layout'));
 };
 
 export const revalidatePhoto = (photoId: string) => {
-  // Tags
+  // Tags: invalidan todas las páginas que usan estos datos
   revalidateTag(photoId);
   revalidateTagsKey();
   revalidateCamerasKey();
@@ -149,19 +157,12 @@ export const revalidatePhoto = (photoId: string) => {
   revalidateRecipesKey();
   revalidateFocalLengthsKey();
   revalidateYearsKey();
-  // Paths
+  // Solo paths específicos de la foto y las vistas principales
+  // Los prefijos genéricos (PREFIX_TAG, PREFIX_CAMERA, etc.) ya están
+  // cubiertos por sus respectivos revalidateTag() arriba
   revalidatePath(pathForPhoto({ photo: photoId }), 'layout');
   revalidatePath(PATH_ROOT, 'layout');
   revalidatePath(PATH_GRID, 'layout');
-  revalidatePath(PATH_FULL, 'layout');
-  revalidatePath(PREFIX_TAG, 'layout');
-  revalidatePath(PREFIX_CAMERA, 'layout');
-  revalidatePath(PREFIX_LENS, 'layout');
-  revalidatePath(PREFIX_FILM, 'layout');
-  revalidatePath(PREFIX_RECIPE, 'layout');
-  revalidatePath(PREFIX_FOCAL_LENGTH, 'layout');
-  revalidatePath(PREFIX_YEAR, 'layout');
-  revalidatePath(PATH_ADMIN, 'layout');
 };
 
 // Cache
@@ -171,6 +172,7 @@ export const getPhotosCached = (
 ) => unstable_cache(
   getPhotos,
   [KEY_PHOTOS, ...getPhotosCacheKeys(...args)],
+  { tags: [KEY_PHOTOS], revalidate: 60 },
 )(...args).then(parseCachedPhotosDates);
 
 export const getPhotosNearIdCached = (
@@ -178,6 +180,7 @@ export const getPhotosNearIdCached = (
 ) => unstable_cache(
   getPhotosNearId,
   [KEY_PHOTOS, ...getPhotosCacheKeys(args[1])],
+  { tags: [KEY_PHOTOS], revalidate: 60 },
 )(...args).then(({ photos, indexNumber }) => {
   const [photoId, { limit }] = args;
   const photo = photos.find(({ id }) => id === photoId);
@@ -195,60 +198,70 @@ export const getPhotosNearIdCached = (
 export const getPhotosMetaCached = unstable_cache(
   getPhotosMeta,
   [KEY_PHOTOS, KEY_COUNT, KEY_DATE_RANGE],
+  { tags: [KEY_PHOTOS], revalidate: 60 },
 );
 
 export const getPhotosMostRecentUpdateCached =
   unstable_cache(
     () => getPhotosMostRecentUpdate(),
     [KEY_PHOTOS, KEY_COUNT, KEY_DATE_RANGE],
+    { tags: [KEY_PHOTOS], revalidate: 60 },
   );
 
 export const getPhotoCached = (...args: Parameters<typeof getPhoto>) =>
   unstable_cache(
     getPhoto,
     [KEY_PHOTOS, KEY_PHOTO],
+    { tags: [KEY_PHOTOS], revalidate: 60 },
   )(...args).then(photo => photo ? parseCachedPhotoDates(photo) : undefined);
 
 export const getUniqueTagsCached =
   unstable_cache(
     getUniqueTags,
     [KEY_PHOTOS, KEY_TAGS],
+    { tags: [KEY_PHOTOS, KEY_TAGS], revalidate: 120 },
   );
 
 export const getUniqueCamerasCached =
   unstable_cache(
     getUniqueCameras,
     [KEY_PHOTOS, KEY_CAMERAS],
+    { tags: [KEY_PHOTOS, KEY_CAMERAS], revalidate: 120 },
   );
 
 export const getUniqueLensesCached =
   unstable_cache(
     getUniqueLenses,
     [KEY_PHOTOS, KEY_LENSES],
+    { tags: [KEY_PHOTOS, KEY_LENSES], revalidate: 120 },
   );
 
 export const getUniqueFilmsCached =
   unstable_cache(
     getUniqueFilms,
     [KEY_PHOTOS, KEY_FILMS],
+    { tags: [KEY_PHOTOS, KEY_FILMS], revalidate: 120 },
   );
 
 export const getUniqueRecipesCached =
   unstable_cache(
     getUniqueRecipes,
     [KEY_PHOTOS, KEY_RECIPES],
+    { tags: [KEY_PHOTOS, KEY_RECIPES], revalidate: 120 },
   );
 
 export const getUniqueFocalLengthsCached =
   unstable_cache(
     getUniqueFocalLengths,
     [KEY_PHOTOS, KEY_FOCAL_LENGTHS],
+    { tags: [KEY_PHOTOS, KEY_FOCAL_LENGTHS], revalidate: 120 },
   );
 
 export const getUniqueYearsCached =
   unstable_cache(
     getUniqueYears,
     [KEY_PHOTOS, KEY_YEARS],
+    { tags: [KEY_PHOTOS, KEY_YEARS], revalidate: 120 },
   );
 
 // No store

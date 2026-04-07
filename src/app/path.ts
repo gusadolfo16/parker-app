@@ -105,11 +105,13 @@ export const PATHS_ADMIN = [
   PATH_ADMIN_COMPONENTS,
 ];
 
+// Rutas públicas que se cachean con ISR
+// Las rutas de admin se excluyen: son protegidas, solo las ve el admin
+// y no vale la pena generar ISR writes por ellas en cada revalidación
 export const PATHS_TO_CACHE = [
   PATH_ROOT,
   PATH_GRID,
   PATH_FULL,
-  PATH_OG,
   PATH_PHOTO_DYNAMIC,
   PATH_CAMERA_DYNAMIC,
   PATH_LENS_DYNAMIC,
@@ -119,7 +121,6 @@ export const PATHS_TO_CACHE = [
   PATH_RECIPE_DYNAMIC,
   PATH_YEAR_DYNAMIC,
   PATH_RECENTS_DYNAMIC,
-  ...PATHS_ADMIN,
 ];
 
 type PhotoPathParams  = { photo: PhotoOrPhotoId } & PhotoSetCategory & {
