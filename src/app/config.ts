@@ -14,7 +14,7 @@ import { parseChromaCutoff, parseStartingHue } from '@/photo/color/sort';
 
 // HARD-CODED GLOBAL CONFIGURATION
 
-export const SHOULD_PREFETCH_ALL_LINKS: boolean | undefined = undefined;
+export const SHOULD_PREFETCH_ALL_LINKS = false;
 
 // TEMPLATE META
 
@@ -239,7 +239,7 @@ export const PRESERVE_ORIGINAL_UPLOADS =
 export const IMAGE_QUALITY =
   process.env.NEXT_PUBLIC_IMAGE_QUALITY
     ? parseInt(process.env.NEXT_PUBLIC_IMAGE_QUALITY)
-    : 75;
+    : 60;
 export const BLUR_ENABLED =
   process.env.NEXT_PUBLIC_BLUR_DISABLED !== '1';
 
