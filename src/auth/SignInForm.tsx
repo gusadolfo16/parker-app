@@ -33,7 +33,7 @@ export default function SignInForm() {
       setError(result.error);
     } else {
       console.log('Login successful, redirecting to PATH_ROOT');
-      invalidateSwr?.(SWR_KEYS.GET_AUTH, true);
+      await invalidateSwr?.(SWR_KEYS.GET_AUTH, true);
       router.push(PATH_ROOT);
       router.refresh();
     }

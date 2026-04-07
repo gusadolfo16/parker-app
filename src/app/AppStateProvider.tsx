@@ -138,11 +138,11 @@ export default function AppStateProvider({
   const invalidateSwr = useCallback((key?: SWRKey, revalidate?: boolean) => {
     if (key) {
       // Mutate specific key
-      mutate((k: string) => k?.startsWith(key), undefined, { revalidate });
+      return mutate((k: string) => k?.startsWith(key), undefined, { revalidate });
     } else {
       // Mutate all keys that can be purged
       mutate(canKeyBePurged, undefined, { revalidate: false });
-      mutate(canKeyBePurgedAndRevalidated, undefined, { revalidate: true });
+      return mutate(canKeyBePurgedAndRevalidated, undefined, { revalidate: true });
     }
   }, [mutate]);
 
@@ -203,9 +203,9 @@ export default function AppStateProvider({
     setUserEmail(undefined);
     setUserEmailEager(undefined);
     clearAuthEmailCookie();
-    invalidateSwr(SWR_KEYS.GET_AUTH, true);
-    invalidateSwr(SWR_KEYS.GET_ADMIN_DATA, true);
-    signOut({ redirect: false }).then(() => {
+    signOut({ redirect: false }).then(async () => {
+      await invalidateSwr(SWR_KEYS.GET_AUTH, true);
+      await invalidateSwr(SWR_KEYS.GET_ADMIN_DATA, true);
       router.refresh();
       router.push(PATH_ROOT);
       toastSuccess('Signed out');
