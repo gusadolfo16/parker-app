@@ -15,9 +15,7 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
-  ? `https://${process.env.NEXT_PUBLIC_DOMAIN}`
-  : 'http://localhost:3000';
+import { BASE_URL } from '@/app/config';
 
 export default function WelcomeEmail() {
   return (
@@ -29,7 +27,7 @@ export default function WelcomeEmail() {
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Section className="mt-[32px]">
               <Img
-                src={`${baseUrl}/email-header.jpg`} // Assuming the user moves this to public/
+                src={`${BASE_URL}/email-header.jpg`} // Assuming the user moves this to public/
                 width="100%"
                 height="auto"
                 alt="Proyecto Polifonía Visual Header"
@@ -63,7 +61,7 @@ export default function WelcomeEmail() {
             </Section>
             <Section className="text-center mt-[32px] mb-[32px]">
               <Link
-                href={`${baseUrl}/`}
+                href={`${BASE_URL}/`}
                 className="bg-[#000000] text-white rounded px-5 py-3 text-[12px] font-semibold no-underline text-center"
               >
                 Comienza a Intervenir
