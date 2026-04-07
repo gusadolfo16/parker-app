@@ -49,11 +49,11 @@ export default withAuth(middleware, {
 });
 
 export const config = {
-  // Excludes:
   // - /api + /api/auth*
   // - /_next/static*
   // - /_next/image*
-  // - /favicon.ico + /favicons/*
+  // - All files with an extension (e.g. .jpg, .png, favicon.ico)
+  // - /favicons/*
   // - /sign-in
   // - /grid
   // - /full
@@ -72,5 +72,5 @@ export const config = {
   // - /template-image-tight
   // - /template-url
   // eslint-disable-next-line max-len
-  matcher: ['/((?!api|api/auth|_next/static|_next/image|favicon.ico|favicons|sign-in|grid|full|p|tag|shot-on|film|lens|focal|recipe|year|recents|home-image|template-image|template-image-tight|template-url|artist-statement|user-guide).+)'],
+  matcher: ['/((?!api|api/auth|_next/static|_next/image|.*\\..*|favicons|sign-in|grid|full|p|tag|shot-on|film|lens|focal|recipe|year|recents|home-image|template-image|template-image-tight|template-url|artist-statement|user-guide).+)'],
 };
