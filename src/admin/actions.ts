@@ -1,6 +1,5 @@
 'use server';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
@@ -14,7 +13,8 @@ import {
   getPhoto,
 } from '@/photo/db/query';
 import { UPDATED_BEFORE_01 } from '@/photo/update';
-import { revalidateAdminPaths, revalidateAllKeysAndPaths } from '@/photo/cache';
+import { revalidateAdminPaths, revalidateAllKeysAndPaths, revalidatePhotosKey } from '@/photo/cache';
+import { revalidatePath } from 'next/cache';
 import {
   getStoragePhotoUrls,
   getStorageUploadUrls,
@@ -56,7 +56,11 @@ export type AdminData = Awaited<ReturnType<typeof getAdminDataAction>>;
 
 export const clearAllSelectionsAction = async () => {
   await unlockAllPhotos();
-  revalidateAllKeysAndPaths();
+  // Solo revalidar fotos + galería pública —
+  // limpiar selecciones no modifica cámaras, tags, films, etc.
+  revalidatePhotosKey();
+  revalidatePath('/', 'page');
+  revalidatePath('/grid', 'page');
 };
 
 export const revalidateAdminPathAction = async () => {
@@ -71,8 +75,8 @@ export const testConnectionsAction = async () => {
 };
 
 export const getSignedStorageUrlsAction = async (
-  photoIds: string[],
-  photoIdsToResign: string[],
+  _photoIds: string[],
+  _photoIdsToResign: string[],
 ) => {
   const [
     urlsUpload,
@@ -123,7 +127,9 @@ export const cleanAllUsersAction = async () => {
       `, [adminEmail]);
     }
 
-    revalidateAllKeysAndPaths();
+    revalidatePhotosKey();
+    revalidatePath('/', 'page');
+    revalidatePath('/grid', 'page');
     return { success: true };
   } catch (error) {
     console.error('Error cleaning users:', error);
@@ -147,9 +153,9 @@ export const cleanAllPhotosDbAction = async () =>
 export const cleanAllR2FilesAction = async () =>
   runAuthenticatedAdminServerAction(async () => {
     try {
-      const { cloudflareR2List, cloudflareR2Delete } =
+      const { cloudflareR2List, cloudflareR2Delete: _1 } =
         await import('@/platforms/storage/cloudflare-r2');
-      const { vercelBlobList, vercelBlobDelete } =
+      const { vercelBlobList, vercelBlobDelete: _2 } =
         await import('@/platforms/storage/vercel-blob');
 
       const [r2Files, vercelFiles] = await Promise.all([

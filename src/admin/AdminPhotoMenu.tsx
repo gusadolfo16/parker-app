@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
 import { Photo, titleForPhoto } from '@/photo';
 import { useAppText } from '@/i18n/state/client';
@@ -12,11 +11,9 @@ import { isPhotoFav } from '@/tag';
 import { FaRegStarIcon, FaStarIcon } from '@/components/icons/FaStarIcon';
 import { IoMdEyeIcon, IoMdEyeOffIcon } from '@/components/icons/IoMdEyeIcon';
 import { MdOutlineModeEditIcon, MdOutlineDeleteIcon } from '@/components/icons/MdOutlineEditIcon';
-import { RiExternalLinkLineIcon } from '@/components/icons/RiExternalLinkLineIcon';
 import FaRegClockIcon from '@/components/icons/FaRegClockIcon';
 import MdOutlineFileDownloadIcon from '@/components/icons/MdOutlineFileDownloadIcon';
 import MoreMenu, { MoreMenuSection } from '@/components/more/MoreMenu';
-import MoreMenuItem from '@/components/more/MoreMenuItem';
 
 export default function AdminPhotoMenu({
   photo,
@@ -30,8 +27,8 @@ export default function AdminPhotoMenu({
   const router = useRouter();
 
   const { 
-    isUserAdmin,
-    isUserSignedIn,
+    isUserAdmin: _isUserAdmin,
+    isUserSignedIn: _isUserSignedIn,
     adminUpdateTimes,
   } = useAppState();
 

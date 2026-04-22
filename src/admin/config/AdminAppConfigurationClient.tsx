@@ -1,7 +1,6 @@
 'use client';
 
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 import {
@@ -29,7 +28,6 @@ import Link from 'next/link';
 import { PATH_FEED_JSON, PATH_RSS_XML } from '@/app/path';
 import { APP_DEFAULT_SORT_BY, DEFAULT_SORT_BY_OPTIONS } from '@/photo/sort';
 import {
-  AdminConfigSection,
   ConfigSectionKey,
   getAdminConfigSections,
 } from '.';

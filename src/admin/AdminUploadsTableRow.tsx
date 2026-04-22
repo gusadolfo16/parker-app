@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { clsx } from 'clsx/lite';
 import { UrlAddStatus } from './AdminUploadsClient';
 import Spinner from '@/components/Spinner';
@@ -7,7 +6,6 @@ import LiaTimesSolidIcon from '@/components/icons/LiaTimesSolidIcon';
 import { useAppText } from '@/i18n/state/client';
 import Link from 'next/link';
 import { pathForAdminUploadUrl } from '@/app/path';
-import { Fragment } from 'react';
 import { formatFileSize } from '@/utility/size';
 
 export default function AdminUploadsTableRow({

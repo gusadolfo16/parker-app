@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import LoaderButton from '@/components/primitives/LoaderButton';
 import { useAppText } from '@/i18n/state/client';
-import { TbChecklist } from 'react-icons/tb';
 import TbChecklistIcon from '@/components/icons/TbChecklistIcon';
 
 export default function AdminShowRecipeButton({

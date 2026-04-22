@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 import { usePathname, useRouter } from 'next/navigation';
@@ -16,7 +15,7 @@ export default function MobileSelectionBar() {
   const appText = useAppText();
   const pathname = usePathname();
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const {
     selectionMode,

@@ -1,13 +1,11 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
 import { useState, useRef, useEffect } from 'react';
 import Modal from './Modal';
 import { useAppText } from '@/i18n/state/client';
-import SubmitButtonWithStatus from './SubmitButtonWithStatus';
 import { clsx } from 'clsx/lite';
 
 export default function ContractModal({

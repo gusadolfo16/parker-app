@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { redirect } from 'next/navigation';
 import {
   getPhotoNoStore,
@@ -11,10 +10,7 @@ import PhotoEditPageClient from '@/photo/PhotoEditPageClient';
 import {
   AI_CONTENT_GENERATION_ENABLED,
   BLUR_ENABLED,
-  IS_PREVIEW,
 } from '@/app/config';
-import { blurImageFromUrl, resizeImageFromUrl } from '@/photo/server';
-import { getNextImageUrlForManipulation } from '@/platforms/next-image';
 
 export default async function PhotoEditPage({
   params,

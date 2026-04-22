@@ -17,8 +17,8 @@ import { isTagFavs } from '@/tag';
 import { BASE_URL, GRID_HOMEPAGE_ENABLED } from '@/app/config';
 import { getPhotoIdsAndUpdatedAt } from '@/photo/db/query';
 
-// Cache for 24 hours
-export const revalidate = 86_400;
+// Cache for 7 days (reduced from 1 day to save Vercel ISR Writes)
+export const revalidate = 604_800;
 
 const PRIORITY_HOME             = 1;
 const PRIORITY_HOME_VIEW        = 0.9;

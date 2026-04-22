@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
@@ -60,7 +59,6 @@ const DEBUG_BEHIND_BY = 9;
 const DEBUG_PHOTOS_NEED_SYNC_COUNT = 7;
 
 const TEXT_COLOR_WARNING  = 'text-amber-600 dark:text-amber-500';
-const TEXT_COLOR_BLUE     = 'text-blue-600 dark:text-blue-500';
 
 const readmeAnchor = (anchor: string) =>
   <AdminLink href={`${TEMPLATE_REPO_URL_README}#${anchor}`}>

@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars, react-hooks/exhaustive-deps */
 import Switcher from '@/components/switcher/Switcher';
 import SwitcherItem from '@/components/switcher/SwitcherItem';
 import IconGrid from '@/components/icons/IconGrid';
@@ -21,31 +19,25 @@ import { KEY_COMMANDS } from '@/photo/key-commands';
 import { useAppText } from '@/i18n/state/client';
 import IconSort from '@/components/icons/IconSort';
 import { getSortStateFromPath } from '@/photo/sort/path';
-import { motion } from 'framer-motion';
 import SortMenu from '@/photo/sort/SortMenu';
 import { SWR_KEYS } from '@/swr';
 
 export type SwitcherSelection = 'full' | 'grid' | 'admin';
 
-const GAP_CLASS_RIGHT = 'mr-0.5 sm:mr-1';
-const GAP_CLASS_LEFT = 'ml-0 sm:ml-0.5';
 
 export default function AppViewSwitcher({
   currentSelection,
   className,
-  animate = true,
 }: {
   currentSelection?: SwitcherSelection
   className?: string
-  animate?: boolean
 }) {
   const pathname = usePathname();
 
   const appText = useAppText();
 
   const {
-    isUserSignedIn,
-    isUserAdmin,
+    isUserAdmin: _isUserAdmin,
     setIsCommandKOpen,
     invalidateSwr,
   } = useAppState();
@@ -89,7 +81,7 @@ export default function AppViewSwitcher({
 
       }
     }
-  }, [pathname, isUserSignedIn]);
+  }, [pathname]);
   useKeydownHandler({ onKeyDown });
 
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);

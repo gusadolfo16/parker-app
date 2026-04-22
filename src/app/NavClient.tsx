@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
@@ -56,12 +55,12 @@ export default function NavClient({
   const router = useRouter();
   const showNav = !isPathSignIn(pathname);
 
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const {
     hasLoadedWithAnimations,
     isUserSignedIn,
     isUserAdmin,
-    isCheckingAuth,
+    isCheckingAuth: _isCheckingAuth,
     clearAuthStateAndRedirectIfNecessary,
   } = useAppState();
 
@@ -123,7 +122,6 @@ export default function NavClient({
               <div className="flex items-center gap-0.5 sm:gap-1">
                 <AppViewSwitcher
                   currentSelection={switcherSelectionForPath()}
-                  animate={hasLoadedWithAnimations && isNavVisible}
                 />
                 {isUserAdmin &&
                   <div className="relative">

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { INFINITE_SCROLL_GRID_INITIAL, Photo } from '@/photo';
 import { generateMetaForRecents } from '@/recents/meta';
 import RecentsOverview from '@/recents/RecentsOverview';
@@ -17,7 +16,7 @@ const getPhotosRecentsDataCachedCached = cache(() =>
 export async function generateMetadata(): Promise<Metadata> {
   const [
     photos,
-    { count, dateRange },
+    {},
   ] = await getPhotosRecentsDataCachedCached();
   
   if (photos.length === 0) { return {}; }

@@ -56,7 +56,7 @@ export default async function GridPage({ params }: SortProps) {
         {...{
           photos,
           photosCount,
-          photosCountWithExcludes,
+          _photosCountWithExcludes: photosCountWithExcludes,
           categories,
           ...sortOptions,
         }}

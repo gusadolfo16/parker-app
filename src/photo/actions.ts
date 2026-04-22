@@ -348,7 +348,8 @@ export const toggleFavoritePhotoAction = async (
         ? tags.filter(tag => !isTagFavs(tag))
         : [...tags, TAG_FAVS];
       await updatePhoto(convertPhotoToPhotoDbInsert(photo));
-      revalidateAllKeysAndPaths();
+      // Solo una foto cambió — revalidatePhoto es suficiente
+      revalidatePhoto(photoId);
       if (shouldRedirect) {
         redirect(pathForPhoto({ photo: photoId }));
       }
@@ -364,7 +365,8 @@ export const togglePrivatePhotoAction = async (
     if (photo) {
       photo.hidden = !photo.hidden;
       await updatePhoto(convertPhotoToPhotoDbInsert(photo));
-      revalidateAllKeysAndPaths();
+      // Solo una foto cambió — revalidatePhoto es suficiente
+      revalidatePhoto(photoId);
     }
     if (redirectPath) { redirect(redirectPath); }
   });
@@ -593,7 +595,11 @@ export const syncPhotoAction = async (photoId: string, isBatch?: boolean) =>
             if (urlToDelete) { await deleteFile(urlToDelete); }
           });
 
-        revalidateAllKeysAndPaths();
+        // En modo batch, no revalidar aquí —
+        // syncPhotosAction hace UNA sola revalidación al final.
+        if (!isBatch) {
+          revalidateAllKeysAndPaths();
+        }
       }
     }
   });

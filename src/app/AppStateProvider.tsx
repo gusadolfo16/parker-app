@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
@@ -32,7 +31,7 @@ import {
   getAuthEmailCookie,
 } from '@/auth';
 import { useRouter } from 'next/navigation';
-import { isPathProtected, PATH_ROOT } from '@/app/path';
+import { PATH_ROOT } from '@/app/path';
 import { INITIAL_UPLOAD_STATE, UploadState } from '@/admin/upload';
 import { RecipeProps } from '@/recipe';
 import { nanoid } from 'nanoid';

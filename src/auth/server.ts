@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable max-len */
-import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
-import NextAuth, { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';
+import { NextAuthOptions, getServerSession as getNextAuthServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { query } from '@/platforms/postgres';
@@ -57,7 +55,7 @@ export const authOptions: NextAuthOptions = {
             }
 
             return user ? { id: user.id, email: user.email, name: user.name } : null;
-          } catch (error) {
+          } catch {
             return null;
           }
         } else {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getStoragePhotoUrlsNoStore } from '@/platforms/storage/cache';
 import { getPhotos, getPhotosInNeedOfUpdateCount } from '@/photo/db/query';
 import { getPhotosMetaCached } from '@/photo/cache';
@@ -8,7 +7,6 @@ import { cookies } from 'next/headers';
 import { TIMEZONE_COOKIE_NAME } from '@/utility/timezone';
 import {
   AI_CONTENT_GENERATION_ENABLED,
-  PRESERVE_ORIGINAL_UPLOADS,
 } from '@/app/config';
 
 export const maxDuration = 60;

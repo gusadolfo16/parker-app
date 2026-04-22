@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 import LoaderButton from '@/components/primitives/LoaderButton';

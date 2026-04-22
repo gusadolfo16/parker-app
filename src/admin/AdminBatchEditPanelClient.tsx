@@ -1,35 +1,33 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 import { useAppState } from '@/app/AppState';
 import { useSelection } from '@/selection/SelectionContext';
 import { clsx } from 'clsx/lite';
 import { useAppText } from '@/i18n/state/client';
-import { FaArrowDown } from 'react-icons/fa';
 import FaArrowDownIcon from '@/components/icons/FaArrowDownIcon';
 import { Tags } from '@/tag';
 import ResponsiveText from '@/components/primitives/ResponsiveText';
 
 export default function AdminBatchEditPanelClient({
-  uniqueTags,
-  onBatchActionComplete,
+  _uniqueTags,
+  _onBatchActionComplete,
 }: {
-  uniqueTags: Tags,
-  onBatchActionComplete: () => void,
+  _uniqueTags: Tags,
+  _onBatchActionComplete: () => void,
 }) {
   const {
     selectedPhotoIds,
-    isPerformingSelectEdit,
+    isPerformingSelectEdit: _isPerformingSelectEdit,
     setIsPerformingSelectEdit,
   } = useAppState();
 
   const {
     selectionMode,
-    selectedPhotos,
+    selectedPhotos: _selectedPhotos,
     clearSelection,
-    confirmSelection,
+    confirmSelection: _confirmSelection,
   } = useSelection();
 
   const appText = useAppText();

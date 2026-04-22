@@ -54,7 +54,7 @@ export default async function HomePage() {
           {...{
             photos,
             photosCount,
-            photosCountWithExcludes,
+            _photosCountWithExcludes: photosCountWithExcludes,
             categories,
           }}
         />

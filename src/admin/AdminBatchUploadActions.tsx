@@ -1,7 +1,6 @@
 'use client';
 
 /* eslint-disable max-len */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 import ErrorNote from '@/components/ErrorNote';
@@ -53,7 +52,7 @@ export default function AdminBatchUploadActions({
   setIsDeleting: Dispatch<SetStateAction<boolean>>
   onBatchActionComplete?: () => Promise<void>
 }) {
-  const { updateAdminData, setUploadState } = useAppState();
+  const { updateAdminData: _updateAdminData, setUploadState } = useAppState();
 
   const [showBulkSettings, setShowBulkSettings] = useState(false);
   const [tagErrorMessage, setTagErrorMessage] = useState('');

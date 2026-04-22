@@ -1,6 +1,5 @@
 'use server';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
@@ -10,13 +9,7 @@ import type { Session } from 'next-auth';
 import { redirect } from 'next/navigation';
 import {
   generateAuthSecret,
-  KEY_CALLBACK_URL,
-  KEY_CREDENTIALS_CALLBACK_ROUTE_ERROR_URL,
-  KEY_CREDENTIALS_SIGN_IN_ERROR,
-  KEY_CREDENTIALS_SIGN_IN_ERROR_URL,
-  KEY_CREDENTIALS_SUCCESS,
 } from '.';
-import { PATH_ROOT } from '@/app/path';
 
 export const signOutAction = async () => {
   redirect('/api/auth/signout');

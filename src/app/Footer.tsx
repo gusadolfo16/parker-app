@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable max-len */
 
@@ -11,7 +10,7 @@ import Link from 'next/link';
 import { SHOW_REPO_LINK } from '@/app/config';
 import RepoLink from '../components/RepoLink';
 import { usePathname } from 'next/navigation';
-import { PATH_ADMIN_PHOTOS, PATH_ROOT, isPathAdmin, isPathSignIn } from './path';
+import { PATH_ADMIN_PHOTOS, isPathAdmin, isPathSignIn } from './path';
 import AnimateItems from '@/components/AnimateItems';
 import { useAppState } from '@/app/AppState';
 import Spinner from '@/components/Spinner';
@@ -24,7 +23,7 @@ export default function Footer() {
     userEmail,
     userEmailEager,
     isCheckingAuth,
-    clearAuthStateAndRedirectIfNecessary,
+    clearAuthStateAndRedirectIfNecessary: _clear,
   } = useAppState();
 
   const appText = useAppText();

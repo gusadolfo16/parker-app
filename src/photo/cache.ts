@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   revalidatePath,
   revalidateTag,
@@ -24,19 +23,11 @@ import { parseCachedPhotoDates, parseCachedPhotosDates } from '@/photo';
 import { createCameraKey } from '@/camera';
 import {
   PATHS_ADMIN,
-  PATHS_TO_CACHE,
   PATH_ADMIN,
   PATH_FULL,
   PATH_GRID,
   PATH_ROOT,
-  PREFIX_CAMERA,
-  PREFIX_FILM,
-  PREFIX_FOCAL_LENGTH,
-  PREFIX_LENS,
-  PREFIX_RECIPE,
-  PREFIX_TAG,
   pathForPhoto,
-  PREFIX_YEAR,
 } from '@/app/path';
 import { createLensKey } from '@/lens';
 

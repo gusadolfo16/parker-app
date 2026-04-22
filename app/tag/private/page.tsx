@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import AnimateItems from '@/components/AnimateItems';
 import Note from '@/components/Note';
 import AppGrid from '@/components/AppGrid';
@@ -15,7 +14,7 @@ const getPhotosHiddenMetaCached = cache(() =>
   getPhotosMetaCached({ hidden: 'only' }));
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { count, dateRange } = await getPhotosHiddenMetaCached();
+  const { count } = await getPhotosHiddenMetaCached();
 
   if (count === 0) { return {}; }
 
@@ -28,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
     appText,
     undefined,
     count,
-    dateRange,
+    undefined,
   );
   const url = absolutePathForTag(TAG_PRIVATE);
 
@@ -50,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PrivateTagPage() {
   const [
     photos,
-    { count, dateRange },
+    { count },
   ] = await Promise.all([
     getPhotosNoStore({ hidden: 'only' }),
     getPhotosHiddenMetaCached(),

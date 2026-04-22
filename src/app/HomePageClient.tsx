@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
 import { useSelection } from '@/selection/SelectionContext';
@@ -8,21 +7,19 @@ import { useSession } from 'next-auth/react';
 import PhotoGridPage from '@/photo/PhotoGridPage';
 import { Photo } from '@/photo';
 import { PhotoSetCategories } from '@/category';
-import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import AppGrid from '@/components/AppGrid';
 import PhotoGridSidebar from '@/photo/PhotoGridSidebar';
 import PhotoGridMobileFilters from '@/photo/PhotoGridMobileFilters';
-import { SortBy } from '@/photo/sort';
 
 export default function HomePageClient({
   photos,
   photosCount,
-  photosCountWithExcludes,
+  _photosCountWithExcludes,
   categories,
 }: {
   photos: Photo[],
   photosCount: number,
-  photosCountWithExcludes: number,
+  _photosCountWithExcludes: number,
   categories: PhotoSetCategories,
 }) {
   const {
