@@ -155,9 +155,9 @@ export const revalidatePhoto = (photoId: string) => {
   // Solo paths específicos de la foto y las vistas principales
   // Los prefijos genéricos (PREFIX_TAG, PREFIX_CAMERA, etc.) ya están
   // cubiertos por sus respectivos revalidateTag() arriba
-  revalidatePath(pathForPhoto({ photo: photoId }), 'layout');
-  revalidatePath(PATH_ROOT, 'layout');
-  revalidatePath(PATH_GRID, 'layout');
+  revalidatePath(pathForPhoto({ photo: photoId }), 'page');
+  revalidatePath(PATH_ROOT, 'page');
+  revalidatePath(PATH_GRID, 'page');
 };
 
 // Cache
