@@ -4,6 +4,8 @@ import { FC } from 'react';
 import { clsx } from 'clsx/lite';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { MdOutlineAdminPanelSettings } from 'react-icons/md';
+
 import AppViewSwitcher, { SwitcherSelection } from '@/app/AppViewSwitcher';
 import { PATH_ROOT, isPathFull, isPathGrid, isPathProtected } from '@/app/path';
 import { GRID_HOMEPAGE_ENABLED, NAV_CAPTION } from '@/app/config';
@@ -82,6 +84,7 @@ const Header: FC<{
             <Link
               href='/admin/photos'
               className={clsx(
+                'pepeTrueno',
                 'font-mono link h-4 active:text-medium',
                 'disabled:bg-transparent! hover:text-dim',
                 'inline-flex items-center gap-1.5 self-start',
@@ -89,7 +92,9 @@ const Header: FC<{
               )}
             >
               <span className='hidden sm:inline'>Admin</span>
-              <span className='sm:hidden'>A</span>
+              <span className='text-[20px] sm:text-base'>
+                <MdOutlineAdminPanelSettings />
+              </span>
             </Link>
           </div>
         )}

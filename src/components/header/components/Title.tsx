@@ -8,10 +8,16 @@ const Title: FC<{
   navCaption?: string;
 }> = ({ navTitle, navCaption }) => {
   return (
-    <div className={clsx('w-1/2 text-left min-w-0')}>
-      <div className='appName truncate overflow-hidden select-none text-[25px] flex items-center'>
+    <div className={clsx('w-3/4 text-left min-w-0')}>
+      <div
+        className={clsx(
+          'appName truncate select-none flex items-center',
+          'text-[20px] sm:text-[25px]',
+        )}
+      >
         <Link href={PATH_ROOT}>{navTitle}</Link>
       </div>
+
       {navCaption && (
         <div
           className={clsx(
