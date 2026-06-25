@@ -1,11 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 
 import { Photo } from '@/photo';
-import {
-  NextImageSize,
-  getNextImageUrlForRequest,
-} from '@/platforms/next-image';
-import { IS_PREVIEW } from '@/app/config';
+import { NextImageSize } from '@/platforms/next-image';
+
 
 export default function ImagePhotoGrid({
   photos,
@@ -31,9 +28,7 @@ export default function ImagePhotoGrid({
   else if (photos.length >= 4) { count = 4; }
   else if (photos.length >= 2) { count = 2; }
 
-  const nextImageWidth: NextImageSize = count <= 2
-    ? width ?? 1080
-    : 640;
+
 
   let rows = 1;
   if (count > 12) { rows = 4; }
@@ -69,11 +64,7 @@ export default function ImagePhotoGrid({
           }}
         >
           <img {...{
-            src: getNextImageUrlForRequest({
-              imageUrl: url,
-              size: nextImageWidth,
-              addBypassSecret: IS_PREVIEW,
-            }),
+            src: url,
             style: {
               ...imageStyle,
               width: '100%',

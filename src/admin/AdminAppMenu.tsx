@@ -14,7 +14,7 @@ import {
   PATH_ADMIN_TAGS,
   PATH_ADMIN_UPLOADS,
 } from '@/app/path';
-import { useAppState } from '@/app/AppState';
+
 import { useSelection } from '@/selection/SelectionContext';
 import { useAppText } from '@/i18n/state/client';
 import AdminMenuIcon from './AdminMenuIcon';
