@@ -84,7 +84,6 @@ const Header: FC<{
             <Link
               href='/admin/photos'
               className={clsx(
-                'pepeTrueno',
                 'font-mono link h-4 active:text-medium',
                 'disabled:bg-transparent! hover:text-dim',
                 'inline-flex items-center gap-1.5 self-start',
