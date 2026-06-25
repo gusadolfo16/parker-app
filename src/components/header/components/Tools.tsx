@@ -3,6 +3,7 @@
 import { FC } from 'react';
 import { clsx } from 'clsx/lite';
 import Link from 'next/link';
+import { BiLogIn, BiLogOut } from 'react-icons/bi';
 import { useAppState } from '@/app/AppState';
 import { useLanguage } from '@/i18n/state/LanguageContext';
 import { useAppText } from '@/i18n/state/client';
@@ -57,6 +58,7 @@ const Tools: FC = () => {
           <Spinner size={14} />
         </div>
       )}
+
       {!isCheckingAuth && (isUserSignedIn || isUserSignedInEager) && (
         <div className='ml-3 sm:ml-4'>
           <button
@@ -69,10 +71,13 @@ const Tools: FC = () => {
             )}
           >
             <span className='hidden sm:inline'>{appText.auth.signOut}</span>
-            <span className='sm:hidden'>-</span>
+            <span className='mt-[5px] sm:mt-0 text-[20px] sm:text-base'>
+              <BiLogOut />
+            </span>
           </button>
         </div>
       )}
+
       {!isCheckingAuth && !(isUserSignedIn || isUserSignedInEager) && (
         <div className='ml-3 sm:ml-4'>
           <Link
@@ -85,7 +90,9 @@ const Tools: FC = () => {
             )}
           >
             <span className='hidden sm:inline'>{appText.auth.signIn}</span>
-            <span className='sm:hidden'>-</span>
+            <span className='mt-[5px] sm:mt-0 text-[20px] sm:text-base'>
+              <BiLogIn />
+            </span>
           </Link>
         </div>
       )}

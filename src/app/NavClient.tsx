@@ -35,14 +35,14 @@ const NavClient: FC<{
           items={
             showNav
               ? [
-                  <Header
-                    key='nav'
-                    navRef={ref}
-                    classNameStickyNav={classNameStickyNav}
-                    navTitle={navTitle}
-                    navCaption={navCaption}
-                  />,
-                ]
+                <Header
+                  key='nav'
+                  navRef={ref}
+                  classNameStickyNav={classNameStickyNav}
+                  navTitle={navTitle}
+                  navCaption={navCaption}
+                />,
+              ]
               : []
           }
         />

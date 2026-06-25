@@ -14,6 +14,7 @@ import { useAppState } from '@/app/AppState';
 import { AnimationConfig } from '@/components/AnimateItems';
 import { clsx } from 'clsx/lite';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+// eslint-disable-next-line max-len
 import useNavigateOrRunActionWithToast from '@/components/useNavigateOrRunActionWithToast';
 import {
   deletePhotoAction,
