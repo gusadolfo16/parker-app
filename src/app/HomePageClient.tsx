@@ -13,6 +13,7 @@ import PhotoGridContainer from '@/photo/PhotoGridContainer';
 import { PATH_GRID_INFERRED } from '@/app/path';
 import { USER_DEFAULT_SORT_OPTIONS } from '@/app/config';
 import { SortBy } from '@/photo/sort';
+import { useAppText } from '@/i18n/state/client';
 
 export default function HomePageClient({
   photos,
@@ -36,6 +37,7 @@ export default function HomePageClient({
   } = useSelection();
 
   const { data: session } = useSession();
+  const appText = useAppText();
 
   return (
     <div className="space-y-4">
@@ -56,6 +58,11 @@ export default function HomePageClient({
         prioritizeInitialPhotos
         userEmail={session?.user?.email ?? undefined}
         {...categories}
+        header={
+          <p className='text-sm text-dim italic max-w-2xl leading-relaxed'>
+            {appText.misc.homeIntro}
+          </p>
+        }
         sidebar={
           <PhotoGridSidebar {...categories} photosCount={photosCount} />
         }

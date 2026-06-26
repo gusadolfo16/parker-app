@@ -164,6 +164,7 @@ export const TEXT = {
     uploading: 'Uploading',
     repo: 'Made with',
     copyPhrase: '{{label}} copied',
+    homeIntro: 'An archive of photographs open to artistic intervention. The idea is simple: each photo invites transformation — through paint, collage, drawing, text, or any gesture the artist chooses. Photos do not end when the shutter is released; Visual Polyphony is the space where artists continue them. From that conversation between the original image and the hand that intervenes, a photo book will be born.',
   },
   utility: {
     paginate: '{{index}} of {{count}}',

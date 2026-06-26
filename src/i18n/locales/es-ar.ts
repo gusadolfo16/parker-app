@@ -164,6 +164,7 @@ export const TEXT = {
     uploading: 'Subiendo',
     repo: 'Hecho con',
     copyPhrase: '{{label}} copiado',
+    homeIntro: 'Un archivo de fotografías abiertas a la intervención artística. La idea es simple: cada foto invita a ser transformada — con pintura, collage, dibujo, texto o cualquier gesto que el artista elija. Las fotos no terminan cuando se dispara el obturador; Polifonía Visual es el espacio donde los artistas las continúan. De esa conversación entre la imagen original y la mano que la interviene, nacerá un foto libro.',
   },
   utility: {
     paginate: '{{index}} de {{count}}',
