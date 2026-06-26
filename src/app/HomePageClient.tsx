@@ -59,7 +59,7 @@ export default function HomePageClient({
         userEmail={session?.user?.email ?? undefined}
         {...categories}
         header={
-          <p className='text-sm text-dim italic max-w-2xl leading-relaxed'>
+          <p className='text-sm text-dim italic leading-relaxed text-justify md:max-w-2xl'>
             {appText.misc.homeIntro}
           </p>
         }

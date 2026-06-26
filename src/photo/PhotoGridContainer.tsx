@@ -50,17 +50,20 @@ export default function PhotoGridContainer({
     setShouldAnimateDynamicItems(true), []);
 
   return (
-    <AppGrid
-      contentMain={<div className={clsx(
-        header && 'space-y-8 mt-1.5',
-      )}>
-        {header &&
-          <AnimateItems
-            type="bottom"
-            items={[header]}
-            animateOnFirstLoadOnly
-          />}
-        <div className={GRID_SPACE_CLASSNAME}>
+    <>
+      {header &&
+        <div className='max-w-[1280px] 3xl:w-[1280px] 3xl:translate-x-[163px] mx-auto mb-6 grid grid-cols-1 md:grid-cols-12 gap-x-4 lg:gap-x-6'>
+          <div className='col-span-1 md:col-span-9'>
+            <AnimateItems
+              type="bottom"
+              items={[header]}
+              animateOnFirstLoadOnly
+            />
+          </div>
+        </div>
+      }
+      <AppGrid
+        contentMain={<div className={GRID_SPACE_CLASSNAME}>
           <PhotoGrid {...{
             photos,
             ...categories,
@@ -84,9 +87,9 @@ export default function PhotoGridContainer({
               animateOnFirstLoadOnly,
             }} />
           )}
-        </div>
-      </div>}
-      contentSide={sidebar}
-    />
+        </div>}
+        contentSide={sidebar}
+      />
+    </>
   );
 }
