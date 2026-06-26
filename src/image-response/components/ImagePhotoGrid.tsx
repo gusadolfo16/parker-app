@@ -65,6 +65,8 @@ export default function ImagePhotoGrid({
         >
           <img {...{
             src: url,
+            width: Math.round(cellWidth),
+            height: Math.round(cellHeight),
             style: {
               ...imageStyle,
               width: '100%',
