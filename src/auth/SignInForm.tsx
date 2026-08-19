@@ -34,6 +34,7 @@ export default function SignInForm() {
     } else {
       console.log('Login successful, redirecting to PATH_ROOT');
       await invalidateSwr?.(SWR_KEYS.GET_AUTH, true);
+      await invalidateSwr?.();
       router.push(PATH_ROOT);
       router.refresh();
     }
