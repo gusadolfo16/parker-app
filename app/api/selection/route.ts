@@ -24,11 +24,6 @@ export async function POST(req: NextRequest) {
   }
 
   const result = await lockPhotos(photoIds, userId);
-  // Solo revalidar lo necesario: fotos + páginas de galería pública.
-  // Mantiene la sincronización de checkmarks entre usuarios.
-  revalidatePhotosKey();
-  revalidatePath('/', 'page');
-  revalidatePath('/grid', 'page');
   return NextResponse.json({
     message: 'Selection processed',
     locked: result.locked,
@@ -47,10 +42,6 @@ export async function DELETE(req: NextRequest) {
   const userId = session.user.email; // Use email as the identifier
 
   await unlockPhotos(photoIds, userId);
-  // Solo revalidar lo necesario: fotos + páginas de galería pública.
-  revalidatePhotosKey();
-  revalidatePath('/', 'page');
-  revalidatePath('/grid', 'page');
 
   return NextResponse.json({ message: 'Selection updated' });
 }
