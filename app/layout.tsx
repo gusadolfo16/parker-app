@@ -28,6 +28,7 @@ import { revalidatePath } from 'next/cache';
 import RecipeModal from '@/recipe/RecipeModal';
 import ThemeColors from '@/app/ThemeColors';
 import SessionProviderClient from '@/app/SessionProviderClient';
+import AuthSessionSync from '@/app/AuthSessionSync';
 import { SelectionProvider } from '@/selection/SelectionContext';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 import SharedHoverProvider from '@/components/shared-hover/SharedHoverProvider';
@@ -108,6 +109,7 @@ export default async function RootLayout({
         <AppStateProvider areAdminDebugToolsEnabled={ADMIN_DEBUG_TOOLS_ENABLED}>
           <AppTextProvider>
             <SessionProviderClient>
+              <AuthSessionSync />
               <SelectionProvider>
                 <ThemeColors />
                 <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME}>
