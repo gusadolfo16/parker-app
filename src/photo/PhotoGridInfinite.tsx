@@ -15,6 +15,7 @@ export default function PhotoGridInfinite({
   sortBy,
   sortWithPriority,
   excludeFromFeeds,
+  useCachedPhotos,
   canStart,
   animateOnFirstLoadOnly,
   ...categories
@@ -24,6 +25,7 @@ export default function PhotoGridInfinite({
   sortBy?: SortBy
   sortWithPriority?: boolean
   excludeFromFeeds?: boolean
+  useCachedPhotos?: boolean
   canStart?: boolean
   animateOnFirstLoadOnly?: boolean
 } & Omit<ComponentProps<typeof PhotoGrid>, 'photos' | 'selectionMode' | 'selectedPhotos' | 'togglePhotoSelection'>) {
@@ -41,6 +43,7 @@ export default function PhotoGridInfinite({
       sortBy={sortBy}
       sortWithPriority={sortWithPriority}
       excludeFromFeeds={excludeFromFeeds}
+      {...useCachedPhotos !== undefined && { useCachedPhotos }}
       {...categories}
     >
       {({ photos, onLastPhotoVisible }) =>

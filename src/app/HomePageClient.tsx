@@ -55,6 +55,12 @@ export default function HomePageClient({
           sortWithPriority ?? USER_DEFAULT_SORT_OPTIONS.sortWithPriority
         }
         excludeFromFeeds
+        // Read photos (incl. live `lockedBy`) from the dynamic, uncached
+        // action so the auction "locked" badge stays fresh after cache.ts
+        // revalidate was frozen to `false` (ISR-write reduction). The first
+        // above-the-fold batch still renders from the static build; lock
+        // availability is enforced authoritatively at confirm time.
+        useCachedPhotos={false}
         prioritizeInitialPhotos
         userEmail={session?.user?.email ?? undefined}
         {...categories}
