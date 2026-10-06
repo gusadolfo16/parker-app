@@ -41,3 +41,6 @@ task.md
 #Claude files
 DIAGNOSTICO-TRADUCCIONES-SESION-HOVER.md
 OPTIMIZACION-IMAGENES.md
+
+# Agent workflow artifacts
+.agents/
