@@ -2,8 +2,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from '@/auth/server';
 import { lockPhotos, unlockPhotos } from '@/photo/db/query';
-import { revalidatePhotosKey } from '@/photo/cache';
-import { revalidatePath } from 'next/cache';
 
 export async function GET() {
   return NextResponse.json({ message: 'Method Not Allowed' }, { status: 405 });

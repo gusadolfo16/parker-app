@@ -17,6 +17,7 @@ export default function PhotoGridContainer({
   sortBy,
   sortWithPriority,
   excludeFromFeeds,
+  useCachedPhotos,
   animateOnFirstLoadOnly,
   prioritizeInitialPhotos,
   header,
@@ -29,6 +30,7 @@ export default function PhotoGridContainer({
   sortBy?: SortBy
   sortWithPriority?: boolean
   excludeFromFeeds?: boolean
+  useCachedPhotos?: boolean
   animateOnFirstLoadOnly?: boolean
   prioritizeInitialPhotos?: boolean
   header?: ReactNode
@@ -82,6 +84,7 @@ export default function PhotoGridContainer({
               sortBy,
               sortWithPriority,
               excludeFromFeeds,
+              useCachedPhotos,
               ...categories,
               canStart: shouldAnimateDynamicItems,
               animateOnFirstLoadOnly,
