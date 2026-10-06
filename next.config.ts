@@ -48,6 +48,10 @@ const LOCALE_DYNAMIC = `i18n/locales/${LOCALE}`;
 
 const nextConfig: NextConfig = {
   images: {
+    // Bypass the Vercel image optimizer (`/_next/image`) to cut Fast Origin
+    // Transfer: the stored low-res images are already small, so serve them
+    // as-is instead of fetching from Blob + streaming optimized output.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 828, 1080, 1200, 1920],
     imageSizes: [16, 48, 96, 200, 384],
