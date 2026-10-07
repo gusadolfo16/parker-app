@@ -5,7 +5,8 @@ import {
   ListObjectsCommand,
   PutObjectCommand,
 } from '@aws-sdk/client-s3';
-import { StorageListResponse, generateStorageId } from '.';
+import type { StorageListResponse } from '.';
+import { generateStorageId } from '@/utility/nanoid';
 import { formatBytesToMB } from '@/utility/number';
 
 const AWS_S3_BUCKET = process.env.NEXT_PUBLIC_AWS_S3_BUCKET ?? '';

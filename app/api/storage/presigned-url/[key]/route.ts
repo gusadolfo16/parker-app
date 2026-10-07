@@ -7,6 +7,7 @@ import {
 import {
   cloudflareR2Client,
   cloudflareR2PutObjectCommandForKey,
+  HAS_CLOUDFLARE_R2_WEB_BUCKET,
 } from '@/platforms/storage/cloudflare-r2';
 import {
   CURRENT_STORAGE,
@@ -22,6 +23,10 @@ export async function GET(
   const { key } = await params;
   const { searchParams } = new URL(request.url);
   const storage = searchParams.get('storage');
+  // `bucket=web` targets the public, low-res R2 bucket (`parker-web`) when it
+  // is configured; otherwise it falls back to the private bucket transparently.
+  const useWebBucket =
+    searchParams.get('bucket') === 'web' && HAS_CLOUDFLARE_R2_WEB_BUCKET;
 
   const session = await getServerSession();
   if (session?.user && key) {
@@ -31,7 +36,10 @@ export async function GET(
     // Prioritize storage type from query parameter
     if (storage === 'cloudflare-r2' && HAS_CLOUDFLARE_R2_STORAGE) {
       client = cloudflareR2Client();
-      putCommand = cloudflareR2PutObjectCommandForKey(key);
+      putCommand = cloudflareR2PutObjectCommandForKey(
+        key,
+        useWebBucket ? 'web' : 'private',
+      );
     } else if (storage === 'aws-s3' && HAS_AWS_S3_STORAGE) {
       client = awsS3Client();
       putCommand = awsS3PutObjectCommandForKey(key);

@@ -48,10 +48,14 @@ const LOCALE_DYNAMIC = `i18n/locales/${LOCALE}`;
 
 const nextConfig: NextConfig = {
   images: {
-    // Bypass the Vercel image optimizer (`/_next/image`) to cut Fast Origin
-    // Transfer: the stored low-res images are already small, so serve them
-    // as-is instead of fetching from Blob + streaming optimized output.
-    unoptimized: true,
+    // Route images through a custom loader so low-res grid images can be
+    // resized/served by Cloudflare (`/cdn-cgi/image/`) from the public R2
+    // bucket instead of Vercel's optimizer, cutting Fast Origin Transfer.
+    // The loader is a safe passthrough until
+    // `NEXT_PUBLIC_CLOUDFLARE_IMAGE_BASE` is set, so behavior is identical to
+    // today until the owner opts in.
+    loader: 'custom',
+    loaderFile: './src/platforms/cloudflare-image-loader.ts',
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 828, 1080, 1200, 1920],
     imageSizes: [16, 48, 96, 200, 384],
