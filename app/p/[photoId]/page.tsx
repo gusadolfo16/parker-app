@@ -83,13 +83,6 @@ export default async function PhotoPage({
 
   if (!photo) { redirect(PATH_ROOT); }
 
-  // Debug logging for image URL investigation
-  console.log('[PhotoPage] Photo ID:', photoId);
-  console.log('[PhotoPage] Photo URL:', photo.url);
-  console.log('[PhotoPage] Photos count:', photos.length);
-  console.log('[PhotoPage] PhotosGrid count:', photosGrid?.length);
-  console.log('[PhotoPage] Sample photo URLs:', photos.slice(0, 3).map(p => p.url));
-
   return (
     <PhotoDetailPage {...{ photo, photos, photosGrid }} />
   );
