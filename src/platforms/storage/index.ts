@@ -20,18 +20,23 @@ import {
   HAS_VERCEL_BLOB_STORAGE,
   HAS_CLOUDFLARE_R2_STORAGE,
 } from '@/app/config';
-import { generateNanoid } from '@/utility/nanoid';
+import { generateStorageId } from '@/utility/nanoid';
 import {
   CLOUDFLARE_R2_BASE_URL_PUBLIC,
+  CLOUDFLARE_R2_WEB_BASE_URL_PUBLIC,
+  HAS_CLOUDFLARE_R2_WEB_BUCKET,
   cloudflareR2Copy,
   cloudflareR2Delete,
   cloudflareR2List,
   cloudflareR2Put,
   isUrlFromCloudflareR2,
+  isUrlFromCloudflareR2Web,
 } from './cloudflare-r2';
 import { PATH_API_PRESIGNED_URL } from '@/app/path';
 
-export const generateStorageId = () => generateNanoid(16);
+// Re-exported from `@/utility/nanoid` so provider modules can import it
+// without pulling in this heavy storage barrel.
+export { generateStorageId };
 
 export type StorageListItem = {
   url: string
@@ -94,7 +99,9 @@ export const fileNameForStorageUrl = (url: string) => {
     case 'vercel-blob':
       return url.replace(`${VERCEL_BLOB_BASE_URL}/`, '');
     case 'cloudflare-r2':
-      return url.replace(`${CLOUDFLARE_R2_BASE_URL_PUBLIC}/`, '');
+      return isUrlFromCloudflareR2Web(url)
+        ? url.replace(`${CLOUDFLARE_R2_WEB_BASE_URL_PUBLIC}/`, '')
+        : url.replace(`${CLOUDFLARE_R2_BASE_URL_PUBLIC}/`, '');
     case 'aws-s3':
       return url.replace(`${AWS_S3_BASE_URL}/`, '');
   }
@@ -112,21 +119,29 @@ export const isUploadPathnameValid = (pathname?: string) =>
 const getFileNameFromStorageUrl = (url: string) =>
   (new URL(url).pathname.match(/\/(.+)$/)?.[1]) ?? '';
 
+// Which R2 bucket a presigned upload targets. `web` routes to the public,
+// low-res bucket (`parker-web`); omitted/`private` keeps today's behavior.
+export type CloudflareR2UploadBucket = 'private' | 'web';
+
 export const uploadFromClientViaPresignedUrl = async (
   file: File | Blob,
   fileName: string,
   extension: string,
   addRandomSuffix?: boolean,
   storageType?: StorageType,
+  r2Bucket?: CloudflareR2UploadBucket,
 ) => {
   const key = addRandomSuffix
     ? `${fileName}-${generateStorageId()}.${extension}`
     : `${fileName}.${extension}`;
 
+  const searchParams = new URLSearchParams();
+  if (storageType) { searchParams.set('storage', storageType); }
+  if (r2Bucket === 'web') { searchParams.set('bucket', 'web'); }
+  const queryString = searchParams.toString();
+
   const response = await fetch(
-    `${PATH_API_PRESIGNED_URL}/${key}${
-      storageType ? `?storage=${storageType}` : ''
-    }`,
+    `${PATH_API_PRESIGNED_URL}/${key}${queryString ? `?${queryString}` : ''}`,
   );
 
   if (!response.ok) {
@@ -138,20 +153,39 @@ export const uploadFromClientViaPresignedUrl = async (
 
   const url = await response.text();
 
+  // Web-bucket uploads resolve to the public CDN domain; everything else keeps
+  // the existing base-URL resolution.
+  const baseUrl = r2Bucket === 'web' && CLOUDFLARE_R2_WEB_BASE_URL_PUBLIC
+    ? CLOUDFLARE_R2_WEB_BASE_URL_PUBLIC
+    : baseUrlForStorage(storageType || CURRENT_STORAGE);
+
   return fetch(url, { method: 'PUT', body: file })
-    .then(() =>
-      `${baseUrlForStorage(storageType || CURRENT_STORAGE)}/${key}`);
+    .then(() => `${baseUrl}/${key}`);
 };
 
 export const uploadPhotoFromClient = async (
   file: File | Blob,
   extension = 'jpg',
-) => (
-  CURRENT_STORAGE === 'cloudflare-r2' ||
-  CURRENT_STORAGE === 'aws-s3'
-)
-  ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
-  : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
+) =>
+  // Route low-res grid images to the public web bucket (`parker-web`) whenever
+  // it is configured — independent of `NEXT_PUBLIC_STORAGE_PREFERENCE` — so a
+  // misconfigured preference can't send low-res images to the private bucket.
+  // When the web bucket is unset, fall back to today's behavior.
+  HAS_CLOUDFLARE_R2_WEB_BUCKET
+    ? uploadFromClientViaPresignedUrl(
+      file,
+      PREFIX_UPLOAD,
+      extension,
+      true,
+      'cloudflare-r2',
+      'web',
+    )
+    : (
+      CURRENT_STORAGE === 'cloudflare-r2' ||
+      CURRENT_STORAGE === 'aws-s3'
+    )
+      ? uploadFromClientViaPresignedUrl(file, PREFIX_UPLOAD, extension, true)
+      : vercelBlobUploadFromClient(file, `${PREFIX_UPLOAD}.${extension}`);
 
 export const uploadHighResPhotoFromClient = async (
   file: File | Blob,
@@ -162,6 +196,8 @@ export const uploadHighResPhotoFromClient = async (
   extension,
   true,
   'cloudflare-r2',
+  // High-res originals always stay in the private bucket (`parker`)
+  'private',
 );
 
 export const putFile = (
