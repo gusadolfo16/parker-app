@@ -154,6 +154,7 @@ export default function AppStateProvider({
     data: auth,
     error: authError,
     isLoading: isCheckingAuth,
+    mutate: mutateAuth,
   } = useSWR(SWR_KEYS.GET_AUTH, getAuthSessionAction, { revalidateOnFocus: true });
 
   useEffect(() => {
@@ -203,13 +204,20 @@ export default function AppStateProvider({
     setUserEmailEager(undefined);
     clearAuthEmailCookie();
     signOut({ redirect: false }).then(async () => {
-      await invalidateSwr(SWR_KEYS.GET_AUTH, true);
-      await invalidateSwr(SWR_KEYS.GET_ADMIN_DATA, true);
+      // Write the authoritative signed-out session directly into the GET_AUTH
+      // cache (no revalidation) so `isCheckingAuth` stays false — a forced
+      // revalidation here would be orphaned by the navigation below and leave
+      // the nav spinner hung until a manual reload.
+      await mutateAuth(
+        { session: null, isAdmin: false, isContractSigned: false },
+        { revalidate: false },
+      );
+      await invalidateSwr(SWR_KEYS.GET_ADMIN_DATA, false);
       router.refresh();
       router.push(PATH_ROOT);
       toastSuccess('Signed out');
     });
-  }, [router, invalidateSwr]);
+  }, [router, invalidateSwr, mutateAuth]);
 
   // Returns false when upload is cancelled
   const startUpload = useCallback(() => new Promise<boolean>(resolve => {
