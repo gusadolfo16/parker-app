@@ -1,23 +1,26 @@
 import { generateOgImageMetaForPhotos } from '@/photo';
 import PhotosEmptyState from '@/photo/PhotosEmptyState';
 import { Metadata } from 'next/types';
-import { getPhotos } from '@/photo/db/query';
-import { cache } from 'react';
 import { getDataForCategoriesCached } from '@/category/cache';
-import { getPhotosMetaCached } from '@/photo/cache';
+import { getPhotosMetaCached, getPhotosNoStore } from '@/photo/cache';
 import { FEED_META_QUERY_OPTIONS, getFeedQueryOptions } from '@/feed';
 import { getAppText } from '@/i18n/state/server';
 import HomePageClient from '@/app/HomePageClient';
 
-export const dynamic = 'force-static';
+// Render dynamically so the initial grid batch reads `locked_by` live from
+// the DB on each request (via `getPhotosNoStore`), keeping the auction
+// "locked" badge fresh. Metadata/category reads stay cached (they don't
+// change on a lock). This does NOT reintroduce ISR writes; cache.ts stays
+// `revalidate: false`.
+export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
-const getPhotosCached = cache(() => getPhotos(getFeedQueryOptions({
+const getPhotosLive = () => getPhotosNoStore(getFeedQueryOptions({
   isGrid: true,
-})));
+}));
 
 export async function generateMetadata(): Promise<Metadata> {
-  const photos = await getPhotosCached()
+  const photos = await getPhotosLive()
     .catch(() => []);
   return generateOgImageMetaForPhotos(photos);
 }
@@ -30,7 +33,7 @@ export default async function GridPage() {
     categories,
     appText,
   ] = await Promise.all([
-    getPhotosCached()
+    getPhotosLive()
       .catch(() => []),
     getPhotosMetaCached(FEED_META_QUERY_OPTIONS)
       .then(({ count }) => count)

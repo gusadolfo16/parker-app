@@ -18,6 +18,7 @@ export default function PhotoGridInfinite({
   useCachedPhotos,
   canStart,
   animateOnFirstLoadOnly,
+  userEmail,
   ...categories
 }: {
   cacheKey: string
@@ -56,6 +57,7 @@ export default function PhotoGridInfinite({
           selectionMode,
           selectedPhotos,
           togglePhotoSelection,
+          userEmail,
         }} />}
     </InfinitePhotoScroll>
   );
