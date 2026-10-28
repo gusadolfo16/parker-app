@@ -88,6 +88,7 @@ export default function PhotoGridContainer({
               ...categories,
               canStart: shouldAnimateDynamicItems,
               animateOnFirstLoadOnly,
+              userEmail,
             }} />
           )}
         </div>}
